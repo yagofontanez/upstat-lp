@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UpStat — Status pages para quem leva seu sistema a sério</title>
+    <meta name="description"
+        content="Monitore seus sistemas, detecte quedas em segundos e compartilhe uma status page profissional com seus clientes." />
+    <meta property="og:title" content="UpStat — Status pages para devs" />
+    <meta property="og:description" content="Monitore seus sistemas e compartilhe sua status page com seus clientes." />
+    <meta name="theme-color" content="#00D4AA" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #060810;
+            --surface: #0D1117;
+            --surface2: #161B22;
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #00D4AA;
+            --primary-dim: rgba(0, 212, 170, 0.12);
+            --text: #F0F6FC;
+            --muted: #8B949E;
+            --down: #EF4444;
+            --warn: #F59E0B;
+            --up: #22C55E;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(6, 8, 16, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: #000 !important;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 6px;
+            transition: opacity 0.2s !important;
+        }
+
+        .nav-cta:hover {
+            opacity: 0.85;
+        }
+
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-dim);
+            border: 1px solid rgba(0, 212, 170, 0.25);
+            color: var(--primary);
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 32px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .hero-badge span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .hero-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(52px, 8vw, 96px);
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s ease 0.1s both;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(14px, 2vw, 17px);
+            color: var(--muted);
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+            animation: fadeUp 0.6s ease 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp 0.6s ease 0.3s both;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: #000;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 32px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            color: var(--text);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-mock {
+            margin-top: 72px;
+            width: 100%;
+            max-width: 680px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            animation: fadeUp 0.6s ease 0.4s both;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .mock-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mock-title {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .mock-status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: var(--up);
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+
+        .mock-status-badge span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--up);
+            animation: pulse 2s infinite;
+        }
+
+        .mock-services {
+            padding: 8px 0;
+        }
+
+        .mock-service {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .mock-service:last-child {
+            border-bottom: none;
+        }
+
+        .mock-service-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-up {
+            background: var(--up);
+        }
+
+        .dot-down {
+            background: var(--down);
+        }
+
+        .dot-warn {
+            background: var(--warn);
+        }
+
+        .mock-service-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .mock-uptime-bar {
+            display: flex;
+            gap: 2px;
+            padding: 0 24px 16px;
+        }
+
+        .mock-bar {
+            flex: 1;
+            height: 24px;
+            border-radius: 3px;
+        }
+
+        .stats {
+            padding: 80px 24px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .stat {
+            background: var(--surface);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Instrument Serif', serif;
+            font-size: 52px;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .features {
+            padding: 100px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(36px, 5vw, 56px);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 64px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .feature {
+            background: var(--surface);
+            padding: 36px;
+            transition: background 0.2s;
+        }
+
+        .feature:hover {
+            background: var(--surface2);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .how {
+            padding: 100px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            text-align: left;
+            margin-top: 48px;
+        }
+
+        .step {
+            background: var(--surface);
+            padding: 32px 36px;
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            transition: background 0.2s;
+        }
+
+        .step:hover {
+            background: var(--surface2);
+        }
+
+        .step-number {
+            font-family: 'Instrument Serif', serif;
+            font-size: 36px;
+            color: var(--primary);
+            line-height: 1;
+            flex-shrink: 0;
+            width: 40px;
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .pricing {
+            padding: 100px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 48px;
+            text-align: left;
+        }
+
+        .plan {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            transition: border-color 0.2s;
+        }
+
+        .plan:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .plan-pro {
+            border-color: rgba(0, 212, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-pro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .plan-name {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-badge {
+            background: var(--primary-dim);
+            color: var(--primary);
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 100px;
+        }
+
+        .plan-price {
+            font-family: 'Instrument Serif', serif;
+            font-size: 48px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .plan-period {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
+
+        .plan-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .plan-features li {
+            font-size: 13px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .plan-features li.disabled {
+            opacity: 0.35;
+        }
+
+        .plan-features li.disabled::before {
+            content: '✗';
+            color: var(--muted);
+        }
+
+        .plan-btn {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .plan-btn-free {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .plan-btn-free:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text);
+        }
+
+        .plan-btn-pro {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .plan-btn-pro:hover {
+            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 100px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(40px, 6vw, 72px);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .cta-sub {
+            font-size: 15px;
+            color: var(--muted);
+            margin-bottom: 40px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-mock {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glow"></div>
+
+    <nav>
+        <a href="/" class="nav-logo">● UpStat</a>
+        <ul class="nav-links">
+            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#how">Como funciona</a></li>
+            <li><a href="#pricing">Preços</a></li>
+            <li><a href="https://upstat.netlify.app/login">Entrar</a></li>
+            <li><a href="https://upstat.netlify.app/register" class="nav-cta">Começar grátis →</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span></span>
+            Monitoramento em tempo real
+        </div>
+
+        <h1 class="hero-title">
+            Seu sistema caiu.<br />
+            <em>Seus clientes já sabem.</em>
+        </h1>
+
+        <p class="hero-subtitle">
+            Monitore suas APIs e sistemas, detecte quedas em segundos e compartilhe uma status page profissional com
+            seus clientes — sem complicação.
+        </p>
+
+        <div class="hero-actions">
+            <a href="https://upstat.netlify.app/register" class="btn-primary">
+                Criar conta grátis →
+            </a>
+            <a href="#how" class="btn-secondary">
+                Ver como funciona
+            </a>
+        </div>
+
+        <div class="hero-mock">
+            <div class="mock-header">
+                <span class="mock-title">Minha Startup — Status</span>
+                <div class="mock-status-badge">
+                    <span></span>
+                    Todos operacionais
+                </div>
+            </div>
+            <div class="mock-services">
+                <div class="mock-service">
+                    <div class="mock-service-left">
+                        <div class="dot dot-up"></div>
+                        API Principal
+                    </div>
+                    <div class="mock-service-right">
+                        <span>142ms</span>
+                        <span>99.98% uptime</span>
+                        <span
+                            style="color: #22C55E; background: rgba(34,197,94,0.1); padding: 2px 8px; border-radius: 100px; font-size: 10px;">Operacional</span>
+                    </div>
+                </div>
+                <div class="mock-uptime-bar">
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#ef444433; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#f59e0b33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                </div>
+                <div class="mock-service">
+                    <div class="mock-service-left">
+                        <div class="dot dot-up"></div>
+                        Dashboard Web
+                    </div>
+                    <div class="mock-service-right">
+                        <span>89ms</span>
+                        <span>100.00% uptime</span>
+                        <span
+                            style="color: #22C55E; background: rgba(34,197,94,0.1); padding: 2px 8px; border-radius: 100px; font-size: 10px;">Operacional</span>
+                    </div>
+                </div>
+                <div class="mock-uptime-bar">
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 0 24px 80px; position:relative; z-index:1;">
+        <div class="stats reveal">
+            <div class="stat">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime médio monitorado</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">&lt;60s</div>
+                <div class="stat-label">Tempo de detecção</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">R$0</div>
+                <div class="stat-label">Pra começar</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <span class="section-label reveal">// funcionalidades</span>
+        <h2 class="section-title reveal">Tudo que você precisa.<br /><em
+                style="font-style:italic; color: var(--primary)">Nada que você não precisa.</em></h2>
+
+        <div class="features-grid reveal">
+            <div class="feature">
+                <span class="feature-icon">⚡</span>
+                <div class="feature-title">Monitoramento automático</div>
+                <p class="feature-desc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu
+                    cliente.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                <div class="feature-title">Histórico de uptime</div>
+                <p class="feature-desc">Visualize 90 dias de histórico com barras de uptime por dia, latência e
+                    incidentes registrados.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🔗</span>
+                <div class="feature-title">Status page pública</div>
+                <p class="feature-desc">Uma página profissional com URL personalizada pra você compartilhar com seus
+                    clientes e usuários.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🔔</span>
+                <div class="feature-title">Alertas instantâneos</div>
+                <p class="feature-desc">Notificações por email (e WhatsApp no Pro) assim que seu sistema cair ou se
+                    recuperar.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🛠️</span>
+                <div class="feature-title">Ping manual</div>
+                <p class="feature-desc">Force uma verificação na hora sem precisar esperar o próximo ciclo automático.
+                </p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">⏸️</span>
+                <div class="feature-title">Pausar monitores</div>
+                <p class="feature-desc">Em manutenção? Pause o monitor sem perder o histórico e reative quando quiser.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how" id="how">
+        <span class="section-label reveal">// como funciona</span>
+        <h2 class="section-title reveal">Do cadastro à<br /><em style="font-style:italic; color: var(--primary)">status
+                page em minutos.</em></h2>
+
+        <div class="steps reveal">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Crie sua conta grátis</div>
+                    <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa
+                        a rodar na hora.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Adicione a URL do seu sistema</div>
+                    <p class="step-desc">Cole a URL da sua API, site ou serviço. O UpStat começa a monitorar
+                        automaticamente a cada minuto.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Compartilhe sua status page</div>
+                    <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe
+                        que eles acompanhem o status em tempo real.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">Receba alertas quando cair</div>
+                    <p class="step-desc">Se seu sistema cair, você é notificado na hora por email — ou WhatsApp se
+                        estiver no plano Pro.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <span class="section-label reveal">// preços</span>
+        <h2 class="section-title reveal">Simples como<br /><em style="font-style:italic; color: var(--primary)">deve
+                ser.</em></h2>
+
+        <div class="pricing-grid reveal">
+            <div class="plan">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">R$0</div>
+                <div class="plan-period">para sempre</div>
+                <ul class="plan-features">
+                    <li>1 monitor</li>
+                    <li>Ping a cada 5 minutos</li>
+                    <li>Histórico de 7 dias</li>
+                    <li>Status page pública</li>
+                    <li>Notificação por email</li>
+                    <li class="disabled">URL personalizada</li>
+                    <li class="disabled">Monitores ilimitados</li>
+                    <li class="disabled">Notificação por WhatsApp</li>
+                </ul>
+                <a href="https://upstat.netlify.app/register" class="plan-btn plan-btn-free">Começar grátis</a>
+            </div>
+            <div class="plan plan-pro">
+                <div class="plan-name">Pro <span class="plan-badge">recomendado</span></div>
+                <div class="plan-price">R$29</div>
+                <div class="plan-period">por mês</div>
+                <ul class="plan-features">
+                    <li>Monitores ilimitados</li>
+                    <li>Ping a cada 1 minuto</li>
+                    <li>Histórico de 90 dias</li>
+                    <li>Status page pública</li>
+                    <li>Notificação por email</li>
+                    <li>URL personalizada</li>
+                    <li>Notificação por WhatsApp</li>
+                    <li>Suporte prioritário</li>
+                </ul>
+                <a href="https://upstat.netlify.app/register" class="plan-btn plan-btn-pro">Fazer upgrade →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="cta-title reveal">
+            Pronto pra parar<br />
+            de perder <em style="font-style:italic; color:var(--primary)">downtime</em>?
+        </h2>
+        <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
+        <div class="reveal">
+            <a href="https://upstat.netlify.app/register" class="btn-primary">
+                Criar minha conta →
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <span class="footer-logo">● UpStat</span>
+        <span class="footer-text">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible')
+                }
+            })
+        }, { threshold: 0.1 })
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+    </script>
+
+</body>
+
+</html>
