@@ -43,14 +43,19 @@
         --whatsapp-dim: rgba(37, 211, 102, 0.12);
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+        scroll-behavior: smooth;
+        background: #060810;
+    }
 
     body {
-        background: var(--bg);
+        background: #060810;
+        background-color: #060810;
         color: var(--text);
         font-family: 'JetBrains Mono', monospace;
         overflow-x: hidden;
         line-height: 1.6;
+        min-height: 100vh;
     }
 
     body::before {
