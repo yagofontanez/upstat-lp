@@ -1,1247 +1,1837 @@
 <!DOCTYPE html>
 
 <html lang="pt-BR" data-theme="dark">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UpStat — Status pages para quem leva seu sistema a sério</title>
-  <meta name="description" content="Monitore seus sistemas, detecte quedas em segundos e compartilhe uma status page profissional com seus clientes." />
-  <meta name="theme-color" content="#060810" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
-
-  <style>
-    /* ─── RESET ─── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    img, svg { display: block; max-width: 100%; }
-    a { text-decoration: none; }
-    ul, ol { list-style: none; }
-    button { cursor: pointer; border: none; background: none; font: inherit; }
-
-    /* ─── TOKENS ─── */
-    :root {
-      --bg:        #060810;
-      --bg2:       #0a0e1a;
-      --surface:   #0D1117;
-      --surface2:  #161B22;
-      --surface3:  #1c2330;
-      --border:    rgba(255,255,255,0.07);
-      --border2:   rgba(255,255,255,0.12);
-
-      --primary:   #00D4AA;
-      --primary-d: rgba(0,212,170,0.10);
-      --primary-b: rgba(0,212,170,0.22);
-
-      --wpp:       #25D366;
-      --wpp-d:     rgba(37,211,102,0.10);
-      --wpp-b:     rgba(37,211,102,0.22);
-
-      --down:      #EF4444;
-      --warn:      #F59E0B;
-      --up:        #22C55E;
-
-      --text:      #F0F6FC;
-      --text2:     #b0bac6;
-      --muted:     #6B7280;
-
-      --radius-sm: 8px;
-      --radius:    14px;
-      --radius-lg: 20px;
-
-      --grid-color: rgba(0,212,170,0.035);
-      --shadow-card: 0 8px 40px rgba(0,0,0,0.55);
-      --shadow-glow: 0 0 60px rgba(0,212,170,0.08);
-    }
-
-    /* ─── BASE ─── */
-    html, body { background: var(--bg); color: var(--text); }
-
-    body {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      line-height: 1.65;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* grid background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    /* top glow */
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(0,212,170,0.07) 0%, transparent 70%);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* ─── LAYOUT HELPERS ─── */
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(18px,5vw,40px); position: relative; z-index: 1; }
-    .wrap-sm { max-width: 760px; margin: 0 auto; padding: 0 clamp(18px,5vw,40px); position: relative; z-index: 1; }
-    section { position: relative; z-index: 1; }
-
-    /* ─── TYPOGRAPHY HELPERS ─── */
-    .stag {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: .12em;
-      color: var(--primary);
-      margin-bottom: 16px;
-      font-weight: 500;
-    }
-    .stag.wpp { color: var(--wpp); }
-
-    .shead {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(32px, 5vw, 52px);
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-      margin-bottom: 16px;
-    }
-    .shead em { font-style: italic; color: var(--primary); }
-    .shead em.wpp { color: var(--wpp); }
-
-    /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(18px,5vw,40px);
-      height: 60px;
-      background: rgba(6,8,16,0.88);
-      backdrop-filter: blur(20px) saturate(1.5);
-      -webkit-backdrop-filter: blur(20px) saturate(1.5);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      letter-spacing: -.01em;
-    }
-    .nav-logo-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--primary);
-      box-shadow: 0 0 8px var(--primary);
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity:1; box-shadow: 0 0 8px var(--primary); }
-      50%      { opacity:.6; box-shadow: 0 0 16px var(--primary); }
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-    .nav-links a {
-      font-size: 12px;
-      color: var(--muted);
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--text); }
-
-    .nav-cta {
-      background: var(--primary) !important;
-      color: #000 !important;
-      padding: 7px 16px;
-      border-radius: var(--radius-sm);
-      font-weight: 700;
-      font-size: 12px !important;
-      color: var(--muted);
-      transition: opacity .15s !important;
-    }
-    .nav-cta:hover { opacity: .85; }
-
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      padding: 4px;
-    }
-    .nav-hamburger span {
-      display: block;
-      width: 20px; height: 2px;
-      background: var(--text2);
-      border-radius: 2px;
-      transition: .2s;
-    }
-
-    /* ─── BUTTONS ─── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 13px 22px;
-      border-radius: var(--radius-sm);
-      transition: opacity .15s, transform .15s;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .btn:hover { opacity: .88; transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
-
-    .btn-primary { background: var(--primary); color: #000; }
-    .btn-ghost   { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
-    .btn-wpp     { background: var(--wpp); color: #000; }
-
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 20px 80px;
-    }
-
-    .hero-badges {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 28px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      padding: 6px 12px;
-      border-radius: 100px;
-      border: 1px solid var(--border2);
-      background: var(--surface);
-      color: var(--text2);
-      letter-spacing: .04em;
-    }
-    .badge-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-      box-shadow: 0 0 6px var(--primary);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    .badge-dot.wpp {
-      background: var(--wpp);
-      box-shadow: 0 0 6px var(--wpp);
-    }
-
-    .hero-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(42px, 9vw, 96px);
-      line-height: 1.03;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-    }
-    .hero-title em { color: var(--primary); font-style: italic; }
-
-    .hero-sub {
-      max-width: 500px;
-      font-size: clamp(13px, 1.8vw, 15px);
-      line-height: 1.9;
-      color: var(--text2);
-      margin-bottom: 36px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 60px;
-    }
-
-    /* ─── HERO MOCK ─── */
-    .hero-mock {
-      width: 100%;
-      max-width: 640px;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-card), 0 0 0 1px rgba(0,212,170,0.06);
-    }
-
-    .mock-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .mock-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 100px;
-      background: rgba(34,197,94,0.1);
-      color: var(--up);
-      border: 1px solid rgba(34,197,94,0.2);
-    }
-    .mock-pill span {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--up);
-    }
-
-    .mock-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 18px 6px;
-      gap: 8px;
-    }
-    .mock-row-l { display: flex; align-items: center; gap: 8px; font-size: 12px; flex-wrap: wrap; }
-    .mock-row-r { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--muted); flex-shrink: 0; }
-
-    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot-up   { background: var(--up);  box-shadow: 0 0 6px var(--up); }
-    .dot-teal { background: var(--primary); box-shadow: 0 0 6px var(--primary); }
-
-    .synth-tag {
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: var(--primary-d);
-      color: var(--primary);
-      border: 1px solid rgba(0,212,170,0.2);
-    }
-
-    .spill {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 5px;
-      font-weight: 700;
-    }
-    .spill-up   { background: rgba(34,197,94,0.1);  color: var(--up);     }
-    .spill-teal { background: var(--primary-d);     color: var(--primary);}
-    .spill-down { background: rgba(239,68,68,0.1);  color: var(--down);   }
-
-    .ubars {
-      display: flex;
-      gap: 2px;
-      padding: 4px 18px 14px;
-    }
-    .ubar {
-      flex: 1;
-      height: 28px;
-      border-radius: 3px;
-      min-width: 0;
-    }
-
-    /* ─── STATS ─── */
-    .stats-section { padding: 80px 0; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: var(--surface);
-    }
-    .stat-cell {
-      padding: 40px 24px;
-      text-align: center;
-      border-right: 1px solid var(--border);
-      position: relative;
-    }
-    .stat-cell:last-child { border-right: none; }
-    .stat-cell::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,170,0.05), transparent 70%);
-      pointer-events: none;
-    }
-    .stat-num {
-      font-family: 'Instrument Serif', serif;
-      font-size: 52px;
-      color: var(--primary);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-lbl { font-size: 11px; color: var(--muted); letter-spacing: .06em; }
-
-    /* ─── FEATURES ─── */
-    .features-section { padding: 100px 0; }
-    .section-header { text-align: center; margin-bottom: 48px; }
-
-    .feat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    .feat-card {
-      padding: 30px 28px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      transition: background .2s;
-    }
-    .feat-card:hover { background: var(--surface2); }
-    .feat-card:nth-child(3n)   { border-right: none; }
-    .feat-card:nth-child(n+4)  { border-bottom: none; }
-
-    .feat-card.hl-wpp   { background: linear-gradient(135deg, var(--surface) 60%, var(--wpp-d)); }
-    .feat-card.hl-synth { background: linear-gradient(135deg, var(--surface) 60%, var(--primary-d)); }
-    .feat-card.hl-wpp:hover   { background: linear-gradient(135deg, var(--surface2) 60%, var(--wpp-b)); }
-    .feat-card.hl-synth:hover { background: linear-gradient(135deg, var(--surface2) 60%, var(--primary-b)); }
-
-    .ficon { font-size: 22px; display: block; margin-bottom: 12px; }
-    .ftitle { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .fdesc  { font-size: 12px; color: var(--text2); line-height: 1.7; }
-    .ftag {
-      display: inline-block;
-      margin-top: 12px;
-      font-size: 10px;
-      padding: 3px 9px;
-      border-radius: 5px;
-      font-weight: 700;
-    }
-    .ftag.wpp   { background: var(--wpp-d);     color: var(--wpp);     border: 1px solid rgba(37,211,102,0.2); }
-    .ftag.synth { background: var(--primary-d); color: var(--primary); border: 1px solid rgba(0,212,170,0.2);  }
-
-    /* ─── SPOTLIGHT ─── */
-    .spotlight-section { padding: 60px 0; }
-
-    .sp-card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: var(--surface);
-    }
-    .sp-card.wpp-card   { border-color: rgba(37,211,102,0.2);  box-shadow: 0 0 60px rgba(37,211,102,0.05); }
-    .sp-card.synth-card { border-color: rgba(0,212,170,0.2);   box-shadow: 0 0 60px rgba(0,212,170,0.06);  }
-
-    .sp-content { padding: 48px 42px; }
-    .sp-content .shead { margin-bottom: 14px; }
-    .sp-desc {
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.85;
-      margin-bottom: 24px;
-    }
-    .sp-desc strong { color: var(--text); }
-
-    .sp-demo {
-      padding: 36px 32px;
-      border-left: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-    }
-    .sp-card.wpp-card   .sp-demo { background: linear-gradient(160deg, var(--surface) 40%, rgba(37,211,102,0.05)); }
-    .sp-card.synth-card .sp-demo { background: linear-gradient(160deg, var(--surface) 40%, rgba(0,212,170,0.05));  }
-
-    /* checklist */
-    .checklist { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--text2); }
-    .ck {
-      flex-shrink: 0;
-      width: 18px; height: 18px;
-      border-radius: 5px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-    }
-    .ck.wpp   { background: var(--wpp-d);     color: var(--wpp);     border: 1px solid rgba(37,211,102,0.2); }
-    .ck.teal  { background: var(--primary-d); color: var(--primary); border: 1px solid rgba(0,212,170,0.2);  }
-
-    /* WhatsApp bubbles */
-    .wbubble {
-      background: var(--surface2);
-      border-radius: 12px 12px 12px 0;
-      border: 1px solid var(--border);
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      max-width: 300px;
-    }
-    .wbubble:last-child { margin-bottom: 0; }
-    .wbubble-t {
-      font-size: 11px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    .wbubble-t.down { color: var(--down); }
-    .wbubble-t.up   { color: var(--up);   }
-    .wbubble-b { font-size: 11px; color: var(--text2); line-height: 1.6; }
-    .wbubble-time {
-      font-size: 10px;
-      color: var(--muted);
-      text-align: right;
-      margin-top: 5px;
-    }
-
-    /* Synthetic steps */
-    .sstep {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .sstep:last-child { border-bottom: none; }
-    .sstep-n {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--surface3);
-      border: 1px solid var(--border2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px;
-      color: var(--muted);
-      flex-shrink: 0;
-    }
-    .sstep-label { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 1px; }
-    .sstep-desc  { font-size: 10px; color: var(--muted); }
-    .sstep-st {
-      margin-left: auto;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 5px;
-      flex-shrink: 0;
-    }
-    .ss-ok  { background: rgba(34,197,94,0.1);  color: var(--up);      }
-    .ss-run { background: var(--primary-d);     color: var(--primary); }
-    .ss-w   { background: var(--surface3);      color: var(--muted);   }
-    .ss-err { background: rgba(239,68,68,0.1);  color: var(--down);    }
-
-    /* ─── HOW ─── */
-    .how-section { padding: 100px 0; }
-    .how-section .section-header { margin-bottom: 52px; }
-
-    .steps-list { display: flex; flex-direction: column; gap: 0; }
-    .step-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      padding: 28px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .step-row:last-child { border-bottom: none; }
-    .step-n {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--primary-d);
-      border: 1px solid rgba(0,212,170,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--primary);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .step-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
-    .step-desc  { font-size: 12px; color: var(--text2); line-height: 1.75; }
-
-    /* ─── PRICING ─── */
-    .pricing-section { padding: 100px 0; }
-
-    .price-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 48px;
-    }
-
-    .plan {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-lg);
-      padding: 32px 28px;
-    }
-    .plan.pro {
-      background: linear-gradient(145deg, var(--surface2), var(--surface));
-      border-color: rgba(0,212,170,0.25);
-      box-shadow: 0 0 40px rgba(0,212,170,0.07);
-      position: relative;
-    }
-
-    .plan-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text2);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .plan-bdg {
-      font-size: 9px;
-      padding: 3px 8px;
-      background: var(--primary-d);
-      color: var(--primary);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 100px;
-      font-weight: 700;
-    }
-
-    .plan-price {
-      font-family: 'Instrument Serif', serif;
-      font-size: 52px;
-      line-height: 1;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .plan.pro .plan-price { color: var(--primary); }
-    .plan-period { font-size: 11px; color: var(--muted); margin-bottom: 24px; }
-
-    .plan-feats {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      margin-bottom: 28px;
-    }
-    .plan-feats li {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-size: 12px;
-      color: var(--text2);
-    }
-    .fi {
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .fi.on   { color: var(--up); }
-    .fi.off  { color: var(--muted); }
-    .fi.wpp  { color: var(--wpp); }
-    .fi.teal { color: var(--primary); }
-
-    .hl-wpp   { color: var(--wpp)     !important; }
-    .hl-synth { color: var(--primary) !important; }
-
-    .plan-btn {
-      display: block;
-      text-align: center;
-      padding: 13px;
-      border-radius: var(--radius-sm);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 700;
-      transition: opacity .15s, transform .15s;
-    }
-    .plan-btn:hover { opacity: .85; transform: translateY(-1px); }
-    .plan-btn.free  { background: var(--surface3); color: var(--text2); border: 1px solid var(--border2); }
-    .plan-btn.pro-b { background: var(--primary); color: #000; }
-
-    /* ─── CTA ─── */
-    .cta-section {
-      padding: 120px 20px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .cta-section::before {
-      content: '';
-      position: absolute;
-      left: 50%; top: 50%;
-      transform: translate(-50%,-50%);
-      width: 700px; height: 400px;
-      background: radial-gradient(ellipse, rgba(0,212,170,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .cta-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(36px, 6vw, 64px);
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-      margin-bottom: 16px;
-    }
-    .cta-title em { font-style: italic; color: var(--down); }
-    .cta-sub { font-size: 13px; color: var(--muted); margin-bottom: 36px; }
-    .cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-
-    /* ─── FOOTER ─── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 28px clamp(18px,5vw,40px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      z-index: 1;
-    }
-    .foot-logo { font-size: 13px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px; }
-    .foot-copy { font-size: 11px; color: var(--muted); }
-
-    /* ─── REVEAL ANIMATION ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* stagger children */
-    .reveal-group > * {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity .5s ease, transform .5s ease;
-    }
-    .reveal-group.visible > *:nth-child(1) { transition-delay: .05s; opacity:1; transform:none; }
-    .reveal-group.visible > *:nth-child(2) { transition-delay: .15s; opacity:1; transform:none; }
-    .reveal-group.visible > *:nth-child(3) { transition-delay: .25s; opacity:1; transform:none; }
-    .reveal-group.visible > *:nth-child(4) { transition-delay: .35s; opacity:1; transform:none; }
-    .reveal-group.visible > *:nth-child(5) { transition-delay: .45s; opacity:1; transform:none; }
-    .reveal-group.visible > *:nth-child(6) { transition-delay: .55s; opacity:1; transform:none; }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      .sp-card {
-        grid-template-columns: 1fr;
-      }
-      .sp-demo {
-        border-left: none;
-        border-top: 1px solid var(--border);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hero { padding: 100px 18px 60px; }
-
-      .hero-mock { display: none; }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      .stat-cell {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-      }
-      .stat-cell:last-child { border-bottom: none; }
-
-      .feat-grid {
-        grid-template-columns: 1fr;
-      }
-      .feat-card:nth-child(3n)  { border-right: none; }
-      .feat-card:nth-child(n+4) { border-bottom: 1px solid var(--border); }
-      .feat-card:last-child { border-bottom: none; }
-
-      .price-grid { grid-template-columns: 1fr; }
-
-      .nav-links { display: none; }
-      .nav-hamburger { display: flex; }
-
-      .sp-content { padding: 32px 24px; }
-      .sp-demo { padding: 28px 24px; }
-
-      footer {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-actions { flex-direction: column; width: 100%; max-width: 300px; }
-      .btn { width: 100%; }
-      .cta-btns { flex-direction: column; align-items: center; }
-      .cta-btns .btn { width: 100%; max-width: 300px; }
-    }
-
-    /* ─── MOBILE MENU ─── */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 60px; left: 0; right: 0;
-      background: rgba(6,8,16,0.97);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      z-index: 998;
-      padding: 20px clamp(18px,5vw,40px);
-      flex-direction: column;
-      gap: 4px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      padding: 12px 0;
-      font-size: 14px;
-      color: var(--text2);
-      border-bottom: 1px solid var(--border);
-      transition: color .2s;
-    }
-    .mobile-menu a:last-child { border-bottom: none; }
-    .mobile-menu a:hover { color: var(--text); }
-    .mobile-menu .m-cta {
-      margin-top: 10px;
-      padding: 13px;
-      text-align: center;
-      background: var(--primary);
-      color: #000;
-      font-weight: 700;
-      border-radius: var(--radius-sm);
-      border-bottom: none !important;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UpStat — Status pages para quem leva seu sistema a sério</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description"
+        content="Monitore seus sistemas, detecte quedas em segundos e compartilhe uma status page profissional com seus clientes." />
+    <meta name="theme-color" content="#060810" />
+    <meta property="og:image" content="https://upstat.online/og-image.png" />
+    <meta property="og:url" content="https://upstat.online" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="UpStat — Uptime Monitoring for Devs" />
+    <meta name="twitter:description"
+        content="Monitor APIs, websites and services. Public status page, email & Slack alerts, and Dependency Map." />
+    <meta name="twitter:image" content="https://upstat.online/og-image.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ─── RESET ─── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font: inherit;
+        }
+
+        /* ─── TOKENS ─── */
+        :root {
+            --bg: #060810;
+            --bg2: #0a0e1a;
+            --surface: #0D1117;
+            --surface2: #161B22;
+            --surface3: #1c2330;
+            --border: rgba(255, 255, 255, 0.07);
+            --border2: rgba(255, 255, 255, 0.12);
+
+            --primary: #00D4AA;
+            --primary-d: rgba(0, 212, 170, 0.10);
+            --primary-b: rgba(0, 212, 170, 0.22);
+
+            --wpp: #25D366;
+            --wpp-d: rgba(37, 211, 102, 0.10);
+            --wpp-b: rgba(37, 211, 102, 0.22);
+
+            --down: #EF4444;
+            --warn: #F59E0B;
+            --up: #22C55E;
+
+            --text: #F0F6FC;
+            --text2: #b0bac6;
+            --muted: #6B7280;
+
+            --radius-sm: 8px;
+            --radius: 14px;
+            --radius-lg: 20px;
+
+            --grid-color: rgba(0, 212, 170, 0.035);
+            --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.55);
+            --shadow-glow: 0 0 60px rgba(0, 212, 170, 0.08);
+        }
+
+        /* ─── BASE ─── */
+        html,
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.65;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* top glow */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(0, 212, 170, 0.07) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ─── LAYOUT HELPERS ─── */
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 clamp(18px, 5vw, 40px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .wrap-sm {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 clamp(18px, 5vw, 40px);
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── TYPOGRAPHY HELPERS ─── */
+        .stag {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: .12em;
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .stag.wpp {
+            color: var(--wpp);
+        }
+
+        .shead {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            margin-bottom: 16px;
+        }
+
+        .shead em {
+            font-style: italic;
+            color: var(--primary);
+        }
+
+        .shead em.wpp {
+            color: var(--wpp);
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(18px, 5vw, 40px);
+            height: 60px;
+            background: rgba(6, 8, 16, 0.88);
+            backdrop-filter: blur(20px) saturate(1.5);
+            -webkit-backdrop-filter: blur(20px) saturate(1.5);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            letter-spacing: -.01em;
+        }
+
+        .nav-logo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 8px var(--primary);
+            }
+
+            50% {
+                opacity: .6;
+                box-shadow: 0 0 16px var(--primary);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            font-size: 12px;
+            color: var(--muted);
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-cta {
+            background: var(--primary) !important;
+            color: #000 !important;
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 12px !important;
+            color: var(--muted);
+            transition: opacity .15s !important;
+        }
+
+        .nav-cta:hover {
+            opacity: .85;
+        }
+
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 4px;
+        }
+
+        .nav-hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--text2);
+            border-radius: 2px;
+            transition: .2s;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 13px 22px;
+            border-radius: var(--radius-sm);
+            transition: opacity .15s, transform .15s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            opacity: .88;
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border2);
+            color: var(--text2);
+        }
+
+        .btn-ghost:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            color: var(--text);
+        }
+
+        .btn-wpp {
+            background: var(--wpp);
+            color: #000;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 100px;
+            border: 1px solid var(--border2);
+            background: var(--surface);
+            color: var(--text2);
+            letter-spacing: .04em;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 6px var(--primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .badge-dot.wpp {
+            background: var(--wpp);
+            box-shadow: 0 0 6px var(--wpp);
+        }
+
+        .hero-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(42px, 9vw, 96px);
+            line-height: 1.03;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .hero-title em {
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        .hero-sub {
+            max-width: 500px;
+            font-size: clamp(13px, 1.8vw, 15px);
+            line-height: 1.9;
+            color: var(--text2);
+            margin-bottom: 36px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        /* ─── HERO MOCK ─── */
+        .hero-mock {
+            width: 100%;
+            max-width: 640px;
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card), 0 0 0 1px rgba(0, 212, 170, 0.06);
+        }
+
+        .mock-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .mock-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--up);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .mock-pill span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--up);
+        }
+
+        .mock-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px 6px;
+            gap: 8px;
+        }
+
+        .mock-row-l {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            flex-wrap: wrap;
+        }
+
+        .mock-row-r {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-up {
+            background: var(--up);
+            box-shadow: 0 0 6px var(--up);
+        }
+
+        .dot-teal {
+            background: var(--primary);
+            box-shadow: 0 0 6px var(--primary);
+        }
+
+        .synth-tag {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: var(--primary-d);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .spill {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+
+        .spill-up {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--up);
+        }
+
+        .spill-teal {
+            background: var(--primary-d);
+            color: var(--primary);
+        }
+
+        .spill-down {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--down);
+        }
+
+        .ubars {
+            display: flex;
+            gap: 2px;
+            padding: 4px 18px 14px;
+        }
+
+        .ubar {
+            flex: 1;
+            height: 28px;
+            border-radius: 3px;
+            min-width: 0;
+        }
+
+        /* ─── STATS ─── */
+        .stats-section {
+            padding: 80px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .stat-cell {
+            padding: 40px 24px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+            position: relative;
+        }
+
+        .stat-cell:last-child {
+            border-right: none;
+        }
+
+        .stat-cell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 212, 170, 0.05), transparent 70%);
+            pointer-events: none;
+        }
+
+        .stat-num {
+            font-family: 'Instrument Serif', serif;
+            font-size: 52px;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: .06em;
+        }
+
+        /* ─── FEATURES ─── */
+        .features-section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .feat-card {
+            padding: 30px 28px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            transition: background .2s;
+        }
+
+        .feat-card:hover {
+            background: var(--surface2);
+        }
+
+        .feat-card:nth-child(3n) {
+            border-right: none;
+        }
+
+        .feat-card:nth-child(n+4) {
+            border-bottom: none;
+        }
+
+        .feat-card.hl-wpp {
+            background: linear-gradient(135deg, var(--surface) 60%, var(--wpp-d));
+        }
+
+        .feat-card.hl-synth {
+            background: linear-gradient(135deg, var(--surface) 60%, var(--primary-d));
+        }
+
+        .feat-card.hl-wpp:hover {
+            background: linear-gradient(135deg, var(--surface2) 60%, var(--wpp-b));
+        }
+
+        .feat-card.hl-synth:hover {
+            background: linear-gradient(135deg, var(--surface2) 60%, var(--primary-b));
+        }
+
+        .ficon {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .fdesc {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.7;
+        }
+
+        .ftag {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 10px;
+            padding: 3px 9px;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+
+        .ftag.wpp {
+            background: var(--wpp-d);
+            color: var(--wpp);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+
+        .ftag.synth {
+            background: var(--primary-d);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        /* ─── SPOTLIGHT ─── */
+        .spotlight-section {
+            padding: 60px 0;
+        }
+
+        .sp-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .sp-card.wpp-card {
+            border-color: rgba(37, 211, 102, 0.2);
+            box-shadow: 0 0 60px rgba(37, 211, 102, 0.05);
+        }
+
+        .sp-card.synth-card {
+            border-color: rgba(0, 212, 170, 0.2);
+            box-shadow: 0 0 60px rgba(0, 212, 170, 0.06);
+        }
+
+        .sp-content {
+            padding: 48px 42px;
+        }
+
+        .sp-content .shead {
+            margin-bottom: 14px;
+        }
+
+        .sp-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.85;
+            margin-bottom: 24px;
+        }
+
+        .sp-desc strong {
+            color: var(--text);
+        }
+
+        .sp-demo {
+            padding: 36px 32px;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .sp-card.wpp-card .sp-demo {
+            background: linear-gradient(160deg, var(--surface) 40%, rgba(37, 211, 102, 0.05));
+        }
+
+        .sp-card.synth-card .sp-demo {
+            background: linear-gradient(160deg, var(--surface) 40%, rgba(0, 212, 170, 0.05));
+        }
+
+        /* checklist */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .ck {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .ck.wpp {
+            background: var(--wpp-d);
+            color: var(--wpp);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+
+        .ck.teal {
+            background: var(--primary-d);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        /* WhatsApp bubbles */
+        .wbubble {
+            background: var(--surface2);
+            border-radius: 12px 12px 12px 0;
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            max-width: 300px;
+        }
+
+        .wbubble:last-child {
+            margin-bottom: 0;
+        }
+
+        .wbubble-t {
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .wbubble-t.down {
+            color: var(--down);
+        }
+
+        .wbubble-t.up {
+            color: var(--up);
+        }
+
+        .wbubble-b {
+            font-size: 11px;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        .wbubble-time {
+            font-size: 10px;
+            color: var(--muted);
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        /* Synthetic steps */
+        .sstep {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sstep:last-child {
+            border-bottom: none;
+        }
+
+        .sstep-n {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--surface3);
+            border: 1px solid var(--border2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .sstep-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1px;
+        }
+
+        .sstep-desc {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .sstep-st {
+            margin-left: auto;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        .ss-ok {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--up);
+        }
+
+        .ss-run {
+            background: var(--primary-d);
+            color: var(--primary);
+        }
+
+        .ss-w {
+            background: var(--surface3);
+            color: var(--muted);
+        }
+
+        .ss-err {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--down);
+        }
+
+        /* ─── HOW ─── */
+        .how-section {
+            padding: 100px 0;
+        }
+
+        .how-section .section-header {
+            margin-bottom: 52px;
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 28px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step-row:last-child {
+            border-bottom: none;
+        }
+
+        .step-n {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-d);
+            border: 1px solid rgba(0, 212, 170, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.75;
+        }
+
+        /* ─── PRICING ─── */
+        .pricing-section {
+            padding: 100px 0;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .plan {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+        }
+
+        .plan.pro {
+            background: linear-gradient(145deg, var(--surface2), var(--surface));
+            border-color: rgba(0, 212, 170, 0.25);
+            box-shadow: 0 0 40px rgba(0, 212, 170, 0.07);
+            position: relative;
+        }
+
+        .plan-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-bdg {
+            font-size: 9px;
+            padding: 3px 8px;
+            background: var(--primary-d);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 100px;
+            font-weight: 700;
+        }
+
+        .plan-price {
+            font-family: 'Instrument Serif', serif;
+            font-size: 52px;
+            line-height: 1;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .plan.pro .plan-price {
+            color: var(--primary);
+        }
+
+        .plan-period {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .plan-feats {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            margin-bottom: 28px;
+        }
+
+        .plan-feats li {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .fi {
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .fi.on {
+            color: var(--up);
+        }
+
+        .fi.off {
+            color: var(--muted);
+        }
+
+        .fi.wpp {
+            color: var(--wpp);
+        }
+
+        .fi.teal {
+            color: var(--primary);
+        }
+
+        .hl-wpp {
+            color: var(--wpp) !important;
+        }
+
+        .hl-synth {
+            color: var(--primary) !important;
+        }
+
+        .plan-btn {
+            display: block;
+            text-align: center;
+            padding: 13px;
+            border-radius: var(--radius-sm);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            transition: opacity .15s, transform .15s;
+        }
+
+        .plan-btn:hover {
+            opacity: .85;
+            transform: translateY(-1px);
+        }
+
+        .plan-btn.free {
+            background: var(--surface3);
+            color: var(--text2);
+            border: 1px solid var(--border2);
+        }
+
+        .plan-btn.pro-b {
+            background: var(--primary);
+            color: #000;
+        }
+
+        /* ─── CTA ─── */
+        .cta-section {
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(36px, 6vw, 64px);
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            margin-bottom: 16px;
+        }
+
+        .cta-title em {
+            font-style: italic;
+            color: var(--down);
+        }
+
+        .cta-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 36px;
+        }
+
+        .cta-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px clamp(18px, 5vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .foot-logo {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .foot-copy {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* ─── REVEAL ANIMATION ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* stagger children */
+        .reveal-group>* {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .5s ease, transform .5s ease;
+        }
+
+        .reveal-group.visible>*:nth-child(1) {
+            transition-delay: .05s;
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-group.visible>*:nth-child(2) {
+            transition-delay: .15s;
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-group.visible>*:nth-child(3) {
+            transition-delay: .25s;
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-group.visible>*:nth-child(4) {
+            transition-delay: .35s;
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-group.visible>*:nth-child(5) {
+            transition-delay: .45s;
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-group.visible>*:nth-child(6) {
+            transition-delay: .55s;
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .sp-card {
+                grid-template-columns: 1fr;
+            }
+
+            .sp-demo {
+                border-left: none;
+                border-top: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 100px 18px 60px;
+            }
+
+            .hero-mock {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-cell {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .stat-cell:last-child {
+                border-bottom: none;
+            }
+
+            .feat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feat-card:nth-child(3n) {
+                border-right: none;
+            }
+
+            .feat-card:nth-child(n+4) {
+                border-bottom: 1px solid var(--border);
+            }
+
+            .feat-card:last-child {
+                border-bottom: none;
+            }
+
+            .price-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-hamburger {
+                display: flex;
+            }
+
+            .sp-content {
+                padding: 32px 24px;
+            }
+
+            .sp-demo {
+                padding: 28px 24px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .cta-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-btns .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* ─── MOBILE MENU ─── */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(6, 8, 16, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 998;
+            padding: 20px clamp(18px, 5vw, 40px);
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--text2);
+            border-bottom: 1px solid var(--border);
+            transition: color .2s;
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--text);
+        }
+
+        .mobile-menu .m-cta {
+            margin-top: 10px;
+            padding: 13px;
+            text-align: center;
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            border-bottom: none !important;
+        }
+    </style>
 
 </head>
 
 <body>
 
-<!-- ─── NAV ─── -->
+    <!-- ─── NAV ─── -->
 
-<nav>
-  <a href="/" class="nav-logo">
-    <div class="nav-logo-dot"></div>
-    UpStat
-  </a>
-  <ul class="nav-links">
-    <li><a href="#features">Funcionalidades</a></li>
-    <li><a href="#whatsapp">WhatsApp</a></li>
-    <li><a href="#synthetic">Synthetic</a></li>
-    <li><a href="#pricing">Preços</a></li>
-    <li><a href="https://upstat.online/login">Entrar</a></li>
-    <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
-  </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+    <nav>
+        <a href="/" class="nav-logo">
+            <div class="nav-logo-dot"></div>
+            UpStat
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#whatsapp">WhatsApp</a></li>
+            <li><a href="#synthetic">Synthetic</a></li>
+            <li><a href="#pricing">Preços</a></li>
+            <li><a href="https://upstat.online/login">Entrar</a></li>
+            <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
+        </ul>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
 
-<!-- Mobile menu -->
+    <!-- Mobile menu -->
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#features">Funcionalidades</a>
-  <a href="#whatsapp">WhatsApp</a>
-  <a href="#synthetic">Synthetic</a>
-  <a href="#pricing">Preços</a>
-  <a href="https://upstat.online/login">Entrar</a>
-  <a href="https://upstat.online/register" class="m-cta">Começar grátis →</a>
-</div>
-
-<!-- ─── HERO ─── -->
-
-<section class="hero">
-  <div class="hero-badges">
-    <div class="badge"><span class="badge-dot"></span> Monitoramento em tempo real</div>
-    <div class="badge"><span class="badge-dot wpp"></span> Alertas por WhatsApp</div>
-  </div>
-
-  <h1 class="hero-title">
-    Seu sistema caiu.<br />
-    <em>Seus clientes já sabem.</em>
-  </h1>
-
-  <p class="hero-sub">
-    Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — sem complicação.
-  </p>
-
-  <div class="hero-actions">
-    <a href="https://upstat.online/register" class="btn btn-primary">Criar conta grátis →</a>
-    <a href="#how" class="btn btn-ghost">Ver como funciona</a>
-  </div>
-
-  <div class="hero-mock">
-    <div class="mock-header">
-      <span>Minha Startup — Status</span>
-      <div class="mock-pill"><span></span> Todos operacionais</div>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#features">Funcionalidades</a>
+        <a href="#whatsapp">WhatsApp</a>
+        <a href="#synthetic">Synthetic</a>
+        <a href="#pricing">Preços</a>
+        <a href="https://upstat.online/login">Entrar</a>
+        <a href="https://upstat.online/register" class="m-cta">Começar grátis →</a>
     </div>
-    <div class="mock-row">
-      <div class="mock-row-l"><div class="dot dot-up"></div> API Principal</div>
-      <div class="mock-row-r"><span>142ms</span><span>99.98%</span><span class="spill spill-up">Operacional</span></div>
-    </div>
-    <div class="ubars">
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(239,68,68,.22)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(245,158,11,.2)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-      <div class="ubar" style="background:rgba(34,197,94,.18)"></div><div class="ubar" style="background:rgba(34,197,94,.18)"></div>
-    </div>
-    <div class="mock-row">
-      <div class="mock-row-l"><div class="dot dot-teal"></div> Checkout Flow <span class="synth-tag">synthetic</span></div>
-      <div class="mock-row-r"><span>1.4s</span><span>100%</span><span class="spill spill-teal">OK</span></div>
-    </div>
-    <div class="ubars">
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-      <div class="ubar" style="background:rgba(0,212,170,.14)"></div><div class="ubar" style="background:rgba(0,212,170,.14)"></div>
-    </div>
-  </div>
-</section>
 
-<!-- ─── STATS ─── -->
+    <!-- ─── HERO ─── -->
 
-<div class="stats-section">
-  <div class="wrap">
-    <div class="stats-grid reveal">
-      <div class="stat-cell">
-        <div class="stat-num">99.9%</div>
-        <div class="stat-lbl">UPTIME MÉDIO MONITORADO</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">&lt;60s</div>
-        <div class="stat-lbl">TEMPO DE DETECÇÃO</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">R$0</div>
-        <div class="stat-lbl">PRA COMEÇAR</div>
-      </div>
-    </div>
-  </div>
-</div>
+    <section class="hero">
+        <div class="hero-badges">
+            <div class="badge"><span class="badge-dot"></span> Monitoramento em tempo real</div>
+            <div class="badge"><span class="badge-dot wpp"></span> Alertas por WhatsApp</div>
+        </div>
 
-<!-- ─── FEATURES ─── -->
+        <h1 class="hero-title">
+            Seu sistema caiu.<br />
+            <em>Seus clientes já sabem.</em>
+        </h1>
 
-<section class="features-section" id="features">
-  <div class="wrap">
-    <div class="section-header">
-      <div class="stag reveal">// funcionalidades</div>
-      <h2 class="shead reveal">Tudo que você precisa.<br /><em>Nada que você não precisa.</em></h2>
-    </div>
-    <div class="feat-grid reveal-group">
-      <div class="feat-card">
-        <span class="ficon">⚡</span>
-        <div class="ftitle">Monitoramento automático</div>
-        <p class="fdesc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu cliente.</p>
-      </div>
-      <div class="feat-card hl-synth">
-        <span class="ficon">🤖</span>
-        <div class="ftitle">Synthetic Monitor</div>
-        <p class="fdesc">Simule fluxos reais — login, checkout, formulários. Detecte quando algo quebra, não só quando o servidor cai.</p>
-        <span class="ftag synth">✦ Pro</span>
-      </div>
-      <div class="feat-card">
-        <span class="ficon">📊</span>
-        <div class="ftitle">Histórico de uptime</div>
-        <p class="fdesc">Visualize 90 dias de histórico com barras por dia, latência e incidentes registrados.</p>
-      </div>
-      <div class="feat-card hl-wpp">
-        <span class="ficon">💬</span>
-        <div class="ftitle">Alertas por WhatsApp</div>
-        <p class="fdesc">Receba mensagem direto no WhatsApp quando qualquer monitor cair ou se recuperar. Na hora, sem delay.</p>
-        <span class="ftag wpp">💬 Pro</span>
-      </div>
-      <div class="feat-card">
-        <span class="ficon">🔗</span>
-        <div class="ftitle">Status page pública</div>
-        <p class="fdesc">Página profissional com URL personalizada pra compartilhar com seus clientes e usuários.</p>
-      </div>
-      <div class="feat-card">
-        <span class="ficon">🔔</span>
-        <div class="ftitle">Alertas por email</div>
-        <p class="fdesc">Notificações por email quando seu sistema cair ou se recuperar — disponível em todos os planos.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── WHATSAPP SPOTLIGHT ─── -->
-
-<section class="spotlight-section" id="whatsapp">
-  <div class="wrap">
-    <div class="sp-card wpp-card reveal">
-      <div class="sp-content">
-        <div class="stag wpp">// alertas por whatsapp</div>
-        <h2 class="shead">Cai às 3h da manhã?<br /><em class="wpp">Você sabe na hora.</em></h2>
-        <p class="sp-desc">
-          Email fica sem ler. Push você ignora. Mas <strong>WhatsApp você vê</strong> — independente da hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.
+        <p class="hero-sub">
+            Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto
+            no seu WhatsApp — sem complicação.
         </p>
-        <ul class="checklist">
-          <li><span class="ck wpp">✓</span><span><strong>Alerta de queda instantâneo</strong> — assim que o monitor detecta falha</span></li>
-          <li><span class="ck wpp">✓</span><span><strong>Alerta de recuperação</strong> — quando o sistema volta ao ar</span></li>
-          <li><span class="ck wpp">✓</span><span><strong>Detalhes completos</strong> — nome do monitor, downtime, código de status</span></li>
-          <li><span class="ck wpp">✓</span><span><strong>Sem app extra</strong> — funciona direto no WhatsApp que você já usa</span></li>
-        </ul>
-        <a href="https://upstat.online/register" class="btn btn-wpp">💬 Ativar alertas WhatsApp →</a>
-      </div>
-      <div class="sp-demo">
-        <div class="wbubble">
-          <div class="wbubble-t down">🔴 Monitor offline</div>
-          <div class="wbubble-b"><strong>API Principal</strong> está fora do ar.<br />Status: 503 · Detectado às 03:17</div>
-          <div class="wbubble-time">03:17 ✓✓</div>
+
+        <div class="hero-actions">
+            <a href="https://upstat.online/register" class="btn btn-primary">Criar conta grátis →</a>
+            <a href="#how" class="btn btn-ghost">Ver como funciona</a>
         </div>
-        <div class="wbubble">
-          <div class="wbubble-t down">🔴 Synthetic falhou</div>
-          <div class="wbubble-b"><strong>Checkout Flow</strong> — step 2 falhou.<br />Timeout na etapa de pagamento</div>
-          <div class="wbubble-time">03:18 ✓✓</div>
+
+        <div class="hero-mock">
+            <div class="mock-header">
+                <span>Minha Startup — Status</span>
+                <div class="mock-pill"><span></span> Todos operacionais</div>
+            </div>
+            <div class="mock-row">
+                <div class="mock-row-l">
+                    <div class="dot dot-up"></div> API Principal
+                </div>
+                <div class="mock-row-r"><span>142ms</span><span>99.98%</span><span
+                        class="spill spill-up">Operacional</span></div>
+            </div>
+            <div class="ubars">
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(239,68,68,.22)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(245,158,11,.2)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+                <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
+            </div>
+            <div class="mock-row">
+                <div class="mock-row-l">
+                    <div class="dot dot-teal"></div> Checkout Flow <span class="synth-tag">synthetic</span>
+                </div>
+                <div class="mock-row-r"><span>1.4s</span><span>100%</span><span class="spill spill-teal">OK</span></div>
+            </div>
+            <div class="ubars">
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+                <div class="ubar" style="background:rgba(0,212,170,.14)"></div>
+            </div>
         </div>
-        <div class="wbubble">
-          <div class="wbubble-t up">🟢 Monitor recuperado</div>
-          <div class="wbubble-b"><strong>API Principal</strong> voltou ao ar.<br />Downtime: 4 min · Latência: 138ms</div>
-          <div class="wbubble-time">03:21 ✓✓</div>
+    </section>
+
+    <!-- ─── STATS ─── -->
+
+    <div class="stats-section">
+        <div class="wrap">
+            <div class="stats-grid reveal">
+                <div class="stat-cell">
+                    <div class="stat-num">99.9%</div>
+                    <div class="stat-lbl">UPTIME MÉDIO MONITORADO</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-num">&lt;60s</div>
+                    <div class="stat-lbl">TEMPO DE DETECÇÃO</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-num">R$0</div>
+                    <div class="stat-lbl">PRA COMEÇAR</div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</section>
 
-<!-- ─── SYNTHETIC SPOTLIGHT ─── -->
+    <!-- ─── FEATURES ─── -->
 
-<section class="spotlight-section" id="synthetic">
-  <div class="wrap">
-    <div class="sp-card synth-card reveal">
-      <div class="sp-content">
-        <div class="stag">// synthetic monitor</div>
-        <h2 class="shead">Não é só ping.<br /><em>É o fluxo real.</em></h2>
-        <p class="sp-desc">
-          Servidor respondendo 200 OK enquanto o checkout está quebrado? O Synthetic Monitor simula o que seu <strong>usuário real faz</strong> e alerta quando qualquer etapa falha.
-        </p>
-        <ul class="checklist">
-          <li><span class="ck teal">✓</span><span><strong>Simula fluxos reais</strong> — login, checkout, APIs encadeadas</span></li>
-          <li><span class="ck teal">✓</span><span><strong>Detecta erros lógicos</strong> — não só downtime, mas falhas de integração</span></li>
-          <li><span class="ck teal">✓</span><span><strong>Steps granulares</strong> — veja exatamente qual etapa quebrou</span></li>
-          <li><span class="ck teal">✓</span><span><strong>Alerta via WhatsApp + email</strong> — integra com todos os canais</span></li>
-        </ul>
-        <a href="https://upstat.online/register" class="btn btn-primary">🤖 Criar meu primeiro synthetic →</a>
-      </div>
-      <div class="sp-demo">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:.04em;">CHECKOUT FLOW · RODANDO AGORA</div>
-        <div class="sstep">
-          <div class="sstep-n">1</div>
-          <div>
-            <div class="sstep-label">GET /products</div>
-            <div class="sstep-desc">Listagem carregada</div>
-          </div>
-          <span class="sstep-st ss-ok">✓ 210ms</span>
+    <section class="features-section" id="features">
+        <div class="wrap">
+            <div class="section-header">
+                <div class="stag reveal">// funcionalidades</div>
+                <h2 class="shead reveal">Tudo que você precisa.<br /><em>Nada que você não precisa.</em></h2>
+            </div>
+            <div class="feat-grid reveal-group">
+                <div class="feat-card">
+                    <span class="ficon">⚡</span>
+                    <div class="ftitle">Monitoramento automático</div>
+                    <p class="fdesc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu
+                        cliente.</p>
+                </div>
+                <div class="feat-card hl-synth">
+                    <span class="ficon">🤖</span>
+                    <div class="ftitle">Synthetic Monitor</div>
+                    <p class="fdesc">Simule fluxos reais — login, checkout, formulários. Detecte quando algo quebra, não
+                        só quando o servidor cai.</p>
+                    <span class="ftag synth">✦ Pro</span>
+                </div>
+                <div class="feat-card">
+                    <span class="ficon">📊</span>
+                    <div class="ftitle">Histórico de uptime</div>
+                    <p class="fdesc">Visualize 90 dias de histórico com barras por dia, latência e incidentes
+                        registrados.</p>
+                </div>
+                <div class="feat-card hl-wpp">
+                    <span class="ficon">💬</span>
+                    <div class="ftitle">Alertas por WhatsApp</div>
+                    <p class="fdesc">Receba mensagem direto no WhatsApp quando qualquer monitor cair ou se recuperar. Na
+                        hora, sem delay.</p>
+                    <span class="ftag wpp">💬 Pro</span>
+                </div>
+                <div class="feat-card">
+                    <span class="ficon">🔗</span>
+                    <div class="ftitle">Status page pública</div>
+                    <p class="fdesc">Página profissional com URL personalizada pra compartilhar com seus clientes e
+                        usuários.</p>
+                </div>
+                <div class="feat-card">
+                    <span class="ficon">🔔</span>
+                    <div class="ftitle">Alertas por email</div>
+                    <p class="fdesc">Notificações por email quando seu sistema cair ou se recuperar — disponível em
+                        todos os planos.</p>
+                </div>
+            </div>
         </div>
-        <div class="sstep">
-          <div class="sstep-n">2</div>
-          <div>
-            <div class="sstep-label">POST /cart/add</div>
-            <div class="sstep-desc">Item adicionado</div>
-          </div>
-          <span class="sstep-st ss-ok">✓ 318ms</span>
+    </section>
+
+    <!-- ─── WHATSAPP SPOTLIGHT ─── -->
+
+    <section class="spotlight-section" id="whatsapp">
+        <div class="wrap">
+            <div class="sp-card wpp-card reveal">
+                <div class="sp-content">
+                    <div class="stag wpp">// alertas por whatsapp</div>
+                    <h2 class="shead">Cai às 3h da manhã?<br /><em class="wpp">Você sabe na hora.</em></h2>
+                    <p class="sp-desc">
+                        Email fica sem ler. Push você ignora. Mas <strong>WhatsApp você vê</strong> — independente da
+                        hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.
+                    </p>
+                    <ul class="checklist">
+                        <li><span class="ck wpp">✓</span><span><strong>Alerta de queda instantâneo</strong> — assim que
+                                o monitor detecta falha</span></li>
+                        <li><span class="ck wpp">✓</span><span><strong>Alerta de recuperação</strong> — quando o sistema
+                                volta ao ar</span></li>
+                        <li><span class="ck wpp">✓</span><span><strong>Detalhes completos</strong> — nome do monitor,
+                                downtime, código de status</span></li>
+                        <li><span class="ck wpp">✓</span><span><strong>Sem app extra</strong> — funciona direto no
+                                WhatsApp que você já usa</span></li>
+                    </ul>
+                    <a href="https://upstat.online/register" class="btn btn-wpp">💬 Ativar alertas WhatsApp →</a>
+                </div>
+                <div class="sp-demo">
+                    <div class="wbubble">
+                        <div class="wbubble-t down">🔴 Monitor offline</div>
+                        <div class="wbubble-b"><strong>API Principal</strong> está fora do ar.<br />Status: 503 ·
+                            Detectado às 03:17</div>
+                        <div class="wbubble-time">03:17 ✓✓</div>
+                    </div>
+                    <div class="wbubble">
+                        <div class="wbubble-t down">🔴 Synthetic falhou</div>
+                        <div class="wbubble-b"><strong>Checkout Flow</strong> — step 2 falhou.<br />Timeout na etapa de
+                            pagamento</div>
+                        <div class="wbubble-time">03:18 ✓✓</div>
+                    </div>
+                    <div class="wbubble">
+                        <div class="wbubble-t up">🟢 Monitor recuperado</div>
+                        <div class="wbubble-b"><strong>API Principal</strong> voltou ao ar.<br />Downtime: 4 min ·
+                            Latência: 138ms</div>
+                        <div class="wbubble-time">03:21 ✓✓</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="sstep">
-          <div class="sstep-n">3</div>
-          <div>
-            <div class="sstep-label">POST /checkout/init</div>
-            <div class="sstep-desc">Verificando gateway…</div>
-          </div>
-          <span class="sstep-st ss-run">⟳ rodando</span>
+    </section>
+
+    <!-- ─── SYNTHETIC SPOTLIGHT ─── -->
+
+    <section class="spotlight-section" id="synthetic">
+        <div class="wrap">
+            <div class="sp-card synth-card reveal">
+                <div class="sp-content">
+                    <div class="stag">// synthetic monitor</div>
+                    <h2 class="shead">Não é só ping.<br /><em>É o fluxo real.</em></h2>
+                    <p class="sp-desc">
+                        Servidor respondendo 200 OK enquanto o checkout está quebrado? O Synthetic Monitor simula o que
+                        seu <strong>usuário real faz</strong> e alerta quando qualquer etapa falha.
+                    </p>
+                    <ul class="checklist">
+                        <li><span class="ck teal">✓</span><span><strong>Simula fluxos reais</strong> — login, checkout,
+                                APIs encadeadas</span></li>
+                        <li><span class="ck teal">✓</span><span><strong>Detecta erros lógicos</strong> — não só
+                                downtime, mas falhas de integração</span></li>
+                        <li><span class="ck teal">✓</span><span><strong>Steps granulares</strong> — veja exatamente qual
+                                etapa quebrou</span></li>
+                        <li><span class="ck teal">✓</span><span><strong>Alerta via WhatsApp + email</strong> — integra
+                                com todos os canais</span></li>
+                    </ul>
+                    <a href="https://upstat.online/register" class="btn btn-primary">🤖 Criar meu primeiro synthetic
+                        →</a>
+                </div>
+                <div class="sp-demo">
+                    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:.04em;">CHECKOUT
+                        FLOW · RODANDO AGORA</div>
+                    <div class="sstep">
+                        <div class="sstep-n">1</div>
+                        <div>
+                            <div class="sstep-label">GET /products</div>
+                            <div class="sstep-desc">Listagem carregada</div>
+                        </div>
+                        <span class="sstep-st ss-ok">✓ 210ms</span>
+                    </div>
+                    <div class="sstep">
+                        <div class="sstep-n">2</div>
+                        <div>
+                            <div class="sstep-label">POST /cart/add</div>
+                            <div class="sstep-desc">Item adicionado</div>
+                        </div>
+                        <span class="sstep-st ss-ok">✓ 318ms</span>
+                    </div>
+                    <div class="sstep">
+                        <div class="sstep-n">3</div>
+                        <div>
+                            <div class="sstep-label">POST /checkout/init</div>
+                            <div class="sstep-desc">Verificando gateway…</div>
+                        </div>
+                        <span class="sstep-st ss-run">⟳ rodando</span>
+                    </div>
+                    <div class="sstep" style="opacity:.4">
+                        <div class="sstep-n">4</div>
+                        <div>
+                            <div class="sstep-label">POST /payment/confirm</div>
+                            <div class="sstep-desc">Confirmação</div>
+                        </div>
+                        <span class="sstep-st ss-w">aguardando</span>
+                    </div>
+                    <div class="sstep" style="opacity:.4">
+                        <div class="sstep-n">5</div>
+                        <div>
+                            <div class="sstep-label">GET /order/:id</div>
+                            <div class="sstep-desc">Validação do pedido</div>
+                        </div>
+                        <span class="sstep-st ss-w">aguardando</span>
+                    </div>
+                    <div
+                        style="font-size:11px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+                        Último: <span style="color:var(--up)">✓ OK</span> · 1.2s · há 3 min
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="sstep" style="opacity:.4">
-          <div class="sstep-n">4</div>
-          <div>
-            <div class="sstep-label">POST /payment/confirm</div>
-            <div class="sstep-desc">Confirmação</div>
-          </div>
-          <span class="sstep-st ss-w">aguardando</span>
+    </section>
+
+    <!-- ─── HOW ─── -->
+
+    <section class="how-section" id="how">
+        <div class="wrap-sm">
+            <div class="section-header">
+                <div class="stag reveal">// como funciona</div>
+                <h2 class="shead reveal">Do cadastro à<br /><em>status page em minutos.</em></h2>
+            </div>
+            <div class="steps-list reveal">
+                <div class="step-row">
+                    <div class="step-n">1</div>
+                    <div>
+                        <div class="step-title">Crie sua conta grátis</div>
+                        <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já
+                            começa a rodar na hora.</p>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-n">2</div>
+                    <div>
+                        <div class="step-title">Adicione um monitor (HTTP ou Synthetic)</div>
+                        <p class="step-desc">Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic
+                            Monitor com steps encadeados pra testar fluxos reais.</p>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-n">3</div>
+                    <div>
+                        <div class="step-title">Configure seus alertas</div>
+                        <p class="step-desc">Ative notificações por email — ou por WhatsApp no plano Pro — pra saber
+                            imediatamente quando algo falhar.</p>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-n">4</div>
+                    <div>
+                        <div class="step-title">Compartilhe sua status page</div>
+                        <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e
+                            deixe que eles acompanhem em tempo real.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="sstep" style="opacity:.4">
-          <div class="sstep-n">5</div>
-          <div>
-            <div class="sstep-label">GET /order/:id</div>
-            <div class="sstep-desc">Validação do pedido</div>
-          </div>
-          <span class="sstep-st ss-w">aguardando</span>
+    </section>
+
+    <!-- ─── PRICING ─── -->
+
+    <section class="pricing-section" id="pricing">
+        <div class="wrap-sm">
+            <div class="section-header">
+                <div class="stag reveal">// preços</div>
+                <h2 class="shead reveal">Simples como<br /><em>deve ser.</em></h2>
+            </div>
+            <div class="price-grid reveal">
+                <div class="plan">
+                    <div class="plan-name">Free</div>
+                    <div class="plan-price">R$0</div>
+                    <div class="plan-period">para sempre</div>
+                    <ul class="plan-feats">
+                        <li><span class="fi on">✓</span> 3 monitores HTTP</li>
+                        <li><span class="fi on">✓</span> Ping a cada 5 minutos</li>
+                        <li><span class="fi on">✓</span> Histórico de 7 dias</li>
+                        <li><span class="fi on">✓</span> Status page pública</li>
+                        <li><span class="fi on">✓</span> Notificação por email</li>
+                        <li><span class="fi off">✗</span> <span style="opacity:.4">Alertas por WhatsApp</span></li>
+                        <li><span class="fi off">✗</span> <span style="opacity:.4">Synthetic Monitor</span></li>
+                        <li><span class="fi off">✗</span> <span style="opacity:.4">URL personalizada</span></li>
+                    </ul>
+                    <a href="https://upstat.online/register" class="plan-btn free">Começar grátis</a>
+                </div>
+                <div class="plan pro">
+                    <div class="plan-name">Pro <span class="plan-bdg">recomendado</span></div>
+                    <div class="plan-price">R$9</div>
+                    <div class="plan-period">por mês</div>
+                    <ul class="plan-feats">
+                        <li><span class="fi on">✓</span> Monitores ilimitados</li>
+                        <li><span class="fi on">✓</span> Ping a cada 1 minuto</li>
+                        <li><span class="fi on">✓</span> Histórico de 90 dias</li>
+                        <li><span class="fi on">✓</span> Status page pública</li>
+                        <li><span class="fi on">✓</span> URL personalizada</li>
+                        <li><span class="fi on">✓</span> Notificação por email</li>
+                        <li class="hl-wpp"><span class="fi wpp">✓</span> 💬 Alertas por WhatsApp</li>
+                        <li class="hl-synth"><span class="fi teal">✓</span> 🤖 Synthetic Monitor</li>
+                        <li><span class="fi on">✓</span> Suporte prioritário</li>
+                    </ul>
+                    <a href="https://upstat.online/register" class="plan-btn pro-b">Fazer upgrade →</a>
+                </div>
+            </div>
         </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
-          Último: <span style="color:var(--up)">✓ OK</span> · 1.2s · há 3 min
+    </section>
+
+    <!-- ─── CTA ─── -->
+
+    <section class="cta-section">
+        <h2 class="cta-title reveal">Pronto pra parar<br />de perder <em>downtime</em>?</h2>
+        <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
+        <div class="cta-btns reveal">
+            <a href="https://upstat.online/register" class="btn btn-primary">Criar minha conta →</a>
+            <a href="https://upstat.online/register" class="btn btn-wpp">💬 Quero alertas no WhatsApp</a>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ─── HOW ─── -->
+    <!-- ─── FOOTER ─── -->
 
-<section class="how-section" id="how">
-  <div class="wrap-sm">
-    <div class="section-header">
-      <div class="stag reveal">// como funciona</div>
-      <h2 class="shead reveal">Do cadastro à<br /><em>status page em minutos.</em></h2>
-    </div>
-    <div class="steps-list reveal">
-      <div class="step-row">
-        <div class="step-n">1</div>
-        <div>
-          <div class="step-title">Crie sua conta grátis</div>
-          <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa a rodar na hora.</p>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-n">2</div>
-        <div>
-          <div class="step-title">Adicione um monitor (HTTP ou Synthetic)</div>
-          <p class="step-desc">Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic Monitor com steps encadeados pra testar fluxos reais.</p>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-n">3</div>
-        <div>
-          <div class="step-title">Configure seus alertas</div>
-          <p class="step-desc">Ative notificações por email — ou por WhatsApp no plano Pro — pra saber imediatamente quando algo falhar.</p>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-n">4</div>
-        <div>
-          <div class="step-title">Compartilhe sua status page</div>
-          <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe que eles acompanhem em tempo real.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <footer>
+        <span class="foot-logo">
+            <div class="nav-logo-dot"></div>
+            UpStat
+        </span>
+        <span class="foot-copy">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
+    </footer>
 
-<!-- ─── PRICING ─── -->
+    <script>
+        // Reveal on scroll
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08 });
 
-<section class="pricing-section" id="pricing">
-  <div class="wrap-sm">
-    <div class="section-header">
-      <div class="stag reveal">// preços</div>
-      <h2 class="shead reveal">Simples como<br /><em>deve ser.</em></h2>
-    </div>
-    <div class="price-grid reveal">
-      <div class="plan">
-        <div class="plan-name">Free</div>
-        <div class="plan-price">R$0</div>
-        <div class="plan-period">para sempre</div>
-        <ul class="plan-feats">
-          <li><span class="fi on">✓</span> 3 monitores HTTP</li>
-          <li><span class="fi on">✓</span> Ping a cada 5 minutos</li>
-          <li><span class="fi on">✓</span> Histórico de 7 dias</li>
-          <li><span class="fi on">✓</span> Status page pública</li>
-          <li><span class="fi on">✓</span> Notificação por email</li>
-          <li><span class="fi off">✗</span> <span style="opacity:.4">Alertas por WhatsApp</span></li>
-          <li><span class="fi off">✗</span> <span style="opacity:.4">Synthetic Monitor</span></li>
-          <li><span class="fi off">✗</span> <span style="opacity:.4">URL personalizada</span></li>
-        </ul>
-        <a href="https://upstat.online/register" class="plan-btn free">Começar grátis</a>
-      </div>
-      <div class="plan pro">
-        <div class="plan-name">Pro <span class="plan-bdg">recomendado</span></div>
-        <div class="plan-price">R$29</div>
-        <div class="plan-period">por mês</div>
-        <ul class="plan-feats">
-          <li><span class="fi on">✓</span> Monitores ilimitados</li>
-          <li><span class="fi on">✓</span> Ping a cada 1 minuto</li>
-          <li><span class="fi on">✓</span> Histórico de 90 dias</li>
-          <li><span class="fi on">✓</span> Status page pública</li>
-          <li><span class="fi on">✓</span> URL personalizada</li>
-          <li><span class="fi on">✓</span> Notificação por email</li>
-          <li class="hl-wpp"><span class="fi wpp">✓</span> 💬 Alertas por WhatsApp</li>
-          <li class="hl-synth"><span class="fi teal">✓</span> 🤖 Synthetic Monitor</li>
-          <li><span class="fi on">✓</span> Suporte prioritário</li>
-        </ul>
-        <a href="https://upstat.online/register" class="plan-btn pro-b">Fazer upgrade →</a>
-      </div>
-    </div>
-  </div>
-</section>
+        document.querySelectorAll('.reveal, .reveal-group').forEach(el => obs.observe(el));
 
-<!-- ─── CTA ─── -->
+        // Mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
 
-<section class="cta-section">
-  <h2 class="cta-title reveal">Pronto pra parar<br />de perder <em>downtime</em>?</h2>
-  <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
-  <div class="cta-btns reveal">
-    <a href="https://upstat.online/register" class="btn btn-primary">Criar minha conta →</a>
-    <a href="https://upstat.online/register" class="btn btn-wpp">💬 Quero alertas no WhatsApp</a>
-  </div>
-</section>
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
 
-<!-- ─── FOOTER ─── -->
-
-<footer>
-  <span class="foot-logo">
-    <div class="nav-logo-dot"></div>
-    UpStat
-  </span>
-  <span class="foot-copy">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
-</footer>
-
-<script>
-  // Reveal on scroll
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-
-  document.querySelectorAll('.reveal, .reveal-group').forEach(el => obs.observe(el));
-
-  // Mobile menu
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-
-  hamburger.addEventListener('click', () => {
-    mobileMenu.classList.toggle('open');
-  });
-
-  // Close mobile menu when clicking a link
-  mobileMenu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
-  });
-</script>
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        });
+    </script>
 
 </body>
+
 </html>
