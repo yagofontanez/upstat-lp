@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -25,764 +26,1221 @@
             padding: 0;
         }
 
-        :root {
-            --bg: #060810;
-            --surface: #0D1117;
-            --surface2: #161B22;
-            --border: rgba(255, 255, 255, 0.08);
-            --primary: #00D4AA;
-            --primary-dim: rgba(0, 212, 170, 0.12);
-            --text: #F0F6FC;
-            --muted: #8B949E;
-            --down: #EF4444;
-            --warn: #F59E0B;
-            --up: #22C55E;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
-            pointer-events: none;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 0;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 20px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(6, 8, 16, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            letter-spacing: -0.02em;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 13px;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--text);
-        }
-
-        .nav-cta {
-            background: var(--primary);
-            color: #000 !important;
-            font-weight: 700;
-            padding: 8px 20px;
-            border-radius: 6px;
-            transition: opacity 0.2s !important;
-        }
-
-        .nav-cta:hover {
-            opacity: 0.85;
-        }
-
-        section {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 120px 24px 80px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary-dim);
-            border: 1px solid rgba(0, 212, 170, 0.25);
-            color: var(--primary);
-            font-size: 12px;
-            padding: 6px 14px;
-            border-radius: 100px;
-            margin-bottom: 32px;
-            animation: fadeUp 0.6s ease both;
-        }
-
-        .hero-badge span {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--primary);
-            animation: pulse 2s infinite;
-        }
-
-        .hero-title {
-            font-family: 'Instrument Serif', serif;
-            font-size: clamp(52px, 8vw, 96px);
-            line-height: 1.0;
-            letter-spacing: -0.03em;
-            margin-bottom: 24px;
-            animation: fadeUp 0.6s ease 0.1s both;
-        }
-
-        .hero-title em {
-            font-style: italic;
-            color: var(--primary);
-        }
-
-        .hero-subtitle {
-            font-size: clamp(14px, 2vw, 17px);
-            color: var(--muted);
-            max-width: 520px;
-            line-height: 1.7;
-            margin-bottom: 48px;
-            animation: fadeUp 0.6s ease 0.2s both;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeUp 0.6s ease 0.3s both;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary);
-            color: #000;
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 14px;
-            padding: 14px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 32px rgba(0, 212, 170, 0.3);
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            padding: 14px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            border: 1px solid var(--border);
-            transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            color: var(--text);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .hero-mock {
-            margin-top: 72px;
-            width: 100%;
-            max-width: 680px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            animation: fadeUp 0.6s ease 0.4s both;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-        }
-
-        .mock-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .mock-title {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .mock-status-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            color: var(--up);
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 100px;
-        }
-
-        .mock-status-badge span {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--up);
-            animation: pulse 2s infinite;
-        }
-
-        .mock-services {
-            padding: 8px 0;
-        }
-
-        .mock-service {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .mock-service:last-child {
-            border-bottom: none;
-        }
-
-        .mock-service-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .dot-up {
-            background: var(--up);
-        }
-
-        .dot-down {
-            background: var(--down);
-        }
-
-        .dot-warn {
-            background: var(--warn);
-        }
-
-        .mock-service-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 11px;
-            color: var(--muted);
-        }
-
-        .mock-uptime-bar {
-            display: flex;
-            gap: 2px;
-            padding: 0 24px 16px;
-        }
-
-        .mock-bar {
-            flex: 1;
-            height: 24px;
-            border-radius: 3px;
-        }
-
-        .stats {
-            padding: 80px 24px;
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .stat {
-            background: var(--surface);
-            padding: 40px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: 'Instrument Serif', serif;
-            font-size: 52px;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--muted);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .features {
-            padding: 100px 24px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section-label {
-            font-size: 11px;
-            color: var(--primary);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .section-title {
-            font-family: 'Instrument Serif', serif;
-            font-size: clamp(36px, 5vw, 56px);
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            margin-bottom: 64px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .feature {
-            background: var(--surface);
-            padding: 36px;
-            transition: background 0.2s;
-        }
-
-        .feature:hover {
-            background: var(--surface2);
-        }
-
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .feature-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text);
-        }
-
-        .feature-desc {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
-        .how {
-            padding: 100px 24px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            text-align: left;
-            margin-top: 48px;
-        }
-
-        .step {
-            background: var(--surface);
-            padding: 32px 36px;
-            display: flex;
-            align-items: flex-start;
-            gap: 24px;
-            transition: background 0.2s;
-        }
-
-        .step:hover {
-            background: var(--surface2);
-        }
-
-        .step-number {
-            font-family: 'Instrument Serif', serif;
-            font-size: 36px;
-            color: var(--primary);
-            line-height: 1;
-            flex-shrink: 0;
-            width: 40px;
-        }
-
-        .step-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .step-desc {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
-        .pricing {
-            padding: 100px 24px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 48px;
-            text-align: left;
-        }
-
-        .plan {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 36px;
-            transition: border-color 0.2s;
-        }
-
-        .plan:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .plan-pro {
-            border-color: rgba(0, 212, 170, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .plan-pro::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary);
-        }
-
-        .plan-name {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .plan-badge {
-            background: var(--primary-dim);
-            color: var(--primary);
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 100px;
-        }
-
-        .plan-price {
-            font-family: 'Instrument Serif', serif;
-            font-size: 48px;
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-
-        .plan-period {
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 32px;
-        }
-
-        .plan-features {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 32px;
-        }
-
-        .plan-features li {
-            font-size: 13px;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .plan-features li::before {
-            content: '✓';
-            color: var(--primary);
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .plan-features li.disabled {
-            opacity: 0.35;
-        }
-
-        .plan-features li.disabled::before {
-            content: '✗';
-            color: var(--muted);
-        }
-
-        .plan-btn {
-            display: block;
-            text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .plan-btn-free {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--muted);
-        }
-
-        .plan-btn-free:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            color: var(--text);
-        }
-
-        .plan-btn-pro {
-            background: var(--primary);
-            color: #000;
-        }
-
-        .plan-btn-pro:hover {
-            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
-            transform: translateY(-1px);
-        }
-
-        /* CTA */
-        .cta-section {
-            padding: 100px 24px;
-            text-align: center;
-            position: relative;
-        }
+```
+    :root {
+        --bg: #060810;
+        --surface: #0D1117;
+        --surface2: #161B22;
+        --border: rgba(255, 255, 255, 0.08);
+        --primary: #00D4AA;
+        --primary-dim: rgba(0, 212, 170, 0.12);
+        --text: #F0F6FC;
+        --muted: #8B949E;
+        --down: #EF4444;
+        --warn: #F59E0B;
+        --up: #22C55E;
+        --whatsapp: #25D366;
+        --whatsapp-dim: rgba(37, 211, 102, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        overflow-x: hidden;
+        line-height: 1.6;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .glow {
+        position: fixed;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+        pointer-events: none;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 0;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(6, 8, 16, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+        letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+        background: var(--primary);
+        color: #000 !important;
+        font-weight: 700;
+        padding: 8px 20px;
+        border-radius: 6px;
+        transition: opacity 0.2s !important;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    section {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 80px;
+    }
+
+    .hero-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 32px;
+        animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary-dim);
+        border: 1px solid rgba(0, 212, 170, 0.25);
+        color: var(--primary);
+        font-size: 12px;
+        padding: 6px 14px;
+        border-radius: 100px;
+    }
+
+    .hero-badge.whatsapp-badge {
+        background: var(--whatsapp-dim);
+        border-color: rgba(37, 211, 102, 0.3);
+        color: var(--whatsapp);
+    }
+
+    .hero-badge span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse 2s infinite;
+    }
+
+    .hero-title {
+        font-family: 'Instrument Serif', serif;
+        font-size: clamp(52px, 8vw, 96px);
+        line-height: 1.0;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+        animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .hero-title em {
+        font-style: italic;
+        color: var(--primary);
+    }
+
+    .hero-subtitle {
+        font-size: clamp(14px, 2vw, 17px);
+        color: var(--muted);
+        max-width: 540px;
+        line-height: 1.7;
+        margin-bottom: 48px;
+        animation: fadeUp 0.6s ease 0.2s both;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary);
+        color: #000;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 32px rgba(0, 212, 170, 0.3);
+    }
+
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ─── HERO MOCK ─── */
+    .hero-mock-wrapper {
+        margin-top: 72px;
+        width: 100%;
+        max-width: 720px;
+        position: relative;
+        animation: fadeUp 0.6s ease 0.4s both;
+    }
+
+    .hero-mock {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    /* WhatsApp notification floating */
+    .wpp-notification {
+        position: absolute;
+        bottom: -20px;
+        right: -16px;
+        background: #1a2a1e;
+        border: 1px solid rgba(37, 211, 102, 0.3);
+        border-radius: 14px;
+        padding: 14px 18px;
+        width: 280px;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(37,211,102,0.1);
+        animation: slideInRight 0.8s ease 1.2s both, floatUpDown 4s ease-in-out 2s infinite;
+        z-index: 10;
+    }
+
+    .wpp-notification-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .wpp-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--whatsapp);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .wpp-app-name {
+        font-size: 10px;
+        color: var(--whatsapp);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .wpp-time {
+        font-size: 10px;
+        color: var(--muted);
+        margin-left: auto;
+    }
+
+    .wpp-message-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 3px;
+    }
+
+    .wpp-message-body {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.5;
+    }
+
+    .wpp-message-body strong {
+        color: var(--down);
+    }
+
+    /* Synthetic monitor badge floating */
+    .synth-badge-float {
+        position: absolute;
+        top: -18px;
+        left: -16px;
+        background: var(--surface2);
+        border: 1px solid rgba(0, 212, 170, 0.25);
+        border-radius: 12px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        animation: slideInLeft 0.8s ease 1.4s both, floatUpDown 4s ease-in-out 2.5s infinite;
+        z-index: 10;
+    }
+
+    .synth-badge-float .synth-icon {
+        font-size: 18px;
+    }
+
+    .synth-badge-float .synth-text {
+        font-size: 11px;
+        color: var(--primary);
+        font-weight: 700;
+    }
+
+    .synth-badge-float .synth-sub {
+        font-size: 10px;
+        color: var(--muted);
+    }
+
+    .mock-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .mock-title { font-size: 15px; font-weight: 700; }
+
+    .mock-status-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        color: var(--up);
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 100px;
+    }
+
+    .mock-status-badge span {
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: var(--up);
+        animation: pulse 2s infinite;
+    }
+
+    .mock-services { padding: 8px 0; }
+
+    .mock-service {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .mock-service:last-child { border-bottom: none; }
+
+    .mock-service-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+    }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-up { background: var(--up); }
+    .dot-down { background: var(--down); }
+    .dot-warn { background: var(--warn); }
+
+    .mock-service-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 11px;
+        color: var(--muted);
+    }
+
+    .mock-uptime-bar {
+        display: flex;
+        gap: 2px;
+        padding: 0 24px 16px;
+    }
+
+    .mock-bar { flex: 1; height: 20px; border-radius: 2px; }
+
+    /* ─── STATS ─── */
+    .stats {
+        padding: 80px 24px;
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .stat { background: var(--surface); padding: 40px; text-align: center; }
+
+    .stat-number {
+        font-family: 'Instrument Serif', serif;
+        font-size: 52px;
+        color: var(--primary);
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    /* ─── FEATURES ─── */
+    .features {
+        padding: 100px 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .section-label {
+        font-size: 11px;
+        color: var(--primary);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .section-title {
+        font-family: 'Instrument Serif', serif;
+        font-size: clamp(36px, 5vw, 56px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 64px;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .feature {
+        background: var(--surface);
+        padding: 36px;
+        transition: background 0.2s;
+        position: relative;
+    }
+
+    .feature:hover { background: var(--surface2); }
+
+    /* WhatsApp feature highlight */
+    .feature-whatsapp {
+        border: 1px solid rgba(37, 211, 102, 0.2) !important;
+        background: linear-gradient(135deg, #0d1117 0%, #0d1a10 100%) !important;
+    }
+
+    .feature-whatsapp:hover {
+        background: linear-gradient(135deg, #111820 0%, #0f2014 100%) !important;
+    }
+
+    .feature-whatsapp::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--whatsapp), transparent);
+    }
+
+    /* Synthetic monitor feature highlight */
+    .feature-synthetic {
+        border: 1px solid rgba(0, 212, 170, 0.2) !important;
+        background: linear-gradient(135deg, #0d1117 0%, #081916 100%) !important;
+    }
+
+    .feature-synthetic:hover {
+        background: linear-gradient(135deg, #111820 0%, #091e1b 100%) !important;
+    }
+
+    .feature-synthetic::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), transparent);
+    }
+
+    .feature-icon { font-size: 24px; margin-bottom: 20px; display: block; }
+
+    .feature-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--text);
+    }
+
+    .feature-desc {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.7;
+    }
+
+    .feature-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 100px;
+        margin-top: 14px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .tag-whatsapp {
+        background: var(--whatsapp-dim);
+        color: var(--whatsapp);
+        border: 1px solid rgba(37,211,102,0.2);
+    }
+
+    .tag-pro {
+        background: var(--primary-dim);
+        color: var(--primary);
+        border: 1px solid rgba(0,212,170,0.2);
+    }
+
+    /* ─── WHATSAPP SPOTLIGHT ─── */
+    .whatsapp-section {
+        padding: 100px 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .whatsapp-spotlight {
+        background: linear-gradient(135deg, #0d1117 0%, #0b1a0e 50%, #060810 100%);
+        border: 1px solid rgba(37, 211, 102, 0.2);
+        border-radius: 24px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        position: relative;
+    }
+
+    .whatsapp-spotlight::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--whatsapp), transparent);
+    }
+
+    .whatsapp-spotlight-content {
+        padding: 56px 48px;
+    }
+
+    .whatsapp-spotlight-content .section-label {
+        color: var(--whatsapp);
+    }
+
+    .whatsapp-spotlight-content .section-title {
+        margin-bottom: 20px;
+        font-size: clamp(30px, 4vw, 44px);
+    }
+
+    .whatsapp-spotlight-content p {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.8;
+        margin-bottom: 32px;
+        max-width: 420px;
+    }
+
+    .wpp-feature-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 36px;
+    }
+
+    .wpp-feature-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    .wpp-feature-list li .check {
+        color: var(--whatsapp);
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .wpp-feature-list li strong {
+        color: var(--text);
+    }
+
+    .btn-whatsapp {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--whatsapp);
+        color: #000;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-whatsapp:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 32px rgba(37, 211, 102, 0.3);
+    }
+
+    .whatsapp-spotlight-demo {
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+        border-left: 1px solid rgba(37, 211, 102, 0.1);
+    }
+
+    .wpp-msg {
+        background: #1a2a1e;
+        border: 1px solid rgba(37,211,102,0.15);
+        border-radius: 12px 12px 12px 4px;
+        padding: 14px 18px;
+        max-width: 320px;
+        animation: fadeUp 0.5s ease both;
+    }
+
+    .wpp-msg.outgoing {
+        background: #0f2318;
+        border-color: rgba(37,211,102,0.1);
+        border-radius: 12px 12px 4px 12px;
+        align-self: flex-end;
+    }
+
+    .wpp-msg-title {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .wpp-msg-title.down { color: var(--down); }
+    .wpp-msg-title.up { color: var(--whatsapp); }
+    .wpp-msg-title.info { color: var(--primary); }
+
+    .wpp-msg-body {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+
+    .wpp-msg-time {
+        font-size: 10px;
+        color: rgba(139,148,158,0.5);
+        text-align: right;
+        margin-top: 6px;
+    }
+
+    /* ─── SYNTHETIC SECTION ─── */
+    .synthetic-section {
+        padding: 100px 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .synthetic-spotlight {
+        background: linear-gradient(135deg, #060810 0%, #081916 50%, #0d1117 100%);
+        border: 1px solid rgba(0, 212, 170, 0.2);
+        border-radius: 24px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        position: relative;
+    }
+
+    .synthetic-spotlight::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    .synthetic-content {
+        padding: 56px 48px;
+    }
+
+    .synthetic-content .section-title {
+        margin-bottom: 20px;
+        font-size: clamp(30px, 4vw, 44px);
+    }
+
+    .synthetic-content p {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.8;
+        margin-bottom: 32px;
+        max-width: 420px;
+    }
+
+    .synth-feature-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 36px;
+    }
+
+    .synth-feature-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    .synth-feature-list li .check {
+        color: var(--primary);
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .synth-feature-list li strong { color: var(--text); }
+
+    .synthetic-demo {
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+        border-left: 1px solid rgba(0,212,170,0.1);
+    }
+
+    .synth-step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 16px;
+        background: rgba(0,212,170,0.04);
+        border: 1px solid rgba(0,212,170,0.1);
+        border-radius: 10px;
+        transition: background 0.2s;
+    }
+
+    .synth-step-item:hover { background: rgba(0,212,170,0.07); }
+
+    .synth-step-num {
+        width: 28px;
+        height: 28px;
+        background: var(--primary-dim);
+        border: 1px solid rgba(0,212,170,0.2);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .synth-step-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 3px;
+    }
+
+    .synth-step-desc {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.5;
+    }
+
+    .synth-step-status {
+        margin-left: auto;
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 100px;
+        flex-shrink: 0;
+        align-self: flex-start;
+    }
+
+    .synth-step-status.ok {
+        background: rgba(34,197,94,0.1);
+        color: var(--up);
+    }
+
+    .synth-step-status.running {
+        background: rgba(0,212,170,0.1);
+        color: var(--primary);
+        animation: pulse 1.5s infinite;
+    }
+
+    .synth-step-status.pending {
+        background: rgba(139,148,158,0.1);
+        color: var(--muted);
+    }
+
+    /* ─── HOW ─── */
+    .how {
+        padding: 100px 24px;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        text-align: left;
+        margin-top: 48px;
+    }
+
+    .step {
+        background: var(--surface);
+        padding: 32px 36px;
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        transition: background 0.2s;
+    }
+
+    .step:hover { background: var(--surface2); }
+
+    .step-number {
+        font-family: 'Instrument Serif', serif;
+        font-size: 36px;
+        color: var(--primary);
+        line-height: 1;
+        flex-shrink: 0;
+        width: 40px;
+    }
+
+    .step-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .step-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* ─── PRICING ─── */
+    .pricing {
+        padding: 100px 24px;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 48px;
+        text-align: left;
+    }
+
+    .plan {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 36px;
+        transition: border-color 0.2s;
+    }
+
+    .plan:hover { border-color: rgba(255, 255, 255, 0.15); }
+
+    .plan-pro {
+        border-color: rgba(0, 212, 170, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plan-pro::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: var(--primary);
+    }
+
+    .plan-name {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .plan-badge {
+        background: var(--primary-dim);
+        color: var(--primary);
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 100px;
+    }
+
+    .plan-price {
+        font-family: 'Instrument Serif', serif;
+        font-size: 48px;
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .plan-period { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+
+    .plan-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+
+    .plan-features li {
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .plan-features li::before {
+        content: '✓';
+        color: var(--primary);
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .plan-features li.disabled { opacity: 0.35; }
+
+    .plan-features li.disabled::before {
+        content: '✗';
+        color: var(--muted);
+    }
+
+    /* WhatsApp highlight in plan */
+    .plan-features li.highlight-wpp {
+        color: var(--whatsapp);
+        background: var(--whatsapp-dim);
+        border: 1px solid rgba(37,211,102,0.2);
+        padding: 6px 10px;
+        border-radius: 8px;
+        margin: 2px 0;
+    }
+
+    .plan-features li.highlight-wpp::before {
+        content: '✓';
+        color: var(--whatsapp);
+    }
+
+    .plan-features li.highlight-synth {
+        color: var(--primary);
+        background: var(--primary-dim);
+        border: 1px solid rgba(0,212,170,0.15);
+        padding: 6px 10px;
+        border-radius: 8px;
+        margin: 2px 0;
+    }
+
+    .plan-features li.highlight-synth::before {
+        content: '✓';
+        color: var(--primary);
+    }
+
+    .plan-btn {
+        display: block;
+        text-align: center;
+        padding: 12px;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .plan-btn-free {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+    }
+
+    .plan-btn-free:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: var(--text);
+    }
+
+    .plan-btn-pro {
+        background: var(--primary);
+        color: #000;
+    }
+
+    .plan-btn-pro:hover {
+        box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+        transform: translateY(-1px);
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+        padding: 100px 24px;
+        text-align: center;
+        position: relative;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .cta-title {
+        font-family: 'Instrument Serif', serif;
+        font-size: clamp(40px, 6vw, 72px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+    }
+
+    .cta-sub { font-size: 15px; color: var(--muted); margin-bottom: 40px; }
+
+    footer {
+        border-top: 1px solid var(--border);
+        padding: 32px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-logo { font-size: 15px; font-weight: 700; color: var(--primary); }
+    .footer-text { font-size: 12px; color: var(--muted); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+    }
+
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes floatUpDown {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+        .whatsapp-spotlight,
+        .synthetic-spotlight {
+            grid-template-columns: 1fr;
+        }
+        .whatsapp-spotlight-demo,
+        .synthetic-demo {
+            border-left: none;
+            border-top: 1px solid rgba(37,211,102,0.1);
+            padding-top: 32px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        nav { padding: 16px 20px; }
+        .nav-links { display: none; }
+        .stats { grid-template-columns: 1fr; }
+        .features-grid { grid-template-columns: 1fr; }
+        .pricing-grid { grid-template-columns: 1fr; }
+        .hero-mock-wrapper { display: none; }
+        .wpp-notification,
+        .synth-badge-float { display: none; }
+    }
+</style>
+```
 
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .cta-title {
-            font-family: 'Instrument Serif', serif;
-            font-size: clamp(40px, 6vw, 72px);
-            line-height: 1.05;
-            letter-spacing: -0.03em;
-            margin-bottom: 24px;
-        }
-
-        .cta-sub {
-            font-size: 15px;
-            color: var(--muted);
-            margin-bottom: 40px;
-        }
-
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 32px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer-logo {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .footer-text {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.4;
-            }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                padding: 16px 20px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-mock {
-                display: none;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
-    <div class="glow"></div>
+```
+<div class="glow"></div>
 
-    <nav>
-        <a href="/" class="nav-logo">● UpStat</a>
-        <ul class="nav-links">
-            <li><a href="#features">Funcionalidades</a></li>
-            <li><a href="#how">Como funciona</a></li>
-            <li><a href="#pricing">Preços</a></li>
-            <li><a href="https://upstat.online/login">Entrar</a></li>
-            <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
-        </ul>
-    </nav>
+<nav>
+    <a href="/" class="nav-logo">● UpStat</a>
+    <ul class="nav-links">
+        <li><a href="#features">Funcionalidades</a></li>
+        <li><a href="#whatsapp">WhatsApp</a></li>
+        <li><a href="#synthetic">Synthetic</a></li>
+        <li><a href="#pricing">Preços</a></li>
+        <li><a href="https://upstat.online/login">Entrar</a></li>
+        <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
+    </ul>
+</nav>
 
-    <section class="hero">
+<!-- ─── HERO ─── -->
+<section class="hero">
+    <div class="hero-badges">
         <div class="hero-badge">
             <span></span>
             Monitoramento em tempo real
         </div>
+        <div class="hero-badge whatsapp-badge">
+            <span></span>
+            Alertas por WhatsApp
+        </div>
+    </div>
 
-        <h1 class="hero-title">
-            Seu sistema caiu.<br />
-            <em>Seus clientes já sabem.</em>
-        </h1>
+    <h1 class="hero-title">
+        Seu sistema caiu.<br />
+        <em>Seus clientes já sabem.</em>
+    </h1>
 
-        <p class="hero-subtitle">
-            Monitore suas APIs e sistemas, detecte quedas em segundos e compartilhe uma status page profissional com
-            seus clientes — sem complicação.
-        </p>
+    <p class="hero-subtitle">
+        Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — sem complicação.
+    </p>
 
-        <div class="hero-actions">
-            <a href="https://upstat.online/register" class="btn-primary">
-                Criar conta grátis →
-            </a>
-            <a href="#how" class="btn-secondary">
-                Ver como funciona
-            </a>
+    <div class="hero-actions">
+        <a href="https://upstat.online/register" class="btn-primary">
+            Criar conta grátis →
+        </a>
+        <a href="#how" class="btn-secondary">
+            Ver como funciona
+        </a>
+    </div>
+
+    <div class="hero-mock-wrapper">
+        <!-- Floating WhatsApp notification -->
+        <div class="wpp-notification">
+            <div class="wpp-notification-header">
+                <div class="wpp-icon">💬</div>
+                <div>
+                    <div class="wpp-app-name">WhatsApp · UpStat</div>
+                </div>
+                <div class="wpp-time">agora</div>
+            </div>
+            <div class="wpp-message-title">🔴 Alerta de queda</div>
+            <div class="wpp-message-body"><strong>API Principal</strong> está fora do ar há 42 segundos. Tempo de resposta: timeout.</div>
+        </div>
+
+        <!-- Floating synthetic badge -->
+        <div class="synth-badge-float">
+            <div class="synth-icon">🤖</div>
+            <div>
+                <div class="synth-text">Synthetic Monitor</div>
+                <div class="synth-sub">3 steps · 1.2s · ✓ OK</div>
+            </div>
         </div>
 
         <div class="hero-mock">
@@ -802,263 +1260,383 @@
                     <div class="mock-service-right">
                         <span>142ms</span>
                         <span>99.98% uptime</span>
-                        <span
-                            style="color: #22C55E; background: rgba(34,197,94,0.1); padding: 2px 8px; border-radius: 100px; font-size: 10px;">Operacional</span>
+                        <span style="color:#22C55E;background:rgba(34,197,94,0.1);padding:2px 8px;border-radius:100px;font-size:10px;">Operacional</span>
                     </div>
                 </div>
                 <div class="mock-uptime-bar">
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#ef444433; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#f59e0b33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#ef444433;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#f59e0b33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
+                    <div class="mock-bar" style="background:#22c55e33;"></div><div class="mock-bar" style="background:#22c55e33;"></div>
                 </div>
                 <div class="mock-service">
                     <div class="mock-service-left">
-                        <div class="dot dot-up"></div>
-                        Dashboard Web
+                        <div class="dot dot-up" style="background: var(--primary);"></div>
+                        Checkout Flow
+                        <span style="font-size:9px;background:rgba(0,212,170,0.1);color:var(--primary);padding:1px 7px;border-radius:100px;border:1px solid rgba(0,212,170,0.2);">synthetic</span>
                     </div>
                     <div class="mock-service-right">
-                        <span>89ms</span>
+                        <span>1.4s</span>
                         <span>100.00% uptime</span>
-                        <span
-                            style="color: #22C55E; background: rgba(34,197,94,0.1); padding: 2px 8px; border-radius: 100px; font-size: 10px;">Operacional</span>
+                        <span style="color:var(--primary);background:rgba(0,212,170,0.1);padding:2px 8px;border-radius:100px;font-size:10px;">OK</span>
                     </div>
                 </div>
                 <div class="mock-uptime-bar">
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
-                    <div class="mock-bar" style="background:#22c55e33; height:20px; border-radius:2px; flex:1;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
+                    <div class="mock-bar" style="background:#00d4aa22;"></div><div class="mock-bar" style="background:#00d4aa22;"></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section style="padding: 0 24px 80px; position:relative; z-index:1;">
-        <div class="stats reveal">
-            <div class="stat">
-                <div class="stat-number">99.9%</div>
-                <div class="stat-label">Uptime médio monitorado</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">&lt;60s</div>
-                <div class="stat-label">Tempo de detecção</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">R$0</div>
-                <div class="stat-label">Pra começar</div>
-            </div>
+<!-- ─── STATS ─── -->
+<section style="padding: 0 24px 80px; position:relative; z-index:1;">
+    <div class="stats reveal">
+        <div class="stat">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Uptime médio monitorado</div>
         </div>
-    </section>
-
-    <section class="features" id="features">
-        <span class="section-label reveal">// funcionalidades</span>
-        <h2 class="section-title reveal">Tudo que você precisa.<br /><em
-                style="font-style:italic; color: var(--primary)">Nada que você não precisa.</em></h2>
-
-        <div class="features-grid reveal">
-            <div class="feature">
-                <span class="feature-icon">⚡</span>
-                <div class="feature-title">Monitoramento automático</div>
-                <p class="feature-desc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu
-                    cliente.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">📊</span>
-                <div class="feature-title">Histórico de uptime</div>
-                <p class="feature-desc">Visualize 90 dias de histórico com barras de uptime por dia, latência e
-                    incidentes registrados.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🔗</span>
-                <div class="feature-title">Status page pública</div>
-                <p class="feature-desc">Uma página profissional com URL personalizada pra você compartilhar com seus
-                    clientes e usuários.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🔔</span>
-                <div class="feature-title">Alertas instantâneos</div>
-                <p class="feature-desc">Notificações por email (e WhatsApp no Pro) assim que seu sistema cair ou se
-                    recuperar.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🛠️</span>
-                <div class="feature-title">Ping manual</div>
-                <p class="feature-desc">Force uma verificação na hora sem precisar esperar o próximo ciclo automático.
-                </p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">⏸️</span>
-                <div class="feature-title">Pausar monitores</div>
-                <p class="feature-desc">Em manutenção? Pause o monitor sem perder o histórico e reative quando quiser.
-                </p>
-            </div>
+        <div class="stat">
+            <div class="stat-number">&lt;60s</div>
+            <div class="stat-label">Tempo de detecção</div>
         </div>
-    </section>
-
-    <section class="how" id="how">
-        <span class="section-label reveal">// como funciona</span>
-        <h2 class="section-title reveal">Do cadastro à<br /><em style="font-style:italic; color: var(--primary)">status
-                page em minutos.</em></h2>
-
-        <div class="steps reveal">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <div class="step-title">Crie sua conta grátis</div>
-                    <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa
-                        a rodar na hora.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <div class="step-title">Adicione a URL do seu sistema</div>
-                    <p class="step-desc">Cole a URL da sua API, site ou serviço. O UpStat começa a monitorar
-                        automaticamente a cada minuto.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <div class="step-title">Compartilhe sua status page</div>
-                    <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe
-                        que eles acompanhem o status em tempo real.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <div class="step-title">Receba alertas quando cair</div>
-                    <p class="step-desc">Se seu sistema cair, você é notificado na hora por email — ou WhatsApp se
-                        estiver no plano Pro.</p>
-                </div>
-            </div>
+        <div class="stat">
+            <div class="stat-number">R$0</div>
+            <div class="stat-label">Pra começar</div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="pricing" id="pricing">
-        <span class="section-label reveal">// preços</span>
-        <h2 class="section-title reveal">Simples como<br /><em style="font-style:italic; color: var(--primary)">deve
-                ser.</em></h2>
+<!-- ─── FEATURES ─── -->
+<section class="features" id="features">
+    <span class="section-label reveal">// funcionalidades</span>
+    <h2 class="section-title reveal">Tudo que você precisa.<br /><em style="font-style:italic; color: var(--primary)">Nada que você não precisa.</em></h2>
 
-        <div class="pricing-grid reveal">
-            <div class="plan">
-                <div class="plan-name">Free</div>
-                <div class="plan-price">R$0</div>
-                <div class="plan-period">para sempre</div>
-                <ul class="plan-features">
-                    <li>3 monitores</li>
-                    <li>Ping a cada 5 minutos</li>
-                    <li>Histórico de 7 dias</li>
-                    <li>Status page pública</li>
-                    <li>Notificação por email</li>
-                    <li class="disabled">URL personalizada</li>
-                    <li class="disabled">Monitores ilimitados</li>
-                    <li class="disabled">Notificação por WhatsApp</li>
-                </ul>
-                <a href="https://upstat.online/register" class="plan-btn plan-btn-free">Começar grátis</a>
-            </div>
-            <div class="plan plan-pro">
-                <div class="plan-name">Pro <span class="plan-badge">recomendado</span></div>
-                <div class="plan-price">R$29</div>
-                <div class="plan-period">por mês</div>
-                <ul class="plan-features">
-                    <li>Monitores ilimitados</li>
-                    <li>Ping a cada 1 minuto</li>
-                    <li>Histórico de 90 dias</li>
-                    <li>Status page pública</li>
-                    <li>Notificação por email</li>
-                    <li>URL personalizada</li>
-                    <li>Notificação por WhatsApp</li>
-                    <li>Suporte prioritário</li>
-                </ul>
-                <a href="https://upstat.online/register" class="plan-btn plan-btn-pro">Fazer upgrade →</a>
-            </div>
+    <div class="features-grid reveal">
+        <div class="feature">
+            <span class="feature-icon">⚡</span>
+            <div class="feature-title">Monitoramento automático</div>
+            <p class="feature-desc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu cliente.</p>
         </div>
-    </section>
+        <div class="feature feature-synthetic">
+            <span class="feature-icon">🤖</span>
+            <div class="feature-title">Synthetic Monitor</div>
+            <p class="feature-desc">Simule fluxos reais de usuário — login, checkout, formulários — e detecte quando algo quebra, não só quando o servidor cai.</p>
+            <span class="feature-tag tag-pro">✦ Pro</span>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">📊</span>
+            <div class="feature-title">Histórico de uptime</div>
+            <p class="feature-desc">Visualize 90 dias de histórico com barras de uptime por dia, latência e incidentes registrados.</p>
+        </div>
+        <div class="feature feature-whatsapp">
+            <span class="feature-icon">💬</span>
+            <div class="feature-title">Alertas por WhatsApp</div>
+            <p class="feature-desc">Receba uma mensagem direto no seu WhatsApp assim que qualquer monitor cair ou se recuperar. Na hora, sem delay.</p>
+            <span class="feature-tag tag-whatsapp">💬 Pro</span>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">🔗</span>
+            <div class="feature-title">Status page pública</div>
+            <p class="feature-desc">Uma página profissional com URL personalizada pra você compartilhar com seus clientes e usuários.</p>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">🔔</span>
+            <div class="feature-title">Alertas por email</div>
+            <p class="feature-desc">Notificações por email assim que seu sistema cair ou se recuperar — disponível em todos os planos.</p>
+        </div>
+    </div>
+</section>
 
-    <section class="cta-section">
-        <h2 class="cta-title reveal">
-            Pronto pra parar<br />
-            de perder <em style="font-style:italic; color:var(--primary)">downtime</em>?
-        </h2>
-        <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
-        <div class="reveal">
-            <a href="https://upstat.online/register" class="btn-primary">
-                Criar minha conta →
+<!-- ─── WHATSAPP SPOTLIGHT ─── -->
+<section class="whatsapp-section" id="whatsapp">
+    <div class="whatsapp-spotlight reveal">
+        <div class="whatsapp-spotlight-content">
+            <span class="section-label">// alertas por whatsapp</span>
+            <h2 class="section-title">Cai às 3h da manhã?<br /><em style="font-style:italic; color:var(--whatsapp)">Você sabe na hora.</em></h2>
+            <p>Email pode ficar sem ler. Notificação push você ignora. Mas <strong style="color:var(--text)">WhatsApp você vê</strong> — independente da hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.</p>
+            <ul class="wpp-feature-list">
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Alerta de queda instantâneo</strong> — mensagem assim que o monitor detecta falha</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Alerta de recuperação</strong> — quando o sistema volta ao ar, você sabe também</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Detalhes completos</strong> — nome do monitor, tempo de downtime, código de status</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Sem app extra</strong> — funciona direto no WhatsApp que você já usa</span>
+                </li>
+            </ul>
+            <a href="https://upstat.online/register" class="btn-whatsapp">
+                💬 Ativar alertas WhatsApp →
             </a>
         </div>
-    </section>
+        <div class="whatsapp-spotlight-demo">
+            <div class="wpp-msg" style="animation-delay: 0.1s;">
+                <div class="wpp-msg-title down">🔴 Monitor offline</div>
+                <div class="wpp-msg-body">
+                    <strong style="color:var(--text)">API Principal</strong> está fora do ar.<br/>
+                    Status: 503 Service Unavailable<br/>
+                    Detectado às 03:17
+                </div>
+                <div class="wpp-msg-time">03:17 ✓✓</div>
+            </div>
+            <div class="wpp-msg" style="animation-delay: 0.3s;">
+                <div class="wpp-msg-title down">🔴 Synthetic falhou</div>
+                <div class="wpp-msg-body">
+                    <strong style="color:var(--text)">Checkout Flow</strong> — step 2 falhou.<br/>
+                    Erro: timeout na etapa de pagamento<br/>
+                    Duração: 1 falha confirmada
+                </div>
+                <div class="wpp-msg-time">03:18 ✓✓</div>
+            </div>
+            <div class="wpp-msg" style="animation-delay: 0.5s;">
+                <div class="wpp-msg-title up">🟢 Monitor recuperado</div>
+                <div class="wpp-msg-body">
+                    <strong style="color:var(--text)">API Principal</strong> está no ar novamente.<br/>
+                    Downtime total: 4 minutos<br/>
+                    Latência atual: 138ms
+                </div>
+                <div class="wpp-msg-time">03:21 ✓✓</div>
+            </div>
+            <div class="wpp-msg outgoing" style="animation-delay: 0.7s;">
+                <div class="wpp-msg-title info">✅ Resolvido</div>
+                <div class="wpp-msg-body" style="color: rgba(139,148,158,0.7);">
+                    Você atuou em menos de 5 min do alerta. Seus clientes mal perceberam.
+                </div>
+                <div class="wpp-msg-time">03:22 ✓✓</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <footer>
-        <span class="footer-logo">● UpStat</span>
-        <span class="footer-text">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
-    </footer>
+<!-- ─── SYNTHETIC SPOTLIGHT ─── -->
+<section class="synthetic-section" id="synthetic">
+    <div class="synthetic-spotlight reveal">
+        <div class="synthetic-content">
+            <span class="section-label">// synthetic monitor</span>
+            <h2 class="section-title">Não é só ping.<br /><em style="font-style:italic; color:var(--primary)">É o fluxo real.</em></h2>
+            <p>Seu servidor pode estar respondendo 200 OK enquanto o checkout está quebrado. O Synthetic Monitor simula o que seu <strong style="color:var(--text)">usuário real faz</strong> — login, navegação, compra — e alerta quando algo no meio do caminho quebra.</p>
+            <ul class="synth-feature-list">
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Simula fluxos reais</strong> — login, checkout, formulários, APIs encadeadas</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Detecta erros lógicos</strong> — não só downtime, mas falhas de UX e integração</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Steps granulares</strong> — veja exatamente em qual etapa do fluxo o erro aconteceu</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Alerta via WhatsApp + email</strong> — integra com todos os canais de notificação</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span><strong>Histórico por step</strong> — veja a performance de cada etapa ao longo do tempo</span>
+                </li>
+            </ul>
+            <a href="https://upstat.online/register" class="btn-primary">
+                🤖 Criar meu primeiro synthetic →
+            </a>
+        </div>
+        <div class="synthetic-demo">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:0.05em;text-transform:uppercase;">Checkout Flow · Rodando agora</div>
+            <div class="synth-step-item">
+                <div class="synth-step-num">1</div>
+                <div style="flex:1;">
+                    <div class="synth-step-label">GET /products</div>
+                    <div class="synth-step-desc">Listagem de produtos carregada</div>
+                </div>
+                <span class="synth-step-status ok">✓ 210ms</span>
+            </div>
+            <div class="synth-step-item">
+                <div class="synth-step-num">2</div>
+                <div style="flex:1;">
+                    <div class="synth-step-label">POST /cart/add</div>
+                    <div class="synth-step-desc">Item adicionado ao carrinho</div>
+                </div>
+                <span class="synth-step-status ok">✓ 318ms</span>
+            </div>
+            <div class="synth-step-item">
+                <div class="synth-step-num">3</div>
+                <div style="flex:1;">
+                    <div class="synth-step-label">POST /checkout/init</div>
+                    <div class="synth-step-desc">Verificando gateway de pagamento…</div>
+                </div>
+                <span class="synth-step-status running">⟳ rodando</span>
+            </div>
+            <div class="synth-step-item" style="opacity:0.4;">
+                <div class="synth-step-num">4</div>
+                <div style="flex:1;">
+                    <div class="synth-step-label">POST /payment/confirm</div>
+                    <div class="synth-step-desc">Confirmação do pagamento</div>
+                </div>
+                <span class="synth-step-status pending">aguardando</span>
+            </div>
+            <div class="synth-step-item" style="opacity:0.4;">
+                <div class="synth-step-num">5</div>
+                <div style="flex:1;">
+                    <div class="synth-step-label">GET /order/:id</div>
+                    <div class="synth-step-desc">Validação do pedido criado</div>
+                </div>
+                <span class="synth-step-status pending">aguardando</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:8px;padding-top:12px;border-top:1px solid var(--border);">
+                Último resultado: <span style="color:var(--up);">✓ OK</span> · 1.2s total · há 3 min
+            </div>
+        </div>
+    </div>
+</section>
 
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible')
-                }
-            })
-        }, { threshold: 0.1 })
+<!-- ─── HOW ─── -->
+<section class="how" id="how">
+    <span class="section-label reveal">// como funciona</span>
+    <h2 class="section-title reveal">Do cadastro à<br /><em style="font-style:italic; color: var(--primary)">status page em minutos.</em></h2>
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
-    </script>
+    <div class="steps reveal">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <div class="step-title">Crie sua conta grátis</div>
+                <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa a rodar na hora.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <div class="step-title">Adicione um monitor (HTTP ou Synthetic)</div>
+                <p class="step-desc">Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic Monitor com steps encadeados pra testar fluxos reais.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <div class="step-title">Configure seus alertas</div>
+                <p class="step-desc">Ative notificações por email — ou por WhatsApp no plano Pro — pra saber na hora quando algo falhar.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <div class="step-title">Compartilhe sua status page</div>
+                <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe que eles acompanhem em tempo real.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section class="pricing" id="pricing">
+    <span class="section-label reveal">// preços</span>
+    <h2 class="section-title reveal">Simples como<br /><em style="font-style:italic; color: var(--primary)">deve ser.</em></h2>
+
+    <div class="pricing-grid reveal">
+        <div class="plan">
+            <div class="plan-name">Free</div>
+            <div class="plan-price">R$0</div>
+            <div class="plan-period">para sempre</div>
+            <ul class="plan-features">
+                <li>3 monitores HTTP</li>
+                <li>Ping a cada 5 minutos</li>
+                <li>Histórico de 7 dias</li>
+                <li>Status page pública</li>
+                <li>Notificação por email</li>
+                <li class="disabled">Alertas por WhatsApp</li>
+                <li class="disabled">Synthetic Monitor</li>
+                <li class="disabled">URL personalizada</li>
+                <li class="disabled">Monitores ilimitados</li>
+            </ul>
+            <a href="https://upstat.online/register" class="plan-btn plan-btn-free">Começar grátis</a>
+        </div>
+        <div class="plan plan-pro">
+            <div class="plan-name">Pro <span class="plan-badge">recomendado</span></div>
+            <div class="plan-price">R$29</div>
+            <div class="plan-period">por mês</div>
+            <ul class="plan-features">
+                <li>Monitores HTTP ilimitados</li>
+                <li>Ping a cada 1 minuto</li>
+                <li>Histórico de 90 dias</li>
+                <li>Status page pública</li>
+                <li>URL personalizada</li>
+                <li>Notificação por email</li>
+                <li class="highlight-wpp">💬 Alertas por WhatsApp</li>
+                <li class="highlight-synth">🤖 Synthetic Monitor</li>
+                <li>Suporte prioritário</li>
+            </ul>
+            <a href="https://upstat.online/register" class="plan-btn plan-btn-pro">Fazer upgrade →</a>
+        </div>
+    </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section class="cta-section">
+    <h2 class="cta-title reveal">
+        Pronto pra parar<br />
+        de perder <em style="font-style:italic; color:var(--primary)">downtime</em>?
+    </h2>
+    <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
+    <div class="reveal" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="https://upstat.online/register" class="btn-primary">
+            Criar minha conta →
+        </a>
+        <a href="https://upstat.online/register" class="btn-whatsapp">
+            💬 Quero alertas no WhatsApp
+        </a>
+    </div>
+</section>
+
+<footer>
+    <span class="footer-logo">● UpStat</span>
+    <span class="footer-text">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
+</footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible')
+            }
+        })
+    }, { threshold: 0.1 })
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+</script>
+```
 
 </body>
 
