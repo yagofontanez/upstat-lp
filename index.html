@@ -1,777 +1,734 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UpStat — Status pages para quem leva seu sistema a sério</title>
-    <meta name="description" content="Monitore seus sistemas, detecte quedas em segundos e compartilhe uma status page profissional com seus clientes." />
-    <meta name="theme-color" content="#060810" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-```
-    :root {
-        --bg:          #060810;
-        --surface:     #0D1117;
-        --surface2:    #161B22;
-        --border:      rgba(255,255,255,0.08);
-        --primary:     #00D4AA;
-        --primary-dim: rgba(0,212,170,0.12);
-        --text:        #F0F6FC;
-        --muted:       #8B949E;
-        --down:        #EF4444;
-        --up:          #22C55E;
-        --wpp:         #25D366;
-        --wpp-dim:     rgba(37,211,102,0.12);
-    }
-
-    html {
-        background-color: #060810;
-        scroll-behavior: smooth;
-    }
-
-    body {
-        background-color: #060810;
-        color: #F0F6FC;
-        font-family: 'JetBrains Mono', monospace;
-        line-height: 1.6;
-        overflow-x: hidden;
-        background-image:
-            linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
-        background-size: 40px 40px;
-    }
-
-    /* NAV */
-    nav {
-        position: fixed;
-        top: 0; left: 0; right: 0;
-        z-index: 999;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 18px 40px;
-        background-color: rgba(6,8,16,0.95);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo { font-size: 17px; font-weight: 700; color: var(--primary); text-decoration: none; }
-
-    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--text); }
-
-    .nav-cta { background: var(--primary) !important; color: #000 !important; font-weight: 700; padding: 8px 18px; border-radius: 6px; }
-    .nav-cta:hover { opacity: 0.85; }
-
-    /* HERO */
-    .hero {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 120px 24px 80px;
-    }
-
-    .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; animation: fadeUp 0.5s ease both; }
-
-    .badge {
-        display: inline-flex; align-items: center; gap: 7px;
-        font-size: 12px; padding: 6px 14px; border-radius: 100px;
-        border: 1px solid rgba(0,212,170,0.25);
-        background: var(--primary-dim); color: var(--primary);
-    }
-
-    .badge.wpp { border-color: rgba(37,211,102,0.3); background: var(--wpp-dim); color: var(--wpp); }
-
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
-
-    .hero-title {
-        font-family: 'Instrument Serif', serif;
-        font-size: clamp(48px, 9vw, 96px);
-        line-height: 1.0;
-        letter-spacing: -0.03em;
-        color: var(--text);
-        margin-bottom: 24px;
-        animation: fadeUp 0.5s ease 0.1s both;
-    }
-
-    .hero-title em { font-style: italic; color: var(--primary); }
-
-    .hero-sub {
-        font-size: clamp(13px, 2vw, 16px);
-        color: var(--muted);
-        max-width: 500px;
-        line-height: 1.8;
-        margin-bottom: 44px;
-        animation: fadeUp 0.5s ease 0.2s both;
-    }
-
-    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.5s ease 0.3s both; }
-
-    .btn-primary {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: var(--primary); color: #000;
-        font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px;
-        padding: 13px 26px; border-radius: 8px; text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,212,170,0.28); }
-
-    .btn-ghost {
-        display: inline-flex; align-items: center; gap: 8px;
-        color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 14px;
-        padding: 13px 26px; border-radius: 8px; text-decoration: none;
-        border: 1px solid var(--border); transition: color 0.2s, border-color 0.2s;
-    }
-    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
-
-    .btn-wpp {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: var(--wpp); color: #000;
-        font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px;
-        padding: 13px 26px; border-radius: 8px; text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-wpp:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,211,102,0.28); }
-
-    /* HERO MOCK */
-    .hero-mock {
-        margin-top: 64px; width: 100%; max-width: 660px;
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 16px; overflow: hidden;
-        box-shadow: 0 32px 80px rgba(0,0,0,0.7);
-        animation: fadeUp 0.5s ease 0.4s both;
-    }
-
-    .mock-header {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 18px 22px; border-bottom: 1px solid var(--border);
-        font-size: 14px; font-weight: 700;
-    }
-
-    .mock-pill {
-        display: flex; align-items: center; gap: 6px;
-        background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2);
-        color: var(--up); font-size: 11px; padding: 4px 10px; border-radius: 100px;
-    }
-    .mock-pill span { width: 5px; height: 5px; border-radius: 50%; background: var(--up); animation: pulse 2s infinite; }
-
-    .mock-row {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 13px 22px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px;
-    }
-    .mock-row:last-child { border-bottom: none; }
-    .mock-row-l { display: flex; align-items: center; gap: 10px; }
-    .mock-row-r { display: flex; align-items: center; gap: 14px; font-size: 11px; color: var(--muted); }
-
-    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot-up    { background: var(--up); }
-    .dot-teal  { background: var(--primary); }
-
-    .synth-tag {
-        font-size: 9px; background: var(--primary-dim); color: var(--primary);
-        border: 1px solid rgba(0,212,170,0.2); padding: 1px 7px; border-radius: 100px;
-    }
-
-    .spill { font-size: 10px; padding: 2px 8px; border-radius: 100px; }
-    .spill-up    { background: rgba(34,197,94,0.1); color: var(--up); }
-    .spill-teal  { background: var(--primary-dim); color: var(--primary); }
-
-    .ubars { display: flex; gap: 2px; padding: 0 22px 14px; }
-    .ubar  { flex: 1; height: 18px; border-radius: 2px; }
-
-    /* STATS */
-    .stats-wrap { padding: 0 24px 80px; }
-
-    .stats-grid {
-        max-width: 880px; margin: 0 auto;
-        display: grid; grid-template-columns: repeat(3,1fr);
-        border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
-    }
-
-    .stat-cell {
-        background: var(--surface); padding: 40px 24px; text-align: center;
-        border-right: 1px solid var(--border);
-    }
-    .stat-cell:last-child { border-right: none; }
-
-    .stat-num { font-family: 'Instrument Serif', serif; font-size: 52px; color: var(--primary); line-height: 1; margin-bottom: 8px; }
-    .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-
-    /* SECTION HEADERS */
-    .stag { display: block; font-size: 11px; color: var(--primary); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; }
-    .stag.wpp { color: var(--wpp); }
-
-    .shead {
-        font-family: 'Instrument Serif', serif;
-        font-size: clamp(34px,5vw,54px); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 56px;
-    }
-    .shead em { font-style: italic; color: var(--primary); }
-    .shead em.wpp { color: var(--wpp); }
-
-    /* FEATURES */
-    .features { padding: 100px 24px; max-width: 1080px; margin: 0 auto; }
-
-    .feat-grid {
-        display: grid; grid-template-columns: repeat(3,1fr);
-        border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
-    }
-
-    .feat-card {
-        background: var(--surface); padding: 32px;
-        border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-        transition: background 0.2s; position: relative;
-    }
-    .feat-card:hover { background: var(--surface2); }
-    .feat-card:nth-child(3n)       { border-right: none; }
-    .feat-card:nth-last-child(-n+3) { border-bottom: none; }
-
-    .feat-card.hl-wpp   { background: #0c1710; border-top: 2px solid var(--wpp); }
-    .feat-card.hl-wpp:hover { background: #0e1c12; }
-    .feat-card.hl-synth { background: #091614; border-top: 2px solid var(--primary); }
-    .feat-card.hl-synth:hover { background: #0b1a17; }
-
-    .ficon { font-size: 22px; margin-bottom: 16px; display: block; }
-    .ftitle { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-    .fdesc  { font-size: 12px; color: var(--muted); line-height: 1.75; }
-
-    .ftag {
-        display: inline-flex; align-items: center; gap: 5px;
-        font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 100px;
-        margin-top: 12px; text-transform: uppercase; letter-spacing: 0.04em;
-    }
-    .ftag.wpp   { background: var(--wpp-dim); color: var(--wpp); border: 1px solid rgba(37,211,102,0.2); }
-    .ftag.synth { background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(0,212,170,0.18); }
-
-    /* SPOTLIGHTS */
-    .spotlight { padding: 80px 24px; max-width: 1080px; margin: 0 auto; }
-
-    .sp-card {
-        display: grid; grid-template-columns: 1fr 1fr;
-        border-radius: 20px; overflow: hidden; border: 1px solid var(--border);
-    }
-    .sp-card.wpp   { border-color: rgba(37,211,102,0.2); background: #08120a; }
-    .sp-card.synth { border-color: rgba(0,212,170,0.2);  background: #060f0d; }
-
-    .sp-content { padding: 52px 44px; }
-
-    .sp-head {
-        font-family: 'Instrument Serif', serif;
-        font-size: clamp(28px,3.5vw,42px); line-height: 1.15; letter-spacing: -0.02em;
-        margin-bottom: 18px; color: var(--text);
-    }
-    .sp-head em      { font-style: italic; }
-    .sp-head em.wpp  { color: var(--wpp); }
-    .sp-head em.teal { color: var(--primary); }
-
-    .sp-desc { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 28px; max-width: 380px; }
-
-    .checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--muted); }
-    .checklist li .ck { flex-shrink: 0; margin-top: 1px; }
-    .checklist li .ck.wpp  { color: var(--wpp); }
-    .checklist li .ck.teal { color: var(--primary); }
-    .checklist li strong   { color: var(--text); }
-
-    .sp-demo {
-        padding: 40px 36px; display: flex; flex-direction: column;
-        justify-content: center; gap: 10px;
-        border-left: 1px solid rgba(255,255,255,0.06);
-    }
-
-    /* WhatsApp bubbles */
-    .wbubble {
-        background: #142019; border: 1px solid rgba(37,211,102,0.12);
-        border-radius: 12px 12px 12px 4px; padding: 13px 16px; max-width: 300px;
-    }
-    .wbubble-t { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
-    .wbubble-t.down { color: var(--down); }
-    .wbubble-t.up   { color: var(--wpp); }
-    .wbubble-b { font-size: 11px; color: var(--muted); line-height: 1.55; }
-    .wbubble-b strong { color: var(--text); }
-    .wbubble-time { font-size: 10px; color: rgba(139,148,158,0.4); text-align: right; margin-top: 5px; }
-
-    /* Synthetic steps */
-    .sstep {
-        display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-        border-radius: 10px; border: 1px solid rgba(0,212,170,0.1); background: rgba(0,212,170,0.03);
-    }
-    .sstep-n {
-        width: 26px; height: 26px; border-radius: 6px;
-        background: var(--primary-dim); border: 1px solid rgba(0,212,170,0.2);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 11px; font-weight: 700; color: var(--primary); flex-shrink: 0;
-    }
-    .sstep-label { font-size: 12px; font-weight: 700; color: var(--text); }
-    .sstep-desc  { font-size: 11px; color: var(--muted); }
-    .sstep-st {
-        margin-left: auto; font-size: 10px; padding: 2px 8px;
-        border-radius: 100px; flex-shrink: 0;
-    }
-    .ss-ok  { background: rgba(34,197,94,0.1); color: var(--up); }
-    .ss-run { background: var(--primary-dim); color: var(--primary); animation: pulse 1.5s infinite; }
-    .ss-w   { background: rgba(139,148,158,0.08); color: var(--muted); opacity: 0.5; }
-
-    /* HOW */
-    .how { padding: 100px 24px; max-width: 760px; margin: 0 auto; text-align: center; }
-
-    .steps-list { margin-top: 44px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; text-align: left; }
-
-    .step-row {
-        display: flex; align-items: flex-start; gap: 22px; padding: 28px 32px;
-        background: var(--surface); border-bottom: 1px solid var(--border); transition: background 0.2s;
-    }
-    .step-row:last-child { border-bottom: none; }
-    .step-row:hover { background: var(--surface2); }
-
-    .step-n { font-family: 'Instrument Serif', serif; font-size: 34px; color: var(--primary); line-height: 1; flex-shrink: 0; width: 36px; }
-    .step-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
-    .step-desc  { font-size: 12px; color: var(--muted); line-height: 1.7; }
-
-    /* PRICING */
-    .pricing { padding: 100px 24px; max-width: 760px; margin: 0 auto; text-align: center; }
-
-    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 44px; text-align: left; }
-
-    .plan {
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 16px; padding: 32px;
-    }
-    .plan.pro { border-color: rgba(0,212,170,0.3); position: relative; overflow: hidden; }
-    .plan.pro::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--primary); }
-
-    .plan-name { font-size: 12px; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .plan-bdg  { font-size: 10px; background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(0,212,170,0.2); padding: 2px 8px; border-radius: 100px; }
-    .plan-price { font-family: 'Instrument Serif', serif; font-size: 46px; line-height: 1; margin-bottom: 4px; color: var(--text); }
-    .plan-period { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
-
-    .plan-feats { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-    .plan-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 12px; color: var(--muted); }
-    .plan-feats li .fi { flex-shrink: 0; }
-    .fi.on    { color: var(--primary); }
-    .fi.off   { color: rgba(139,148,158,0.25); }
-
-    .plan-feats li.hl-wpp {
-        color: var(--wpp); background: var(--wpp-dim);
-        border: 1px solid rgba(37,211,102,0.18); padding: 5px 9px; border-radius: 7px;
-    }
-    .plan-feats li.hl-synth {
-        color: var(--primary); background: var(--primary-dim);
-        border: 1px solid rgba(0,212,170,0.15); padding: 5px 9px; border-radius: 7px;
-    }
-    .plan-feats li.hl-wpp .fi,
-    .plan-feats li.hl-synth .fi { color: inherit; }
-
-    .plan-btn {
-        display: block; text-align: center; padding: 11px; border-radius: 8px;
-        font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
-        text-decoration: none; transition: all 0.2s;
-    }
-    .plan-btn.free { border: 1px solid var(--border); color: var(--muted); background: transparent; }
-    .plan-btn.free:hover { border-color: rgba(255,255,255,0.18); color: var(--text); }
-    .plan-btn.pro-b { background: var(--primary); color: #000; }
-    .plan-btn.pro-b:hover { box-shadow: 0 4px 20px rgba(0,212,170,0.3); transform: translateY(-1px); }
-
-    /* CTA */
-    .cta { padding: 100px 24px; text-align: center; }
-    .cta-title { font-family: 'Instrument Serif', serif; font-size: clamp(38px,6vw,68px); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px; color: var(--text); }
-    .cta-title em { font-style: italic; color: var(--primary); }
-    .cta-sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; }
-    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; }
-    .foot-logo { font-size: 15px; font-weight: 700; color: var(--primary); }
-    .foot-copy { font-size: 12px; color: var(--muted); }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-        from { opacity:0; transform:translateY(18px); }
-        to   { opacity:1; transform:translateY(0); }
-    }
-    @keyframes pulse {
-        0%,100% { opacity:1; }
-        50%      { opacity:0.35; }
-    }
-
-    .reveal { opacity:0; transform:translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
-    .reveal.visible { opacity:1; transform:translateY(0); }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-        .sp-card { grid-template-columns: 1fr; }
-        .sp-demo { border-left: none; border-top: 1px solid var(--border); padding-top: 32px; }
-    }
-
-    @media (max-width: 768px) {
-        nav { padding: 14px 18px; }
-        .nav-links { display: none; }
-        .hero { padding: 100px 20px 60px; }
-        .hero-mock { display: none; }
-        .stats-grid { grid-template-columns: 1fr; }
-        .stat-cell { border-right: none; border-bottom: 1px solid var(--border); }
-        .stat-cell:last-child { border-bottom: none; }
-        .feat-grid { grid-template-columns: 1fr; }
-        .feat-card { border-right: none !important; border-bottom: 1px solid var(--border) !important; }
-        .feat-card:last-child { border-bottom: none !important; }
-        .price-grid { grid-template-columns: 1fr; }
-        .spotlight { padding: 60px 20px; }
-        .sp-content { padding: 36px 24px; }
-        footer { flex-direction: column; gap: 8px; text-align: center; padding: 24px 20px; }
-    }
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>UpStat — Status pages para quem leva seu sistema a sério</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+:root{
+
+--bg:#060810;
+--surface:#0D1117;
+--surface2:#161B22;
+--border:rgba(255,255,255,0.08);
+
+--primary:#00D4AA;
+--primary-dim:rgba(0,212,170,0.12);
+
+--text:#F0F6FC;
+--muted:#8B949E;
+
+--up:#22C55E;
+--down:#EF4444;
+
+--wpp:#25D366;
+--wpp-dim:rgba(37,211,102,0.12);
+
+}
+
+@media (prefers-color-scheme: light){
+
+:root{
+--bg:#ffffff;
+--surface:#f6f8fa;
+--surface2:#eef1f4;
+--border:rgba(0,0,0,0.08);
+--text:#0f172a;
+--muted:#475569;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+background-image:
+linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+}
+
+}
+
+html{
+scroll-behavior:smooth;
+background:var(--bg);
+}
+
+body{
+
+font-family:'JetBrains Mono',monospace;
+background:var(--bg);
+color:var(--text);
+line-height:1.6;
+
+background-image:
+linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
+
+background-size:40px 40px;
+
+overflow-x:hidden;
+
+}
+
+nav{
+
+position:fixed;
+top:0;
+left:0;
+right:0;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:18px 40px;
+
+border-bottom:1px solid var(--border);
+
+background:rgba(6,8,16,0.9);
+backdrop-filter:blur(16px);
+
+z-index:999;
+
+}
+
+.nav-logo{
+color:var(--primary);
+text-decoration:none;
+font-weight:700;
+}
+
+.nav-links{
+
+display:flex;
+gap:28px;
+align-items:center;
+
+list-style:none;
+
+}
+
+.nav-links a{
+
+font-size:13px;
+text-decoration:none;
+color:var(--muted);
+
+}
+
+.nav-links a:hover{
+color:var(--text);
+}
+
+.nav-cta{
+
+background:var(--primary);
+color:#000!important;
+font-weight:700;
+
+padding:8px 18px;
+border-radius:6px;
+
+}
+
+.hero{
+
+min-height:100vh;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+text-align:center;
+
+padding:120px 24px 80px;
+
+}
+
+.hero-title{
+
+font-family:'Instrument Serif',serif;
+
+font-size:clamp(40px,9vw,96px);
+
+line-height:1.05;
+
+letter-spacing:-0.03em;
+
+margin-bottom:24px;
+
+}
+
+.hero-title em{
+color:var(--primary);
+font-style:italic;
+}
+
+.hero-sub{
+
+max-width:520px;
+
+font-size:15px;
+
+color:var(--muted);
+
+line-height:1.8;
+
+margin-bottom:40px;
+
+}
+
+.hero-actions{
+
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+justify-content:center;
+
+}
+
+.btn-primary{
+
+background:var(--primary);
+color:#000;
+
+padding:13px 24px;
+
+border-radius:8px;
+
+font-weight:700;
+
+text-decoration:none;
+
+display:inline-flex;
+align-items:center;
+gap:8px;
+
+}
+
+.btn-primary:hover{
+transform:translateY(-2px);
+}
+
+.btn-ghost{
+
+border:1px solid var(--border);
+
+color:var(--muted);
+
+padding:13px 24px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+}
+
+.hero-mock{
+
+margin-top:60px;
+
+max-width:650px;
+width:100%;
+
+border:1px solid var(--border);
+
+border-radius:16px;
+
+background:var(--surface);
+
+overflow:hidden;
+
+}
+
+.mock-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:18px 22px;
+
+border-bottom:1px solid var(--border);
+
+}
+
+.mock-row{
+
+display:flex;
+justify-content:space-between;
+
+padding:13px 22px;
+
+border-bottom:1px solid rgba(255,255,255,0.04);
+
+font-size:13px;
+
+}
+
+.stats-wrap{
+padding:60px 24px;
+}
+
+.stats-grid{
+
+max-width:900px;
+margin:auto;
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+
+border:1px solid var(--border);
+border-radius:16px;
+overflow:hidden;
+
+}
+
+.stat-cell{
+
+padding:40px 24px;
+text-align:center;
+
+border-right:1px solid var(--border);
+
+background:var(--surface);
+
+}
+
+.stat-cell:last-child{
+border-right:none;
+}
+
+.stat-num{
+
+font-family:'Instrument Serif',serif;
+font-size:50px;
+
+color:var(--primary);
+
+}
+
+.stat-lbl{
+font-size:11px;
+color:var(--muted);
+}
+
+.features{
+
+padding:100px 24px;
+
+max-width:1100px;
+margin:auto;
+
+}
+
+.feat-grid{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+
+border:1px solid var(--border);
+border-radius:16px;
+
+overflow:hidden;
+
+}
+
+.feat-card{
+
+padding:32px;
+
+background:var(--surface);
+
+border-right:1px solid var(--border);
+border-bottom:1px solid var(--border);
+
+}
+
+.feat-card:nth-child(3n){
+border-right:none;
+}
+
+.ftitle{
+
+font-weight:700;
+margin-bottom:8px;
+
+}
+
+.fdesc{
+
+font-size:12px;
+color:var(--muted);
+
+}
+
+.pricing{
+
+padding:100px 24px;
+max-width:760px;
+margin:auto;
+text-align:center;
+
+}
+
+.price-grid{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+
+margin-top:40px;
+
+}
+
+.plan{
+
+background:var(--surface);
+
+border:1px solid var(--border);
+
+border-radius:16px;
+
+padding:32px;
+
+}
+
+.plan-price{
+
+font-family:'Instrument Serif',serif;
+font-size:44px;
+
+margin-bottom:6px;
+
+}
+
+.plan-period{
+font-size:12px;
+color:var(--muted);
+margin-bottom:20px;
+}
+
+.plan-feats{
+
+list-style:none;
+display:flex;
+flex-direction:column;
+gap:10px;
+
+font-size:12px;
+color:var(--muted);
+
+margin-bottom:26px;
+
+}
+
+.plan-btn{
+
+display:block;
+
+padding:11px;
+
+border-radius:8px;
+
+font-weight:700;
+
+text-decoration:none;
+
+}
+
+.plan-btn.free{
+border:1px solid var(--border);
+color:var(--muted);
+}
+
+.plan-btn.pro{
+
+background:var(--primary);
+color:#000;
+
+}
+
+footer{
+
+margin-top:60px;
+
+border-top:1px solid var(--border);
+
+padding:28px 24px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+}
+
+.foot-copy{
+font-size:12px;
+color:var(--muted);
+}
+
+/* MOBILE */
+
+@media (max-width:900px){
+
+.stats-grid{
+grid-template-columns:1fr;
+}
+
+.stat-cell{
+border-right:none;
+border-bottom:1px solid var(--border);
+}
+
+.feat-grid{
+grid-template-columns:1fr;
+}
+
+.feat-card{
+border-right:none!important;
+}
+
+.price-grid{
+grid-template-columns:1fr;
+}
+
+.hero{
+padding:100px 20px 60px;
+}
+
+.hero-mock{
+display:none;
+}
+
+nav{
+padding:14px 18px;
+}
+
+.nav-links{
+display:none;
+}
+
+footer{
+
+flex-direction:column;
+gap:8px;
+
+text-align:center;
+
+}
+
+}
+
 </style>
-```
 
 </head>
+
 <body>
 
 <nav>
-    <a href="/" class="nav-logo">● UpStat</a>
-    <ul class="nav-links">
-        <li><a href="#features">Funcionalidades</a></li>
-        <li><a href="#whatsapp">WhatsApp</a></li>
-        <li><a href="#synthetic">Synthetic</a></li>
-        <li><a href="#pricing">Preços</a></li>
-        <li><a href="https://upstat.online/login">Entrar</a></li>
-        <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
-    </ul>
+
+<a class="nav-logo" href="/">● UpStat</a>
+
+<ul class="nav-links">
+
+<li><a href="#features">Funcionalidades</a></li>
+<li><a href="#pricing">Preços</a></li>
+
+<li><a href="https://upstat.online/login">Entrar</a></li>
+
+<li><a class="nav-cta" href="https://upstat.online/register">Começar grátis →</a></li>
+
+</ul>
+
 </nav>
 
-<!-- HERO -->
-
 <section class="hero">
-    <div class="hero-badges">
-        <div class="badge"><span class="badge-dot"></span> Monitoramento em tempo real</div>
-        <div class="badge wpp"><span class="badge-dot"></span> Alertas por WhatsApp</div>
-    </div>
 
-```
 <h1 class="hero-title">
-    Seu sistema caiu.<br />
-    <em>Seus clientes já sabem.</em>
+Seu sistema caiu.<br>
+<em>Seus clientes já sabem.</em>
 </h1>
 
 <p class="hero-sub">
-    Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — sem complicação.
+Monitore APIs e fluxos. Detecte quedas em segundos e receba alertas direto no WhatsApp.
 </p>
 
 <div class="hero-actions">
-    <a href="https://upstat.online/register" class="btn-primary">Criar conta grátis →</a>
-    <a href="#how" class="btn-ghost">Ver como funciona</a>
+
+<a class="btn-primary" href="https://upstat.online/register">
+Criar conta grátis →
+</a>
+
+<a class="btn-ghost" href="#pricing">
+Ver preços
+</a>
+
 </div>
 
 <div class="hero-mock">
-    <div class="mock-header">
-        <span>Minha Startup — Status</span>
-        <div class="mock-pill"><span></span> Todos operacionais</div>
-    </div>
-    <div class="mock-row">
-        <div class="mock-row-l"><div class="dot dot-up"></div> API Principal</div>
-        <div class="mock-row-r"><span>142ms</span><span>99.98%</span><span class="spill spill-up">Operacional</span></div>
-    </div>
-    <div class="ubars">
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#ef444433;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#f59e0b33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
-    </div>
-    <div class="mock-row">
-        <div class="mock-row-l"><div class="dot dot-teal"></div> Checkout Flow <span class="synth-tag">synthetic</span></div>
-        <div class="mock-row-r"><span>1.4s</span><span>100%</span><span class="spill spill-teal">OK</span></div>
-    </div>
-    <div class="ubars">
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
-    </div>
+
+<div class="mock-header">
+<span>Minha Startup — Status</span>
+<span style="color:#22C55E">● Operacional</span>
 </div>
-```
+
+<div class="mock-row">
+<span>API Principal</span>
+<span>99.98%</span>
+</div>
+
+<div class="mock-row">
+<span>Checkout Flow</span>
+<span>100%</span>
+</div>
+
+</div>
 
 </section>
-
-<!-- STATS -->
 
 <div class="stats-wrap">
-    <div class="stats-grid reveal">
-        <div class="stat-cell"><div class="stat-num">99.9%</div><div class="stat-lbl">Uptime médio monitorado</div></div>
-        <div class="stat-cell"><div class="stat-num">&lt;60s</div><div class="stat-lbl">Tempo de detecção</div></div>
-        <div class="stat-cell"><div class="stat-num">R$0</div><div class="stat-lbl">Pra começar</div></div>
-    </div>
+
+<div class="stats-grid">
+
+<div class="stat-cell">
+<div class="stat-num">99.9%</div>
+<div class="stat-lbl">Uptime médio</div>
 </div>
 
-<!-- FEATURES -->
+<div class="stat-cell">
+<div class="stat-num">&lt;60s</div>
+<div class="stat-lbl">Tempo de detecção</div>
+</div>
+
+<div class="stat-cell">
+<div class="stat-num">R$0</div>
+<div class="stat-lbl">Pra começar</div>
+</div>
+
+</div>
+
+</div>
 
 <section class="features" id="features">
-    <span class="stag reveal">// funcionalidades</span>
-    <h2 class="shead reveal">Tudo que você precisa.<br /><em>Nada que você não precisa.</em></h2>
 
-```
-<div class="feat-grid reveal">
-    <div class="feat-card">
-        <span class="ficon">⚡</span>
-        <div class="ftitle">Monitoramento automático</div>
-        <p class="fdesc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu cliente.</p>
-    </div>
-    <div class="feat-card hl-synth">
-        <span class="ficon">🤖</span>
-        <div class="ftitle">Synthetic Monitor</div>
-        <p class="fdesc">Simule fluxos reais — login, checkout, formulários. Detecte quando algo quebra, não só quando o servidor cai.</p>
-        <span class="ftag synth">✦ Pro</span>
-    </div>
-    <div class="feat-card">
-        <span class="ficon">📊</span>
-        <div class="ftitle">Histórico de uptime</div>
-        <p class="fdesc">Visualize 90 dias de histórico com barras por dia, latência e incidentes registrados.</p>
-    </div>
-    <div class="feat-card hl-wpp">
-        <span class="ficon">💬</span>
-        <div class="ftitle">Alertas por WhatsApp</div>
-        <p class="fdesc">Receba mensagem direto no WhatsApp quando qualquer monitor cair ou se recuperar. Na hora, sem delay.</p>
-        <span class="ftag wpp">💬 Pro</span>
-    </div>
-    <div class="feat-card">
-        <span class="ficon">🔗</span>
-        <div class="ftitle">Status page pública</div>
-        <p class="fdesc">Página profissional com URL personalizada pra compartilhar com seus clientes e usuários.</p>
-    </div>
-    <div class="feat-card">
-        <span class="ficon">🔔</span>
-        <div class="ftitle">Alertas por email</div>
-        <p class="fdesc">Notificações por email quando seu sistema cair ou se recuperar — disponível em todos os planos.</p>
-    </div>
+<div class="feat-grid">
+
+<div class="feat-card">
+
+<div class="ftitle">⚡ Monitoramento automático</div>
+
+<p class="fdesc">
+Seu sistema é verificado a cada poucos minutos.
+</p>
+
 </div>
-```
 
-</section>
+<div class="feat-card">
 
-<!-- WHATSAPP SPOTLIGHT -->
+<div class="ftitle">🤖 Synthetic Monitor</div>
 
-<section class="spotlight" id="whatsapp">
-    <div class="sp-card wpp reveal">
-        <div class="sp-content">
-            <span class="stag wpp">// alertas por whatsapp</span>
-            <h2 class="sp-head">Cai às 3h da manhã?<br /><em class="wpp">Você sabe na hora.</em></h2>
-            <p class="sp-desc">Email fica sem ler. Push você ignora. Mas <strong style="color:#F0F6FC">WhatsApp você vê</strong> — independente da hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.</p>
-            <ul class="checklist">
-                <li><span class="ck wpp">✓</span><span><strong>Alerta de queda instantâneo</strong> — assim que o monitor detecta falha</span></li>
-                <li><span class="ck wpp">✓</span><span><strong>Alerta de recuperação</strong> — quando o sistema volta ao ar</span></li>
-                <li><span class="ck wpp">✓</span><span><strong>Detalhes completos</strong> — nome do monitor, downtime, código de status</span></li>
-                <li><span class="ck wpp">✓</span><span><strong>Sem app extra</strong> — funciona direto no WhatsApp que você já usa</span></li>
-            </ul>
-            <a href="https://upstat.online/register" class="btn-wpp">💬 Ativar alertas WhatsApp →</a>
-        </div>
-        <div class="sp-demo">
-            <div class="wbubble">
-                <div class="wbubble-t down">🔴 Monitor offline</div>
-                <div class="wbubble-b"><strong>API Principal</strong> está fora do ar.<br/>Status: 503 · Detectado às 03:17</div>
-                <div class="wbubble-time">03:17 ✓✓</div>
-            </div>
-            <div class="wbubble">
-                <div class="wbubble-t down">🔴 Synthetic falhou</div>
-                <div class="wbubble-b"><strong>Checkout Flow</strong> — step 2 falhou.<br/>Timeout na etapa de pagamento</div>
-                <div class="wbubble-time">03:18 ✓✓</div>
-            </div>
-            <div class="wbubble">
-                <div class="wbubble-t up">🟢 Monitor recuperado</div>
-                <div class="wbubble-b"><strong>API Principal</strong> voltou ao ar.<br/>Downtime: 4 min · Latência: 138ms</div>
-                <div class="wbubble-time">03:21 ✓✓</div>
-            </div>
-        </div>
-    </div>
-</section>
+<p class="fdesc">
+Simule login, checkout e fluxos completos.
+</p>
 
-<!-- SYNTHETIC SPOTLIGHT -->
-
-<section class="spotlight" id="synthetic">
-    <div class="sp-card synth reveal">
-        <div class="sp-content">
-            <span class="stag">// synthetic monitor</span>
-            <h2 class="sp-head">Não é só ping.<br /><em class="teal">É o fluxo real.</em></h2>
-            <p class="sp-desc">Servidor respondendo 200 OK enquanto o checkout está quebrado? O Synthetic Monitor simula o que seu <strong style="color:#F0F6FC">usuário real faz</strong> e alerta quando qualquer etapa falha.</p>
-            <ul class="checklist">
-                <li><span class="ck teal">✓</span><span><strong>Simula fluxos reais</strong> — login, checkout, APIs encadeadas</span></li>
-                <li><span class="ck teal">✓</span><span><strong>Detecta erros lógicos</strong> — não só downtime, mas falhas de integração</span></li>
-                <li><span class="ck teal">✓</span><span><strong>Steps granulares</strong> — veja exatamente qual etapa quebrou</span></li>
-                <li><span class="ck teal">✓</span><span><strong>Alerta via WhatsApp + email</strong> — integra com todos os canais</span></li>
-            </ul>
-            <a href="https://upstat.online/register" class="btn-primary">🤖 Criar meu primeiro synthetic →</a>
-        </div>
-        <div class="sp-demo">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Checkout Flow · rodando agora</div>
-            <div class="sstep">
-                <div class="sstep-n">1</div>
-                <div><div class="sstep-label">GET /products</div><div class="sstep-desc">Listagem carregada</div></div>
-                <span class="sstep-st ss-ok">✓ 210ms</span>
-            </div>
-            <div class="sstep">
-                <div class="sstep-n">2</div>
-                <div><div class="sstep-label">POST /cart/add</div><div class="sstep-desc">Item adicionado</div></div>
-                <span class="sstep-st ss-ok">✓ 318ms</span>
-            </div>
-            <div class="sstep">
-                <div class="sstep-n">3</div>
-                <div><div class="sstep-label">POST /checkout/init</div><div class="sstep-desc">Verificando gateway…</div></div>
-                <span class="sstep-st ss-run">⟳ rodando</span>
-            </div>
-            <div class="sstep" style="opacity:0.4;">
-                <div class="sstep-n">4</div>
-                <div><div class="sstep-label">POST /payment/confirm</div><div class="sstep-desc">Confirmação</div></div>
-                <span class="sstep-st ss-w">aguardando</span>
-            </div>
-            <div class="sstep" style="opacity:0.4;">
-                <div class="sstep-n">5</div>
-                <div><div class="sstep-label">GET /order/:id</div><div class="sstep-desc">Validação do pedido</div></div>
-                <span class="sstep-st ss-w">aguardando</span>
-            </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:10px;padding-top:12px;border-top:1px solid var(--border);">
-                Último: <span style="color:var(--up);">✓ OK</span> · 1.2s · há 3 min
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- HOW -->
-
-<section class="how" id="how">
-    <span class="stag reveal">// como funciona</span>
-    <h2 class="shead reveal">Do cadastro à<br /><em>status page em minutos.</em></h2>
-
-```
-<div class="steps-list reveal">
-    <div class="step-row">
-        <div class="step-n">1</div>
-        <div>
-            <div class="step-title">Crie sua conta grátis</div>
-            <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa a rodar na hora.</p>
-        </div>
-    </div>
-    <div class="step-row">
-        <div class="step-n">2</div>
-        <div>
-            <div class="step-title">Adicione um monitor (HTTP ou Synthetic)</div>
-            <p class="step-desc">Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic Monitor com steps encadeados pra testar fluxos reais.</p>
-        </div>
-    </div>
-    <div class="step-row">
-        <div class="step-n">3</div>
-        <div>
-            <div class="step-title">Configure seus alertas</div>
-            <p class="step-desc">Ative notificações por email — ou por WhatsApp no plano Pro — pra saber imediatamente quando algo falhar.</p>
-        </div>
-    </div>
-    <div class="step-row">
-        <div class="step-n">4</div>
-        <div>
-            <div class="step-title">Compartilhe sua status page</div>
-            <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe que eles acompanhem em tempo real.</p>
-        </div>
-    </div>
 </div>
-```
+
+<div class="feat-card">
+
+<div class="ftitle">📊 Histórico</div>
+
+<p class="fdesc">
+Visualize uptime e latência.
+</p>
+
+</div>
+
+</div>
 
 </section>
-
-<!-- PRICING -->
 
 <section class="pricing" id="pricing">
-    <span class="stag reveal">// preços</span>
-    <h2 class="shead reveal">Simples como<br /><em>deve ser.</em></h2>
 
-```
-<div class="price-grid reveal">
-    <div class="plan">
-        <div class="plan-name">Free</div>
-        <div class="plan-price">R$0</div>
-        <div class="plan-period">para sempre</div>
-        <ul class="plan-feats">
-            <li><span class="fi on">✓</span> 3 monitores HTTP</li>
-            <li><span class="fi on">✓</span> Ping a cada 5 minutos</li>
-            <li><span class="fi on">✓</span> Histórico de 7 dias</li>
-            <li><span class="fi on">✓</span> Status page pública</li>
-            <li><span class="fi on">✓</span> Notificação por email</li>
-            <li><span class="fi off">✗</span> <span style="opacity:0.4">Alertas por WhatsApp</span></li>
-            <li><span class="fi off">✗</span> <span style="opacity:0.4">Synthetic Monitor</span></li>
-            <li><span class="fi off">✗</span> <span style="opacity:0.4">URL personalizada</span></li>
-        </ul>
-        <a href="https://upstat.online/register" class="plan-btn free">Começar grátis</a>
-    </div>
-    <div class="plan pro">
-        <div class="plan-name">Pro <span class="plan-bdg">recomendado</span></div>
-        <div class="plan-price">R$29</div>
-        <div class="plan-period">por mês</div>
-        <ul class="plan-feats">
-            <li><span class="fi on">✓</span> Monitores ilimitados</li>
-            <li><span class="fi on">✓</span> Ping a cada 1 minuto</li>
-            <li><span class="fi on">✓</span> Histórico de 90 dias</li>
-            <li><span class="fi on">✓</span> Status page pública</li>
-            <li><span class="fi on">✓</span> URL personalizada</li>
-            <li><span class="fi on">✓</span> Notificação por email</li>
-            <li class="hl-wpp"><span class="fi">✓</span> 💬 Alertas por WhatsApp</li>
-            <li class="hl-synth"><span class="fi">✓</span> 🤖 Synthetic Monitor</li>
-            <li><span class="fi on">✓</span> Suporte prioritário</li>
-        </ul>
-        <a href="https://upstat.online/register" class="plan-btn pro-b">Fazer upgrade →</a>
-    </div>
+<h2>Preços</h2>
+
+<div class="price-grid">
+
+<div class="plan">
+
+<div class="plan-name">Free</div>
+
+<div class="plan-price">R$0</div>
+
+<div class="plan-period">para sempre</div>
+
+<ul class="plan-feats">
+
+<li>3 monitores HTTP</li>
+<li>Ping a cada 5 min</li>
+<li>Status page</li>
+<li>Email alerts</li>
+
+</ul>
+
+<a class="plan-btn free" href="https://upstat.online/register">
+Começar grátis
+</a>
+
 </div>
-```
 
-</section>
+<div class="plan">
 
-<!-- CTA -->
+<div class="plan-name">Pro</div>
 
-<section class="cta">
-    <h2 class="cta-title reveal">Pronto pra parar<br />de perder <em>downtime</em>?</h2>
-    <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
-    <div class="cta-btns reveal">
-        <a href="https://upstat.online/register" class="btn-primary">Criar minha conta →</a>
-        <a href="https://upstat.online/register" class="btn-wpp">💬 Quero alertas no WhatsApp</a>
-    </div>
+<div class="plan-price">R$29</div>
+
+<div class="plan-period">por mês</div>
+
+<ul class="plan-feats">
+
+<li>Monitores ilimitados</li>
+<li>Ping a cada 1 min</li>
+<li>90 dias histórico</li>
+<li>Alertas WhatsApp</li>
+<li>Synthetic Monitor</li>
+
+</ul>
+
+<a class="plan-btn pro" href="https://upstat.online/register">
+Fazer upgrade →
+</a>
+
+</div>
+
+</div>
+
 </section>
 
 <footer>
-    <span class="foot-logo">● UpStat</span>
-    <span class="foot-copy">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
-</footer>
 
-<script>
-    const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
-    }, { threshold: 0.08 })
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
-</script>
+<span>● UpStat</span>
+
+<span class="foot-copy">
+© 2026 UpStat
+</span>
+
+</footer>
 
 </body>
 </html>
