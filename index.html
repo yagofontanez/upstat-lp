@@ -1,26 +1,24 @@
+html:
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>UpStat — Status pages para quem leva seu sistema a sério</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UpStat — Status pages para quem leva seu sistema a sério</title>
+    <meta name="description" content="Monitore seus sistemas, detecte quedas em segundos e compartilhe uma status page profissional com seus clientes." />
+    <meta name="theme-color" content="#060810" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after {
 box-sizing:border-box;
 margin:0;
 padding:0;
 }
 
-:root{
+:root {
 
 --bg:#060810;
 --surface:#0D1117;
@@ -33,34 +31,43 @@ padding:0;
 --text:#F0F6FC;
 --muted:#8B949E;
 
---up:#22C55E;
 --down:#EF4444;
+--up:#22C55E;
 
 --wpp:#25D366;
 --wpp-dim:rgba(37,211,102,0.12);
 
 }
 
-@media (prefers-color-scheme: light){
+/* LIGHT MODE */
+
+@media (prefers-color-scheme:light){
 
 :root{
+
 --bg:#ffffff;
 --surface:#f6f8fa;
 --surface2:#eef1f4;
 --border:rgba(0,0,0,0.08);
+
 --text:#0f172a;
 --muted:#475569;
+
 }
 
 body{
-background:var(--bg);
-color:var(--text);
 background-image:
-linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+}
+
+nav{
+background:rgba(255,255,255,0.9);
 }
 
 }
+
+/* BASE */
 
 html{
 scroll-behavior:smooth;
@@ -69,10 +76,13 @@ background:var(--bg);
 
 body{
 
-font-family:'JetBrains Mono',monospace;
 background:var(--bg);
 color:var(--text);
-line-height:1.6;
+
+font-family:'JetBrains Mono',monospace;
+line-height:1.65;
+
+overflow-x:hidden;
 
 background-image:
 linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
@@ -80,9 +90,9 @@ linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
 
 background-size:40px 40px;
 
-overflow-x:hidden;
-
 }
+
+/* NAV */
 
 nav{
 
@@ -91,32 +101,34 @@ top:0;
 left:0;
 right:0;
 
+z-index:999;
+
 display:flex;
 align-items:center;
 justify-content:space-between;
 
-padding:18px 40px;
+padding:16px clamp(18px,5vw,40px);
+
+background:rgba(6,8,16,0.92);
+
+backdrop-filter:blur(14px);
 
 border-bottom:1px solid var(--border);
-
-background:rgba(6,8,16,0.9);
-backdrop-filter:blur(16px);
-
-z-index:999;
 
 }
 
 .nav-logo{
+font-size:17px;
+font-weight:700;
 color:var(--primary);
 text-decoration:none;
-font-weight:700;
 }
 
 .nav-links{
 
 display:flex;
-gap:28px;
 align-items:center;
+gap:26px;
 
 list-style:none;
 
@@ -126,7 +138,10 @@ list-style:none;
 
 font-size:13px;
 text-decoration:none;
+
 color:var(--muted);
+
+transition:color .2s;
 
 }
 
@@ -136,14 +151,18 @@ color:var(--text);
 
 .nav-cta{
 
-background:var(--primary);
+background:var(--primary)!important;
 color:#000!important;
-font-weight:700;
 
 padding:8px 18px;
-border-radius:6px;
+
+border-radius:7px;
+
+font-weight:700;
 
 }
+
+/* HERO */
 
 .hero{
 
@@ -156,7 +175,7 @@ justify-content:center;
 
 text-align:center;
 
-padding:120px 24px 80px;
+padding:120px 20px 80px;
 
 }
 
@@ -164,41 +183,66 @@ padding:120px 24px 80px;
 
 font-family:'Instrument Serif',serif;
 
-font-size:clamp(40px,9vw,96px);
+font-size:clamp(40px,9vw,92px);
 
 line-height:1.05;
 
 letter-spacing:-0.03em;
 
-margin-bottom:24px;
+margin-bottom:22px;
 
 }
 
 .hero-title em{
 color:var(--primary);
-font-style:italic;
 }
 
 .hero-sub{
 
-max-width:520px;
+max-width:540px;
 
-font-size:15px;
-
-color:var(--muted);
+font-size:clamp(13px,2vw,16px);
 
 line-height:1.8;
+
+color:var(--muted);
 
 margin-bottom:40px;
 
 }
 
+/* BUTTONS */
+
 .hero-actions{
 
 display:flex;
 gap:12px;
+
 flex-wrap:wrap;
+
 justify-content:center;
+
+}
+
+.btn-primary,
+.btn-ghost,
+.btn-wpp{
+
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+gap:8px;
+
+font-size:14px;
+
+padding:13px 24px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+font-family:'JetBrains Mono',monospace;
 
 }
 
@@ -207,106 +251,79 @@ justify-content:center;
 background:var(--primary);
 color:#000;
 
-padding:13px 24px;
-
-border-radius:8px;
-
 font-weight:700;
 
-text-decoration:none;
-
-display:inline-flex;
-align-items:center;
-gap:8px;
-
-}
-
-.btn-primary:hover{
-transform:translateY(-2px);
 }
 
 .btn-ghost{
 
 border:1px solid var(--border);
-
 color:var(--muted);
 
-padding:13px 24px;
+}
 
-border-radius:8px;
+.btn-wpp{
 
-text-decoration:none;
+background:var(--wpp);
+color:#000;
+font-weight:700;
 
 }
+
+/* HERO MOCK */
 
 .hero-mock{
 
 margin-top:60px;
 
-max-width:650px;
 width:100%;
+max-width:660px;
+
+background:var(--surface);
 
 border:1px solid var(--border);
 
 border-radius:16px;
 
-background:var(--surface);
-
 overflow:hidden;
 
-}
-
-.mock-header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:18px 22px;
-
-border-bottom:1px solid var(--border);
+box-shadow:0 30px 80px rgba(0,0,0,0.6);
 
 }
 
-.mock-row{
-
-display:flex;
-justify-content:space-between;
-
-padding:13px 22px;
-
-border-bottom:1px solid rgba(255,255,255,0.04);
-
-font-size:13px;
-
-}
+/* STATS */
 
 .stats-wrap{
-padding:60px 24px;
+padding:80px 20px;
 }
 
 .stats-grid{
 
 max-width:900px;
+
 margin:auto;
 
 display:grid;
+
 grid-template-columns:repeat(3,1fr);
 
 border:1px solid var(--border);
+
 border-radius:16px;
+
 overflow:hidden;
 
 }
 
 .stat-cell{
 
-padding:40px 24px;
+padding:36px 20px;
+
 text-align:center;
 
-border-right:1px solid var(--border);
-
 background:var(--surface);
+
+border-right:1px solid var(--border);
 
 }
 
@@ -317,22 +334,33 @@ border-right:none;
 .stat-num{
 
 font-family:'Instrument Serif',serif;
-font-size:50px;
+
+font-size:48px;
 
 color:var(--primary);
+
+margin-bottom:6px;
 
 }
 
 .stat-lbl{
+
 font-size:11px;
+
 color:var(--muted);
+
+letter-spacing:.05em;
+
 }
+
+/* FEATURES */
 
 .features{
 
-padding:100px 24px;
+padding:100px 20px;
 
 max-width:1100px;
+
 margin:auto;
 
 }
@@ -340,9 +368,11 @@ margin:auto;
 .feat-grid{
 
 display:grid;
+
 grid-template-columns:repeat(3,1fr);
 
 border:1px solid var(--border);
+
 border-radius:16px;
 
 overflow:hidden;
@@ -364,25 +394,68 @@ border-bottom:1px solid var(--border);
 border-right:none;
 }
 
-.ftitle{
+/* SPOTLIGHT */
 
-font-weight:700;
-margin-bottom:8px;
+.spotlight{
+
+padding:80px 20px;
+
+max-width:1100px;
+
+margin:auto;
+
+}
+
+.sp-card{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+border:1px solid var(--border);
+
+border-radius:20px;
+
+overflow:hidden;
 
 }
 
-.fdesc{
+.sp-content{
+padding:46px 40px;
+}
 
-font-size:12px;
-color:var(--muted);
+.sp-demo{
+
+padding:40px;
+
+border-left:1px solid var(--border);
 
 }
+
+/* HOW */
+
+.how{
+
+padding:100px 20px;
+
+max-width:760px;
+
+margin:auto;
+
+text-align:center;
+
+}
+
+/* PRICING */
 
 .pricing{
 
-padding:100px 24px;
+padding:100px 20px;
+
 max-width:760px;
+
 margin:auto;
+
 text-align:center;
 
 }
@@ -390,7 +463,9 @@ text-align:center;
 .price-grid{
 
 display:grid;
+
 grid-template-columns:1fr 1fr;
+
 gap:16px;
 
 margin-top:40px;
@@ -405,87 +480,69 @@ border:1px solid var(--border);
 
 border-radius:16px;
 
-padding:32px;
+padding:30px;
 
 }
 
-.plan-price{
+/* CTA */
 
-font-family:'Instrument Serif',serif;
-font-size:44px;
+.cta{
 
-margin-bottom:6px;
+padding:100px 20px;
 
-}
-
-.plan-period{
-font-size:12px;
-color:var(--muted);
-margin-bottom:20px;
-}
-
-.plan-feats{
-
-list-style:none;
-display:flex;
-flex-direction:column;
-gap:10px;
-
-font-size:12px;
-color:var(--muted);
-
-margin-bottom:26px;
+text-align:center;
 
 }
 
-.plan-btn{
-
-display:block;
-
-padding:11px;
-
-border-radius:8px;
-
-font-weight:700;
-
-text-decoration:none;
-
-}
-
-.plan-btn.free{
-border:1px solid var(--border);
-color:var(--muted);
-}
-
-.plan-btn.pro{
-
-background:var(--primary);
-color:#000;
-
-}
+/* FOOTER */
 
 footer{
 
-margin-top:60px;
-
 border-top:1px solid var(--border);
 
-padding:28px 24px;
+padding:28px 20px;
 
 display:flex;
-justify-content:space-between;
+
 align-items:center;
+justify-content:space-between;
 
 }
 
-.foot-copy{
-font-size:12px;
-color:var(--muted);
+/* ================= */
+/* RESPONSIVE */
+/* ================= */
+
+@media (max-width:1000px){
+
+.feat-grid{
+grid-template-columns:repeat(2,1fr);
 }
 
-/* MOBILE */
+}
 
 @media (max-width:900px){
+
+.sp-card{
+grid-template-columns:1fr;
+}
+
+.sp-demo{
+border-left:none;
+border-top:1px solid var(--border);
+}
+
+}
+
+@media (max-width:768px){
+
+.hero{
+padding:100px 18px 60px;
+}
+
+.hero-mock{
+display:none;
+}
 
 .stats-grid{
 grid-template-columns:1fr;
@@ -500,24 +557,8 @@ border-bottom:1px solid var(--border);
 grid-template-columns:1fr;
 }
 
-.feat-card{
-border-right:none!important;
-}
-
 .price-grid{
 grid-template-columns:1fr;
-}
-
-.hero{
-padding:100px 20px 60px;
-}
-
-.hero-mock{
-display:none;
-}
-
-nav{
-padding:14px 18px;
 }
 
 .nav-links{
@@ -527,6 +568,7 @@ display:none;
 footer{
 
 flex-direction:column;
+
 gap:8px;
 
 text-align:center;
@@ -535,200 +577,366 @@ text-align:center;
 
 }
 
+@media (max-width:420px){
+
+.btn-primary,
+.btn-ghost,
+.btn-wpp{
+
+width:100%;
+
+}
+
+.hero-actions{
+flex-direction:column;
+width:100%;
+max-width:300px;
+}
+
+}
 </style>
+```
 
 </head>
-
 <body>
 
 <nav>
-
-<a class="nav-logo" href="/">● UpStat</a>
-
-<ul class="nav-links">
-
-<li><a href="#features">Funcionalidades</a></li>
-<li><a href="#pricing">Preços</a></li>
-
-<li><a href="https://upstat.online/login">Entrar</a></li>
-
-<li><a class="nav-cta" href="https://upstat.online/register">Começar grátis →</a></li>
-
-</ul>
-
+    <a href="/" class="nav-logo">● UpStat</a>
+    <ul class="nav-links">
+        <li><a href="#features">Funcionalidades</a></li>
+        <li><a href="#whatsapp">WhatsApp</a></li>
+        <li><a href="#synthetic">Synthetic</a></li>
+        <li><a href="#pricing">Preços</a></li>
+        <li><a href="https://upstat.online/login">Entrar</a></li>
+        <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
+    </ul>
 </nav>
 
-<section class="hero">
+<!-- HERO -->
 
+<section class="hero">
+    <div class="hero-badges">
+        <div class="badge"><span class="badge-dot"></span> Monitoramento em tempo real</div>
+        <div class="badge wpp"><span class="badge-dot"></span> Alertas por WhatsApp</div>
+    </div>
+
+```
 <h1 class="hero-title">
-Seu sistema caiu.<br>
-<em>Seus clientes já sabem.</em>
+    Seu sistema caiu.<br />
+    <em>Seus clientes já sabem.</em>
 </h1>
 
 <p class="hero-sub">
-Monitore APIs e fluxos. Detecte quedas em segundos e receba alertas direto no WhatsApp.
+    Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — sem complicação.
 </p>
 
 <div class="hero-actions">
-
-<a class="btn-primary" href="https://upstat.online/register">
-Criar conta grátis →
-</a>
-
-<a class="btn-ghost" href="#pricing">
-Ver preços
-</a>
-
+    <a href="https://upstat.online/register" class="btn-primary">Criar conta grátis →</a>
+    <a href="#how" class="btn-ghost">Ver como funciona</a>
 </div>
 
 <div class="hero-mock">
-
-<div class="mock-header">
-<span>Minha Startup — Status</span>
-<span style="color:#22C55E">● Operacional</span>
+    <div class="mock-header">
+        <span>Minha Startup — Status</span>
+        <div class="mock-pill"><span></span> Todos operacionais</div>
+    </div>
+    <div class="mock-row">
+        <div class="mock-row-l"><div class="dot dot-up"></div> API Principal</div>
+        <div class="mock-row-r"><span>142ms</span><span>99.98%</span><span class="spill spill-up">Operacional</span></div>
+    </div>
+    <div class="ubars">
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#ef444433;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#f59e0b33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+        <div class="ubar" style="background:#22c55e33;"></div><div class="ubar" style="background:#22c55e33;"></div>
+    </div>
+    <div class="mock-row">
+        <div class="mock-row-l"><div class="dot dot-teal"></div> Checkout Flow <span class="synth-tag">synthetic</span></div>
+        <div class="mock-row-r"><span>1.4s</span><span>100%</span><span class="spill spill-teal">OK</span></div>
+    </div>
+    <div class="ubars">
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+        <div class="ubar" style="background:#00d4aa22;"></div><div class="ubar" style="background:#00d4aa22;"></div>
+    </div>
 </div>
-
-<div class="mock-row">
-<span>API Principal</span>
-<span>99.98%</span>
-</div>
-
-<div class="mock-row">
-<span>Checkout Flow</span>
-<span>100%</span>
-</div>
-
-</div>
+```
 
 </section>
+
+<!-- STATS -->
 
 <div class="stats-wrap">
-
-<div class="stats-grid">
-
-<div class="stat-cell">
-<div class="stat-num">99.9%</div>
-<div class="stat-lbl">Uptime médio</div>
+    <div class="stats-grid reveal">
+        <div class="stat-cell"><div class="stat-num">99.9%</div><div class="stat-lbl">Uptime médio monitorado</div></div>
+        <div class="stat-cell"><div class="stat-num">&lt;60s</div><div class="stat-lbl">Tempo de detecção</div></div>
+        <div class="stat-cell"><div class="stat-num">R$0</div><div class="stat-lbl">Pra começar</div></div>
+    </div>
 </div>
 
-<div class="stat-cell">
-<div class="stat-num">&lt;60s</div>
-<div class="stat-lbl">Tempo de detecção</div>
-</div>
-
-<div class="stat-cell">
-<div class="stat-num">R$0</div>
-<div class="stat-lbl">Pra começar</div>
-</div>
-
-</div>
-
-</div>
+<!-- FEATURES -->
 
 <section class="features" id="features">
+    <span class="stag reveal">// funcionalidades</span>
+    <h2 class="shead reveal">Tudo que você precisa.<br /><em>Nada que você não precisa.</em></h2>
 
-<div class="feat-grid">
-
-<div class="feat-card">
-
-<div class="ftitle">⚡ Monitoramento automático</div>
-
-<p class="fdesc">
-Seu sistema é verificado a cada poucos minutos.
-</p>
-
+```
+<div class="feat-grid reveal">
+    <div class="feat-card">
+        <span class="ficon">⚡</span>
+        <div class="ftitle">Monitoramento automático</div>
+        <p class="fdesc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu cliente.</p>
+    </div>
+    <div class="feat-card hl-synth">
+        <span class="ficon">🤖</span>
+        <div class="ftitle">Synthetic Monitor</div>
+        <p class="fdesc">Simule fluxos reais — login, checkout, formulários. Detecte quando algo quebra, não só quando o servidor cai.</p>
+        <span class="ftag synth">✦ Pro</span>
+    </div>
+    <div class="feat-card">
+        <span class="ficon">📊</span>
+        <div class="ftitle">Histórico de uptime</div>
+        <p class="fdesc">Visualize 90 dias de histórico com barras por dia, latência e incidentes registrados.</p>
+    </div>
+    <div class="feat-card hl-wpp">
+        <span class="ficon">💬</span>
+        <div class="ftitle">Alertas por WhatsApp</div>
+        <p class="fdesc">Receba mensagem direto no WhatsApp quando qualquer monitor cair ou se recuperar. Na hora, sem delay.</p>
+        <span class="ftag wpp">💬 Pro</span>
+    </div>
+    <div class="feat-card">
+        <span class="ficon">🔗</span>
+        <div class="ftitle">Status page pública</div>
+        <p class="fdesc">Página profissional com URL personalizada pra compartilhar com seus clientes e usuários.</p>
+    </div>
+    <div class="feat-card">
+        <span class="ficon">🔔</span>
+        <div class="ftitle">Alertas por email</div>
+        <p class="fdesc">Notificações por email quando seu sistema cair ou se recuperar — disponível em todos os planos.</p>
+    </div>
 </div>
-
-<div class="feat-card">
-
-<div class="ftitle">🤖 Synthetic Monitor</div>
-
-<p class="fdesc">
-Simule login, checkout e fluxos completos.
-</p>
-
-</div>
-
-<div class="feat-card">
-
-<div class="ftitle">📊 Histórico</div>
-
-<p class="fdesc">
-Visualize uptime e latência.
-</p>
-
-</div>
-
-</div>
+```
 
 </section>
 
+<!-- WHATSAPP SPOTLIGHT -->
+
+<section class="spotlight" id="whatsapp">
+    <div class="sp-card wpp reveal">
+        <div class="sp-content">
+            <span class="stag wpp">// alertas por whatsapp</span>
+            <h2 class="sp-head">Cai às 3h da manhã?<br /><em class="wpp">Você sabe na hora.</em></h2>
+            <p class="sp-desc">Email fica sem ler. Push você ignora. Mas <strong style="color:#F0F6FC">WhatsApp você vê</strong> — independente da hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.</p>
+            <ul class="checklist">
+                <li><span class="ck wpp">✓</span><span><strong>Alerta de queda instantâneo</strong> — assim que o monitor detecta falha</span></li>
+                <li><span class="ck wpp">✓</span><span><strong>Alerta de recuperação</strong> — quando o sistema volta ao ar</span></li>
+                <li><span class="ck wpp">✓</span><span><strong>Detalhes completos</strong> — nome do monitor, downtime, código de status</span></li>
+                <li><span class="ck wpp">✓</span><span><strong>Sem app extra</strong> — funciona direto no WhatsApp que você já usa</span></li>
+            </ul>
+            <a href="https://upstat.online/register" class="btn-wpp">💬 Ativar alertas WhatsApp →</a>
+        </div>
+        <div class="sp-demo">
+            <div class="wbubble">
+                <div class="wbubble-t down">🔴 Monitor offline</div>
+                <div class="wbubble-b"><strong>API Principal</strong> está fora do ar.<br/>Status: 503 · Detectado às 03:17</div>
+                <div class="wbubble-time">03:17 ✓✓</div>
+            </div>
+            <div class="wbubble">
+                <div class="wbubble-t down">🔴 Synthetic falhou</div>
+                <div class="wbubble-b"><strong>Checkout Flow</strong> — step 2 falhou.<br/>Timeout na etapa de pagamento</div>
+                <div class="wbubble-time">03:18 ✓✓</div>
+            </div>
+            <div class="wbubble">
+                <div class="wbubble-t up">🟢 Monitor recuperado</div>
+                <div class="wbubble-b"><strong>API Principal</strong> voltou ao ar.<br/>Downtime: 4 min · Latência: 138ms</div>
+                <div class="wbubble-time">03:21 ✓✓</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SYNTHETIC SPOTLIGHT -->
+
+<section class="spotlight" id="synthetic">
+    <div class="sp-card synth reveal">
+        <div class="sp-content">
+            <span class="stag">// synthetic monitor</span>
+            <h2 class="sp-head">Não é só ping.<br /><em class="teal">É o fluxo real.</em></h2>
+            <p class="sp-desc">Servidor respondendo 200 OK enquanto o checkout está quebrado? O Synthetic Monitor simula o que seu <strong style="color:#F0F6FC">usuário real faz</strong> e alerta quando qualquer etapa falha.</p>
+            <ul class="checklist">
+                <li><span class="ck teal">✓</span><span><strong>Simula fluxos reais</strong> — login, checkout, APIs encadeadas</span></li>
+                <li><span class="ck teal">✓</span><span><strong>Detecta erros lógicos</strong> — não só downtime, mas falhas de integração</span></li>
+                <li><span class="ck teal">✓</span><span><strong>Steps granulares</strong> — veja exatamente qual etapa quebrou</span></li>
+                <li><span class="ck teal">✓</span><span><strong>Alerta via WhatsApp + email</strong> — integra com todos os canais</span></li>
+            </ul>
+            <a href="https://upstat.online/register" class="btn-primary">🤖 Criar meu primeiro synthetic →</a>
+        </div>
+        <div class="sp-demo">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Checkout Flow · rodando agora</div>
+            <div class="sstep">
+                <div class="sstep-n">1</div>
+                <div><div class="sstep-label">GET /products</div><div class="sstep-desc">Listagem carregada</div></div>
+                <span class="sstep-st ss-ok">✓ 210ms</span>
+            </div>
+            <div class="sstep">
+                <div class="sstep-n">2</div>
+                <div><div class="sstep-label">POST /cart/add</div><div class="sstep-desc">Item adicionado</div></div>
+                <span class="sstep-st ss-ok">✓ 318ms</span>
+            </div>
+            <div class="sstep">
+                <div class="sstep-n">3</div>
+                <div><div class="sstep-label">POST /checkout/init</div><div class="sstep-desc">Verificando gateway…</div></div>
+                <span class="sstep-st ss-run">⟳ rodando</span>
+            </div>
+            <div class="sstep" style="opacity:0.4;">
+                <div class="sstep-n">4</div>
+                <div><div class="sstep-label">POST /payment/confirm</div><div class="sstep-desc">Confirmação</div></div>
+                <span class="sstep-st ss-w">aguardando</span>
+            </div>
+            <div class="sstep" style="opacity:0.4;">
+                <div class="sstep-n">5</div>
+                <div><div class="sstep-label">GET /order/:id</div><div class="sstep-desc">Validação do pedido</div></div>
+                <span class="sstep-st ss-w">aguardando</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:10px;padding-top:12px;border-top:1px solid var(--border);">
+                Último: <span style="color:var(--up);">✓ OK</span> · 1.2s · há 3 min
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW -->
+
+<section class="how" id="how">
+    <span class="stag reveal">// como funciona</span>
+    <h2 class="shead reveal">Do cadastro à<br /><em>status page em minutos.</em></h2>
+
+```
+<div class="steps-list reveal">
+    <div class="step-row">
+        <div class="step-n">1</div>
+        <div>
+            <div class="step-title">Crie sua conta grátis</div>
+            <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa a rodar na hora.</p>
+        </div>
+    </div>
+    <div class="step-row">
+        <div class="step-n">2</div>
+        <div>
+            <div class="step-title">Adicione um monitor (HTTP ou Synthetic)</div>
+            <p class="step-desc">Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic Monitor com steps encadeados pra testar fluxos reais.</p>
+        </div>
+    </div>
+    <div class="step-row">
+        <div class="step-n">3</div>
+        <div>
+            <div class="step-title">Configure seus alertas</div>
+            <p class="step-desc">Ative notificações por email — ou por WhatsApp no plano Pro — pra saber imediatamente quando algo falhar.</p>
+        </div>
+    </div>
+    <div class="step-row">
+        <div class="step-n">4</div>
+        <div>
+            <div class="step-title">Compartilhe sua status page</div>
+            <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe que eles acompanhem em tempo real.</p>
+        </div>
+    </div>
+</div>
+```
+
+</section>
+
+<!-- PRICING -->
+
 <section class="pricing" id="pricing">
+    <span class="stag reveal">// preços</span>
+    <h2 class="shead reveal">Simples como<br /><em>deve ser.</em></h2>
 
-<h2>Preços</h2>
-
-<div class="price-grid">
-
-<div class="plan">
-
-<div class="plan-name">Free</div>
-
-<div class="plan-price">R$0</div>
-
-<div class="plan-period">para sempre</div>
-
-<ul class="plan-feats">
-
-<li>3 monitores HTTP</li>
-<li>Ping a cada 5 min</li>
-<li>Status page</li>
-<li>Email alerts</li>
-
-</ul>
-
-<a class="plan-btn free" href="https://upstat.online/register">
-Começar grátis
-</a>
-
+```
+<div class="price-grid reveal">
+    <div class="plan">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">R$0</div>
+        <div class="plan-period">para sempre</div>
+        <ul class="plan-feats">
+            <li><span class="fi on">✓</span> 3 monitores HTTP</li>
+            <li><span class="fi on">✓</span> Ping a cada 5 minutos</li>
+            <li><span class="fi on">✓</span> Histórico de 7 dias</li>
+            <li><span class="fi on">✓</span> Status page pública</li>
+            <li><span class="fi on">✓</span> Notificação por email</li>
+            <li><span class="fi off">✗</span> <span style="opacity:0.4">Alertas por WhatsApp</span></li>
+            <li><span class="fi off">✗</span> <span style="opacity:0.4">Synthetic Monitor</span></li>
+            <li><span class="fi off">✗</span> <span style="opacity:0.4">URL personalizada</span></li>
+        </ul>
+        <a href="https://upstat.online/register" class="plan-btn free">Começar grátis</a>
+    </div>
+    <div class="plan pro">
+        <div class="plan-name">Pro <span class="plan-bdg">recomendado</span></div>
+        <div class="plan-price">R$29</div>
+        <div class="plan-period">por mês</div>
+        <ul class="plan-feats">
+            <li><span class="fi on">✓</span> Monitores ilimitados</li>
+            <li><span class="fi on">✓</span> Ping a cada 1 minuto</li>
+            <li><span class="fi on">✓</span> Histórico de 90 dias</li>
+            <li><span class="fi on">✓</span> Status page pública</li>
+            <li><span class="fi on">✓</span> URL personalizada</li>
+            <li><span class="fi on">✓</span> Notificação por email</li>
+            <li class="hl-wpp"><span class="fi">✓</span> 💬 Alertas por WhatsApp</li>
+            <li class="hl-synth"><span class="fi">✓</span> 🤖 Synthetic Monitor</li>
+            <li><span class="fi on">✓</span> Suporte prioritário</li>
+        </ul>
+        <a href="https://upstat.online/register" class="plan-btn pro-b">Fazer upgrade →</a>
+    </div>
 </div>
+```
 
-<div class="plan">
+</section>
 
-<div class="plan-name">Pro</div>
+<!-- CTA -->
 
-<div class="plan-price">R$29</div>
-
-<div class="plan-period">por mês</div>
-
-<ul class="plan-feats">
-
-<li>Monitores ilimitados</li>
-<li>Ping a cada 1 min</li>
-<li>90 dias histórico</li>
-<li>Alertas WhatsApp</li>
-<li>Synthetic Monitor</li>
-
-</ul>
-
-<a class="plan-btn pro" href="https://upstat.online/register">
-Fazer upgrade →
-</a>
-
-</div>
-
-</div>
-
+<section class="cta">
+    <h2 class="cta-title reveal">Pronto pra parar<br />de perder <em>downtime</em>?</h2>
+    <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
+    <div class="cta-btns reveal">
+        <a href="https://upstat.online/register" class="btn-primary">Criar minha conta →</a>
+        <a href="https://upstat.online/register" class="btn-wpp">💬 Quero alertas no WhatsApp</a>
+    </div>
 </section>
 
 <footer>
-
-<span>● UpStat</span>
-
-<span class="foot-copy">
-© 2026 UpStat
-</span>
-
+    <span class="foot-logo">● UpStat</span>
+    <span class="foot-copy">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
 </footer>
+
+<script>
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+    }, { threshold: 0.08 })
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
+</script>
 
 </body>
 </html>
