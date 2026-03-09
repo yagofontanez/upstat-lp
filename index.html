@@ -25,7 +25,6 @@
         rel="stylesheet" />
 
     <style>
-        /* ─── RESET ─── */
         *,
         *::before,
         *::after {
@@ -60,7 +59,6 @@
             font: inherit;
         }
 
-        /* ─── TOKENS ─── */
         :root {
             --bg: #060810;
             --bg2: #0a0e1a;
@@ -69,33 +67,26 @@
             --surface3: #1c2330;
             --border: rgba(255, 255, 255, 0.07);
             --border2: rgba(255, 255, 255, 0.12);
-
             --primary: #00D4AA;
             --primary-d: rgba(0, 212, 170, 0.10);
             --primary-b: rgba(0, 212, 170, 0.22);
-
             --wpp: #25D366;
             --wpp-d: rgba(37, 211, 102, 0.10);
             --wpp-b: rgba(37, 211, 102, 0.22);
-
             --down: #EF4444;
             --warn: #F59E0B;
             --up: #22C55E;
-
             --text: #F0F6FC;
             --text2: #b0bac6;
             --muted: #6B7280;
-
             --radius-sm: 8px;
             --radius: 14px;
             --radius-lg: 20px;
-
             --grid-color: rgba(0, 212, 170, 0.035);
             --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.55);
             --shadow-glow: 0 0 60px rgba(0, 212, 170, 0.08);
         }
 
-        /* ─── BASE ─── */
         html,
         body {
             background: var(--bg);
@@ -110,7 +101,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* grid background */
         body::before {
             content: '';
             position: fixed;
@@ -123,7 +113,6 @@
             background-size: 40px 40px;
         }
 
-        /* top glow */
         body::after {
             content: '';
             position: fixed;
@@ -138,7 +127,6 @@
             pointer-events: none;
         }
 
-        /* ─── LAYOUT HELPERS ─── */
         .wrap {
             max-width: 1100px;
             margin: 0 auto;
@@ -160,7 +148,6 @@
             z-index: 1;
         }
 
-        /* ─── TYPOGRAPHY HELPERS ─── */
         .stag {
             display: inline-block;
             font-size: 11px;
@@ -191,7 +178,6 @@
             color: var(--wpp);
         }
 
-        /* ─── NAV ─── */
         nav {
             position: fixed;
             top: 0;
@@ -265,7 +251,6 @@
             border-radius: var(--radius-sm);
             font-weight: 700;
             font-size: 12px !important;
-            color: var(--muted);
             transition: opacity .15s !important;
         }
 
@@ -287,6 +272,147 @@
             background: var(--text2);
             border-radius: 2px;
             transition: .2s;
+        }
+
+        /* ─── LANG SWITCHER ─── */
+        .lang-switcher {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            transition: color .2s, border-color .2s, background .2s;
+            letter-spacing: .04em;
+        }
+
+        .lang-btn:hover {
+            color: var(--text);
+            border-color: var(--border2);
+            background: var(--surface2);
+        }
+
+        .lang-btn .lang-flag {
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .lang-btn .lang-arrow {
+            font-size: 8px;
+            color: var(--muted);
+            transition: transform .2s;
+        }
+
+        .lang-switcher.open .lang-arrow {
+            transform: rotate(180deg);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-4px);
+            transition: opacity .15s, transform .15s;
+            min-width: 130px;
+            z-index: 100;
+        }
+
+        .lang-switcher.open .lang-dropdown {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text2);
+            cursor: pointer;
+            transition: background .15s, color .15s;
+            letter-spacing: .04em;
+            white-space: nowrap;
+        }
+
+        .lang-option:hover {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+        .lang-option.active {
+            color: var(--primary);
+        }
+
+        .lang-option .lang-opt-flag {
+            font-size: 14px;
+        }
+
+        .lang-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 2px 0;
+        }
+
+        /* Loading state for translation */
+        .translating-overlay {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 100px;
+            padding: 8px 16px;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: .06em;
+            font-weight: 700;
+            gap: 8px;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .5);
+        }
+
+        .translating-overlay.show {
+            display: flex;
+        }
+
+        .tl-spinner {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-b);
+            border-top-color: var(--primary);
+            animation: spin .6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ─── BUTTONS ─── */
@@ -326,7 +452,7 @@
         }
 
         .btn-ghost:hover {
-            border-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, .25);
             color: var(--text);
         }
 
@@ -410,7 +536,6 @@
             margin-bottom: 60px;
         }
 
-        /* ─── HERO MOCK ─── */
         .hero-mock {
             width: 100%;
             max-width: 640px;
@@ -418,7 +543,7 @@
             border: 1px solid var(--border2);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-card), 0 0 0 1px rgba(0, 212, 170, 0.06);
+            box-shadow: var(--shadow-card), 0 0 0 1px rgba(0, 212, 170, .06);
         }
 
         .mock-header {
@@ -438,9 +563,9 @@
             font-size: 11px;
             padding: 4px 10px;
             border-radius: 100px;
-            background: rgba(34, 197, 94, 0.1);
+            background: rgba(34, 197, 94, .1);
             color: var(--up);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, .2);
         }
 
         .mock-pill span {
@@ -498,7 +623,7 @@
             border-radius: 4px;
             background: var(--primary-d);
             color: var(--primary);
-            border: 1px solid rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, .2);
         }
 
         .spill {
@@ -509,7 +634,7 @@
         }
 
         .spill-up {
-            background: rgba(34, 197, 94, 0.1);
+            background: rgba(34, 197, 94, .1);
             color: var(--up);
         }
 
@@ -519,7 +644,7 @@
         }
 
         .spill-down {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, .1);
             color: var(--down);
         }
 
@@ -565,7 +690,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(0, 212, 170, 0.05), transparent 70%);
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 212, 170, .05), transparent 70%);
             pointer-events: none;
         }
 
@@ -669,13 +794,13 @@
         .ftag.wpp {
             background: var(--wpp-d);
             color: var(--wpp);
-            border: 1px solid rgba(37, 211, 102, 0.2);
+            border: 1px solid rgba(37, 211, 102, .2);
         }
 
         .ftag.synth {
             background: var(--primary-d);
             color: var(--primary);
-            border: 1px solid rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, .2);
         }
 
         /* ─── SPOTLIGHT ─── */
@@ -693,13 +818,13 @@
         }
 
         .sp-card.wpp-card {
-            border-color: rgba(37, 211, 102, 0.2);
-            box-shadow: 0 0 60px rgba(37, 211, 102, 0.05);
+            border-color: rgba(37, 211, 102, .2);
+            box-shadow: 0 0 60px rgba(37, 211, 102, .05);
         }
 
         .sp-card.synth-card {
-            border-color: rgba(0, 212, 170, 0.2);
-            box-shadow: 0 0 60px rgba(0, 212, 170, 0.06);
+            border-color: rgba(0, 212, 170, .2);
+            box-shadow: 0 0 60px rgba(0, 212, 170, .06);
         }
 
         .sp-content {
@@ -731,14 +856,13 @@
         }
 
         .sp-card.wpp-card .sp-demo {
-            background: linear-gradient(160deg, var(--surface) 40%, rgba(37, 211, 102, 0.05));
+            background: linear-gradient(160deg, var(--surface) 40%, rgba(37, 211, 102, .05));
         }
 
         .sp-card.synth-card .sp-demo {
-            background: linear-gradient(160deg, var(--surface) 40%, rgba(0, 212, 170, 0.05));
+            background: linear-gradient(160deg, var(--surface) 40%, rgba(0, 212, 170, .05));
         }
 
-        /* checklist */
         .checklist {
             display: flex;
             flex-direction: column;
@@ -769,16 +893,15 @@
         .ck.wpp {
             background: var(--wpp-d);
             color: var(--wpp);
-            border: 1px solid rgba(37, 211, 102, 0.2);
+            border: 1px solid rgba(37, 211, 102, .2);
         }
 
         .ck.teal {
             background: var(--primary-d);
             color: var(--primary);
-            border: 1px solid rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, .2);
         }
 
-        /* WhatsApp bubbles */
         .wbubble {
             background: var(--surface2);
             border-radius: 12px 12px 12px 0;
@@ -819,7 +942,6 @@
             margin-top: 5px;
         }
 
-        /* Synthetic steps */
         .sstep {
             display: flex;
             align-items: center;
@@ -868,7 +990,7 @@
         }
 
         .ss-ok {
-            background: rgba(34, 197, 94, 0.1);
+            background: rgba(34, 197, 94, .1);
             color: var(--up);
         }
 
@@ -883,7 +1005,7 @@
         }
 
         .ss-err {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, .1);
             color: var(--down);
         }
 
@@ -919,7 +1041,7 @@
             height: 36px;
             border-radius: 50%;
             background: var(--primary-d);
-            border: 1px solid rgba(0, 212, 170, 0.25);
+            border: 1px solid rgba(0, 212, 170, .25);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -964,8 +1086,8 @@
 
         .plan.pro {
             background: linear-gradient(145deg, var(--surface2), var(--surface));
-            border-color: rgba(0, 212, 170, 0.25);
-            box-shadow: 0 0 40px rgba(0, 212, 170, 0.07);
+            border-color: rgba(0, 212, 170, .25);
+            box-shadow: 0 0 40px rgba(0, 212, 170, .07);
             position: relative;
         }
 
@@ -984,7 +1106,7 @@
             padding: 3px 8px;
             background: var(--primary-d);
             color: var(--primary);
-            border: 1px solid rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, .2);
             border-radius: 100px;
             font-weight: 700;
         }
@@ -1095,7 +1217,7 @@
             transform: translate(-50%, -50%);
             width: 700px;
             height: 400px;
-            background: radial-gradient(ellipse, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(0, 212, 170, .06) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -1150,7 +1272,7 @@
             color: var(--muted);
         }
 
-        /* ─── REVEAL ANIMATION ─── */
+        /* ─── REVEAL ─── */
         .reveal {
             opacity: 0;
             transform: translateY(20px);
@@ -1162,7 +1284,6 @@
             transform: none;
         }
 
-        /* stagger children */
         .reveal-group>* {
             opacity: 0;
             transform: translateY(16px);
@@ -1280,6 +1401,11 @@
                 gap: 8px;
                 text-align: center;
             }
+
+            .lang-dropdown {
+                right: auto;
+                left: 0;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1304,14 +1430,13 @@
             }
         }
 
-        /* ─── MOBILE MENU ─── */
         .mobile-menu {
             display: none;
             position: fixed;
             top: 60px;
             left: 0;
             right: 0;
-            background: rgba(6, 8, 16, 0.97);
+            background: rgba(6, 8, 16, .97);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
@@ -1352,76 +1477,98 @@
             border-bottom: none !important;
         }
     </style>
-
 </head>
 
 <body>
 
     <!-- ─── NAV ─── -->
-
     <nav>
         <a href="/" class="nav-logo">
             <div class="nav-logo-dot"></div>
             UpStat
         </a>
         <ul class="nav-links">
-            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#features" data-i18n="nav.features">Funcionalidades</a></li>
             <li><a href="#whatsapp">WhatsApp</a></li>
             <li><a href="#synthetic">Synthetic</a></li>
-            <li><a href="#pricing">Preços</a></li>
-            <li><a href="https://upstat.online/login">Entrar</a></li>
-            <li><a href="https://upstat.online/register" class="nav-cta">Começar grátis →</a></li>
+            <li><a href="#pricing" data-i18n="nav.pricing">Preços</a></li>
+            <li><a href="https://upstat.online/login" data-i18n="nav.login">Entrar</a></li>
+            <li><a href="https://upstat.online/register" class="nav-cta" data-i18n="nav.cta">Começar grátis →</a></li>
         </ul>
+        <!-- Lang Switcher -->
+        <div class="lang-switcher" id="langSwitcher">
+            <button class="lang-btn" id="langBtn" aria-label="Language">
+                <span class="lang-flag" id="currentFlag">🇧🇷</span>
+                <span id="currentLang">PT</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="langDropdown">
+                <div class="lang-option active" data-lang="pt">
+                    <span class="lang-opt-flag">🇧🇷</span> Português
+                </div>
+                <div class="lang-divider"></div>
+                <div class="lang-option" data-lang="en">
+                    <span class="lang-opt-flag">🇺🇸</span> English
+                </div>
+            </div>
+        </div>
         <button class="nav-hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
     </nav>
 
     <!-- Mobile menu -->
-
     <div class="mobile-menu" id="mobileMenu">
-        <a href="#features">Funcionalidades</a>
+        <a href="#features" data-i18n="nav.features">Funcionalidades</a>
         <a href="#whatsapp">WhatsApp</a>
         <a href="#synthetic">Synthetic</a>
-        <a href="#pricing">Preços</a>
-        <a href="https://upstat.online/login">Entrar</a>
-        <a href="https://upstat.online/register" class="m-cta">Começar grátis →</a>
+        <a href="#pricing" data-i18n="nav.pricing">Preços</a>
+        <a href="https://upstat.online/login" data-i18n="nav.login">Entrar</a>
+        <a href="https://upstat.online/register" class="m-cta" data-i18n="nav.cta">Começar grátis →</a>
+    </div>
+
+    <!-- Loading toast -->
+    <div class="translating-overlay" id="translatingToast">
+        <div class="tl-spinner"></div>
+        <span id="toastText">Translating…</span>
     </div>
 
     <!-- ─── HERO ─── -->
-
     <section class="hero">
         <div class="hero-badges">
-            <div class="badge"><span class="badge-dot"></span> Monitoramento em tempo real</div>
-            <div class="badge"><span class="badge-dot wpp"></span> Alertas por WhatsApp</div>
+            <div class="badge"><span class="badge-dot"></span> <span data-i18n="hero.badge1">Monitoramento em tempo
+                    real</span></div>
+            <div class="badge"><span class="badge-dot wpp"></span> <span data-i18n="hero.badge2">Alertas por
+                    WhatsApp</span></div>
         </div>
 
         <h1 class="hero-title">
-            Seu sistema caiu.<br />
-            <em>Seus clientes já sabem.</em>
+            <span data-i18n="hero.title1">Seu sistema caiu.</span><br />
+            <em data-i18n="hero.title2">Seus clientes já sabem.</em>
         </h1>
 
-        <p class="hero-sub">
+        <p class="hero-sub" data-i18n="hero.sub">
             Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto
             no seu WhatsApp — sem complicação.
         </p>
 
         <div class="hero-actions">
-            <a href="https://upstat.online/register" class="btn btn-primary">Criar conta grátis →</a>
-            <a href="#how" class="btn btn-ghost">Ver como funciona</a>
+            <a href="https://upstat.online/register" class="btn btn-primary" data-i18n="hero.cta1">Criar conta grátis
+                →</a>
+            <a href="#how" class="btn btn-ghost" data-i18n="hero.cta2">Ver como funciona</a>
         </div>
 
         <div class="hero-mock">
             <div class="mock-header">
-                <span>Minha Startup — Status</span>
-                <div class="mock-pill"><span></span> Todos operacionais</div>
+                <span data-i18n="mock.title">Minha Startup — Status</span>
+                <div class="mock-pill"><span></span> <span data-i18n="mock.allOk">Todos operacionais</span></div>
             </div>
             <div class="mock-row">
                 <div class="mock-row-l">
-                    <div class="dot dot-up"></div> API Principal
+                    <div class="dot dot-up"></div> <span data-i18n="mock.api">API Principal</span>
                 </div>
-                <div class="mock-row-r"><span>142ms</span><span>99.98%</span><span
-                        class="spill spill-up">Operacional</span></div>
+                <div class="mock-row-r"><span>142ms</span><span>99.98%</span><span class="spill spill-up"
+                        data-i18n="mock.operational">Operacional</span></div>
             </div>
             <div class="ubars">
                 <div class="ubar" style="background:rgba(34,197,94,.18)"></div>
@@ -1497,118 +1644,118 @@
     </section>
 
     <!-- ─── STATS ─── -->
-
     <div class="stats-section">
         <div class="wrap">
             <div class="stats-grid reveal">
                 <div class="stat-cell">
                     <div class="stat-num">99.9%</div>
-                    <div class="stat-lbl">UPTIME MÉDIO MONITORADO</div>
+                    <div class="stat-lbl" data-i18n="stats.uptime">UPTIME MÉDIO MONITORADO</div>
                 </div>
                 <div class="stat-cell">
                     <div class="stat-num">&lt;60s</div>
-                    <div class="stat-lbl">TEMPO DE DETECÇÃO</div>
+                    <div class="stat-lbl" data-i18n="stats.detection">TEMPO DE DETECÇÃO</div>
                 </div>
                 <div class="stat-cell">
                     <div class="stat-num">R$0</div>
-                    <div class="stat-lbl">PRA COMEÇAR</div>
+                    <div class="stat-lbl" data-i18n="stats.start">PRA COMEÇAR</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ─── FEATURES ─── -->
-
     <section class="features-section" id="features">
         <div class="wrap">
             <div class="section-header">
-                <div class="stag reveal">// funcionalidades</div>
-                <h2 class="shead reveal">Tudo que você precisa.<br /><em>Nada que você não precisa.</em></h2>
+                <div class="stag reveal" data-i18n="feat.tag">// funcionalidades</div>
+                <h2 class="shead reveal"><span data-i18n="feat.head1">Tudo que você precisa.</span><br /><em
+                        data-i18n="feat.head2">Nada que você não precisa.</em></h2>
             </div>
             <div class="feat-grid reveal-group">
                 <div class="feat-card">
                     <span class="ficon">⚡</span>
-                    <div class="ftitle">Monitoramento automático</div>
-                    <p class="fdesc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu
-                        cliente.</p>
+                    <div class="ftitle" data-i18n="feat1.title">Monitoramento automático</div>
+                    <p class="fdesc" data-i18n="feat1.desc">Seu sistema é verificado a cada 1–5 minutos. Se cair, você
+                        sabe antes do seu cliente.</p>
                 </div>
                 <div class="feat-card hl-synth">
                     <span class="ficon">🤖</span>
-                    <div class="ftitle">Synthetic Monitor</div>
-                    <p class="fdesc">Simule fluxos reais — login, checkout, formulários. Detecte quando algo quebra, não
-                        só quando o servidor cai.</p>
-                    <span class="ftag synth">✦ Pro</span>
+                    <div class="ftitle" data-i18n="feat2.title">Synthetic Monitor</div>
+                    <p class="fdesc" data-i18n="feat2.desc">Simule fluxos reais — login, checkout, formulários. Detecte
+                        quando algo quebra, não só quando o servidor cai.</p>
+                    <span class="ftag synth" data-i18n="feat2.tag">✦ Pro</span>
                 </div>
                 <div class="feat-card">
                     <span class="ficon">📊</span>
-                    <div class="ftitle">Histórico de uptime</div>
-                    <p class="fdesc">Visualize 90 dias de histórico com barras por dia, latência e incidentes
-                        registrados.</p>
+                    <div class="ftitle" data-i18n="feat3.title">Histórico de uptime</div>
+                    <p class="fdesc" data-i18n="feat3.desc">Visualize 90 dias de histórico com barras por dia, latência
+                        e incidentes registrados.</p>
                 </div>
                 <div class="feat-card hl-wpp">
                     <span class="ficon">💬</span>
-                    <div class="ftitle">Alertas por WhatsApp</div>
-                    <p class="fdesc">Receba mensagem direto no WhatsApp quando qualquer monitor cair ou se recuperar. Na
-                        hora, sem delay.</p>
-                    <span class="ftag wpp">💬 Pro</span>
+                    <div class="ftitle" data-i18n="feat4.title">Alertas por WhatsApp</div>
+                    <p class="fdesc" data-i18n="feat4.desc">Receba mensagem direto no WhatsApp quando qualquer monitor
+                        cair ou se recuperar. Na hora, sem delay.</p>
+                    <span class="ftag wpp" data-i18n="feat4.tag">💬 Pro</span>
                 </div>
                 <div class="feat-card">
                     <span class="ficon">🔗</span>
-                    <div class="ftitle">Status page pública</div>
-                    <p class="fdesc">Página profissional com URL personalizada pra compartilhar com seus clientes e
-                        usuários.</p>
+                    <div class="ftitle" data-i18n="feat5.title">Status page pública</div>
+                    <p class="fdesc" data-i18n="feat5.desc">Página profissional com URL personalizada pra compartilhar
+                        com seus clientes e usuários.</p>
                 </div>
                 <div class="feat-card">
                     <span class="ficon">🔔</span>
-                    <div class="ftitle">Alertas por email</div>
-                    <p class="fdesc">Notificações por email quando seu sistema cair ou se recuperar — disponível em
-                        todos os planos.</p>
+                    <div class="ftitle" data-i18n="feat6.title">Alertas por email</div>
+                    <p class="fdesc" data-i18n="feat6.desc">Notificações por email quando seu sistema cair ou se
+                        recuperar — disponível em todos os planos.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ─── WHATSAPP SPOTLIGHT ─── -->
-
     <section class="spotlight-section" id="whatsapp">
         <div class="wrap">
             <div class="sp-card wpp-card reveal">
                 <div class="sp-content">
-                    <div class="stag wpp">// alertas por whatsapp</div>
-                    <h2 class="shead">Cai às 3h da manhã?<br /><em class="wpp">Você sabe na hora.</em></h2>
-                    <p class="sp-desc">
+                    <div class="stag wpp" data-i18n="wpp.tag">// alertas por whatsapp</div>
+                    <h2 class="shead"><span data-i18n="wpp.head1">Cai às 3h da manhã?</span><br /><em class="wpp"
+                            data-i18n="wpp.head2">Você sabe na hora.</em></h2>
+                    <p class="sp-desc" data-i18n="wpp.desc">
                         Email fica sem ler. Push você ignora. Mas <strong>WhatsApp você vê</strong> — independente da
                         hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.
                     </p>
                     <ul class="checklist">
-                        <li><span class="ck wpp">✓</span><span><strong>Alerta de queda instantâneo</strong> — assim que
-                                o monitor detecta falha</span></li>
-                        <li><span class="ck wpp">✓</span><span><strong>Alerta de recuperação</strong> — quando o sistema
-                                volta ao ar</span></li>
-                        <li><span class="ck wpp">✓</span><span><strong>Detalhes completos</strong> — nome do monitor,
-                                downtime, código de status</span></li>
-                        <li><span class="ck wpp">✓</span><span><strong>Sem app extra</strong> — funciona direto no
-                                WhatsApp que você já usa</span></li>
+                        <li><span class="ck wpp">✓</span><span data-i18n="wpp.check1"><strong>Alerta de queda
+                                    instantâneo</strong> — assim que o monitor detecta falha</span></li>
+                        <li><span class="ck wpp">✓</span><span data-i18n="wpp.check2"><strong>Alerta de
+                                    recuperação</strong> — quando o sistema volta ao ar</span></li>
+                        <li><span class="ck wpp">✓</span><span data-i18n="wpp.check3"><strong>Detalhes
+                                    completos</strong> — nome do monitor, downtime, código de status</span></li>
+                        <li><span class="ck wpp">✓</span><span data-i18n="wpp.check4"><strong>Sem app extra</strong> —
+                                funciona direto no WhatsApp que você já usa</span></li>
                     </ul>
-                    <a href="https://upstat.online/register" class="btn btn-wpp">💬 Ativar alertas WhatsApp →</a>
+                    <a href="https://upstat.online/register" class="btn btn-wpp" data-i18n="wpp.cta">💬 Ativar alertas
+                        WhatsApp →</a>
                 </div>
                 <div class="sp-demo">
                     <div class="wbubble">
-                        <div class="wbubble-t down">🔴 Monitor offline</div>
-                        <div class="wbubble-b"><strong>API Principal</strong> está fora do ar.<br />Status: 503 ·
-                            Detectado às 03:17</div>
+                        <div class="wbubble-t down" data-i18n="wpp.bubble1t">🔴 Monitor offline</div>
+                        <div class="wbubble-b" data-i18n="wpp.bubble1b"><strong>API Principal</strong> está fora do
+                            ar.<br />Status: 503 · Detectado às 03:17</div>
                         <div class="wbubble-time">03:17 ✓✓</div>
                     </div>
                     <div class="wbubble">
-                        <div class="wbubble-t down">🔴 Synthetic falhou</div>
-                        <div class="wbubble-b"><strong>Checkout Flow</strong> — step 2 falhou.<br />Timeout na etapa de
-                            pagamento</div>
+                        <div class="wbubble-t down" data-i18n="wpp.bubble2t">🔴 Synthetic falhou</div>
+                        <div class="wbubble-b" data-i18n="wpp.bubble2b"><strong>Checkout Flow</strong> — step 2
+                            falhou.<br />Timeout na etapa de pagamento</div>
                         <div class="wbubble-time">03:18 ✓✓</div>
                     </div>
                     <div class="wbubble">
-                        <div class="wbubble-t up">🟢 Monitor recuperado</div>
-                        <div class="wbubble-b"><strong>API Principal</strong> voltou ao ar.<br />Downtime: 4 min ·
-                            Latência: 138ms</div>
+                        <div class="wbubble-t up" data-i18n="wpp.bubble3t">🟢 Monitor recuperado</div>
+                        <div class="wbubble-b" data-i18n="wpp.bubble3b"><strong>API Principal</strong> voltou ao
+                            ar.<br />Downtime: 4 min · Latência: 138ms</div>
                         <div class="wbubble-time">03:21 ✓✓</div>
                     </div>
                 </div>
@@ -1617,38 +1764,38 @@
     </section>
 
     <!-- ─── SYNTHETIC SPOTLIGHT ─── -->
-
     <section class="spotlight-section" id="synthetic">
         <div class="wrap">
             <div class="sp-card synth-card reveal">
                 <div class="sp-content">
-                    <div class="stag">// synthetic monitor</div>
-                    <h2 class="shead">Não é só ping.<br /><em>É o fluxo real.</em></h2>
-                    <p class="sp-desc">
+                    <div class="stag" data-i18n="syn.tag">// synthetic monitor</div>
+                    <h2 class="shead"><span data-i18n="syn.head1">Não é só ping.</span><br /><em data-i18n="syn.head2">É
+                            o fluxo real.</em></h2>
+                    <p class="sp-desc" data-i18n="syn.desc">
                         Servidor respondendo 200 OK enquanto o checkout está quebrado? O Synthetic Monitor simula o que
                         seu <strong>usuário real faz</strong> e alerta quando qualquer etapa falha.
                     </p>
                     <ul class="checklist">
-                        <li><span class="ck teal">✓</span><span><strong>Simula fluxos reais</strong> — login, checkout,
-                                APIs encadeadas</span></li>
-                        <li><span class="ck teal">✓</span><span><strong>Detecta erros lógicos</strong> — não só
-                                downtime, mas falhas de integração</span></li>
-                        <li><span class="ck teal">✓</span><span><strong>Steps granulares</strong> — veja exatamente qual
-                                etapa quebrou</span></li>
-                        <li><span class="ck teal">✓</span><span><strong>Alerta via WhatsApp + email</strong> — integra
-                                com todos os canais</span></li>
+                        <li><span class="ck teal">✓</span><span data-i18n="syn.check1"><strong>Simula fluxos
+                                    reais</strong> — login, checkout, APIs encadeadas</span></li>
+                        <li><span class="ck teal">✓</span><span data-i18n="syn.check2"><strong>Detecta erros
+                                    lógicos</strong> — não só downtime, mas falhas de integração</span></li>
+                        <li><span class="ck teal">✓</span><span data-i18n="syn.check3"><strong>Steps granulares</strong>
+                                — veja exatamente qual etapa quebrou</span></li>
+                        <li><span class="ck teal">✓</span><span data-i18n="syn.check4"><strong>Alerta via WhatsApp +
+                                    email</strong> — integra com todos os canais</span></li>
                     </ul>
-                    <a href="https://upstat.online/register" class="btn btn-primary">🤖 Criar meu primeiro synthetic
-                        →</a>
+                    <a href="https://upstat.online/register" class="btn btn-primary" data-i18n="syn.cta">🤖 Criar meu
+                        primeiro synthetic →</a>
                 </div>
                 <div class="sp-demo">
-                    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:.04em;">CHECKOUT
-                        FLOW · RODANDO AGORA</div>
+                    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:.04em;"
+                        data-i18n="syn.running">CHECKOUT FLOW · RODANDO AGORA</div>
                     <div class="sstep">
                         <div class="sstep-n">1</div>
                         <div>
                             <div class="sstep-label">GET /products</div>
-                            <div class="sstep-desc">Listagem carregada</div>
+                            <div class="sstep-desc" data-i18n="syn.step1">Listagem carregada</div>
                         </div>
                         <span class="sstep-st ss-ok">✓ 210ms</span>
                     </div>
@@ -1656,7 +1803,7 @@
                         <div class="sstep-n">2</div>
                         <div>
                             <div class="sstep-label">POST /cart/add</div>
-                            <div class="sstep-desc">Item adicionado</div>
+                            <div class="sstep-desc" data-i18n="syn.step2">Item adicionado</div>
                         </div>
                         <span class="sstep-st ss-ok">✓ 318ms</span>
                     </div>
@@ -1664,28 +1811,28 @@
                         <div class="sstep-n">3</div>
                         <div>
                             <div class="sstep-label">POST /checkout/init</div>
-                            <div class="sstep-desc">Verificando gateway…</div>
+                            <div class="sstep-desc" data-i18n="syn.step3">Verificando gateway…</div>
                         </div>
-                        <span class="sstep-st ss-run">⟳ rodando</span>
+                        <span class="sstep-st ss-run" data-i18n="syn.running_step">⟳ rodando</span>
                     </div>
                     <div class="sstep" style="opacity:.4">
                         <div class="sstep-n">4</div>
                         <div>
                             <div class="sstep-label">POST /payment/confirm</div>
-                            <div class="sstep-desc">Confirmação</div>
+                            <div class="sstep-desc" data-i18n="syn.step4desc">Confirmação</div>
                         </div>
-                        <span class="sstep-st ss-w">aguardando</span>
+                        <span class="sstep-st ss-w" data-i18n="syn.waiting">aguardando</span>
                     </div>
                     <div class="sstep" style="opacity:.4">
                         <div class="sstep-n">5</div>
                         <div>
                             <div class="sstep-label">GET /order/:id</div>
-                            <div class="sstep-desc">Validação do pedido</div>
+                            <div class="sstep-desc" data-i18n="syn.step5desc">Validação do pedido</div>
                         </div>
-                        <span class="sstep-st ss-w">aguardando</span>
+                        <span class="sstep-st ss-w" data-i18n="syn.waiting">aguardando</span>
                     </div>
-                    <div
-                        style="font-size:11px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+                    <div style="font-size:11px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border);"
+                        data-i18n="syn.lastrun">
                         Último: <span style="color:var(--up)">✓ OK</span> · 1.2s · há 3 min
                     </div>
                 </div>
@@ -1694,44 +1841,44 @@
     </section>
 
     <!-- ─── HOW ─── -->
-
     <section class="how-section" id="how">
         <div class="wrap-sm">
             <div class="section-header">
-                <div class="stag reveal">// como funciona</div>
-                <h2 class="shead reveal">Do cadastro à<br /><em>status page em minutos.</em></h2>
+                <div class="stag reveal" data-i18n="how.tag">// como funciona</div>
+                <h2 class="shead reveal"><span data-i18n="how.head1">Do cadastro à</span><br /><em
+                        data-i18n="how.head2">status page em minutos.</em></h2>
             </div>
             <div class="steps-list reveal">
                 <div class="step-row">
                     <div class="step-n">1</div>
                     <div>
-                        <div class="step-title">Crie sua conta grátis</div>
-                        <p class="step-desc">Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já
-                            começa a rodar na hora.</p>
+                        <div class="step-title" data-i18n="how.step1title">Crie sua conta grátis</div>
+                        <p class="step-desc" data-i18n="how.step1desc">Cadastro em 30 segundos. Sem cartão de crédito.
+                            Seu primeiro monitor já começa a rodar na hora.</p>
                     </div>
                 </div>
                 <div class="step-row">
                     <div class="step-n">2</div>
                     <div>
-                        <div class="step-title">Adicione um monitor (HTTP ou Synthetic)</div>
-                        <p class="step-desc">Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic
-                            Monitor com steps encadeados pra testar fluxos reais.</p>
+                        <div class="step-title" data-i18n="how.step2title">Adicione um monitor (HTTP ou Synthetic)</div>
+                        <p class="step-desc" data-i18n="how.step2desc">Cole a URL da sua API pra monitoramento simples,
+                            ou configure um Synthetic Monitor com steps encadeados pra testar fluxos reais.</p>
                     </div>
                 </div>
                 <div class="step-row">
                     <div class="step-n">3</div>
                     <div>
-                        <div class="step-title">Configure seus alertas</div>
-                        <p class="step-desc">Ative notificações por email — ou por WhatsApp no plano Pro — pra saber
-                            imediatamente quando algo falhar.</p>
+                        <div class="step-title" data-i18n="how.step3title">Configure seus alertas</div>
+                        <p class="step-desc" data-i18n="how.step3desc">Ative notificações por email — ou por WhatsApp no
+                            plano Pro — pra saber imediatamente quando algo falhar.</p>
                     </div>
                 </div>
                 <div class="step-row">
                     <div class="step-n">4</div>
                     <div>
-                        <div class="step-title">Compartilhe sua status page</div>
-                        <p class="step-desc">Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e
-                            deixe que eles acompanhem em tempo real.</p>
+                        <div class="step-title" data-i18n="how.step4title">Compartilhe sua status page</div>
+                        <p class="step-desc" data-i18n="how.step4desc">Uma URL pública é gerada automaticamente.
+                            Compartilhe com seus clientes e deixe que eles acompanhem em tempo real.</p>
                     </div>
                 </div>
             </div>
@@ -1739,74 +1886,376 @@
     </section>
 
     <!-- ─── PRICING ─── -->
-
     <section class="pricing-section" id="pricing">
         <div class="wrap-sm">
             <div class="section-header">
-                <div class="stag reveal">// preços</div>
-                <h2 class="shead reveal">Simples como<br /><em>deve ser.</em></h2>
+                <div class="stag reveal" data-i18n="price.tag">// preços</div>
+                <h2 class="shead reveal"><span data-i18n="price.head1">Simples como</span><br /><em
+                        data-i18n="price.head2">deve ser.</em></h2>
             </div>
             <div class="price-grid reveal">
                 <div class="plan">
                     <div class="plan-name">Free</div>
                     <div class="plan-price">R$0</div>
-                    <div class="plan-period">para sempre</div>
+                    <div class="plan-period" data-i18n="price.forever">para sempre</div>
                     <ul class="plan-feats">
-                        <li><span class="fi on">✓</span> 10 monitores HTTP</li>
-                        <li><span class="fi on">✓</span> Ping a cada 5 minutos</li>
-                        <li><span class="fi on">✓</span> Histórico de 7 dias</li>
-                        <li><span class="fi on">✓</span> Status page pública</li>
-                        <li><span class="fi on">✓</span> Notificação por email</li>
-                        <li><span class="fi off">✗</span> <span style="opacity:.4">Alertas por WhatsApp</span></li>
-                        <li><span class="fi off">✗</span> <span style="opacity:.4">Synthetic Monitor</span></li>
-                        <li><span class="fi off">✗</span> <span style="opacity:.4">URL personalizada</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.f1">10 monitores HTTP</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.f2">Ping a cada 5 minutos</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.f3">Histórico de 7 dias</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.f4">Status page pública</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.f5">Notificação por email</span></li>
+                        <li><span class="fi off">✗</span> <span style="opacity:.4" data-i18n="price.f6">Alertas por
+                                WhatsApp</span></li>
+                        <li><span class="fi off">✗</span> <span style="opacity:.4" data-i18n="price.f7">Synthetic
+                                Monitor</span></li>
+                        <li><span class="fi off">✗</span> <span style="opacity:.4" data-i18n="price.f8">URL
+                                personalizada</span></li>
                     </ul>
-                    <a href="https://upstat.online/register" class="plan-btn free">Começar grátis</a>
+                    <a href="https://upstat.online/register" class="plan-btn free" data-i18n="price.freebtn">Começar
+                        grátis</a>
                 </div>
                 <div class="plan pro">
-                    <div class="plan-name">Pro <span class="plan-bdg">recomendado</span></div>
+                    <div class="plan-name">Pro <span class="plan-bdg" data-i18n="price.recommended">recomendado</span>
+                    </div>
                     <div class="plan-price">R$9</div>
-                    <div class="plan-period">por mês</div>
+                    <div class="plan-period" data-i18n="price.permonth">por mês</div>
                     <ul class="plan-feats">
-                        <li><span class="fi on">✓</span> Monitores ilimitados</li>
-                        <li><span class="fi on">✓</span> Ping a cada 1 minuto</li>
-                        <li><span class="fi on">✓</span> Histórico de 90 dias</li>
-                        <li><span class="fi on">✓</span> Status page pública</li>
-                        <li><span class="fi on">✓</span> URL personalizada</li>
-                        <li><span class="fi on">✓</span> Notificação por email</li>
-                        <li class="hl-wpp"><span class="fi wpp">✓</span> 💬 Alertas por WhatsApp</li>
-                        <li class="hl-synth"><span class="fi teal">✓</span> 🤖 Synthetic Monitor</li>
-                        <li><span class="fi on">✓</span> Suporte prioritário</li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p1">Monitores ilimitados</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p2">Ping a cada 1 minuto</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p3">Histórico de 90 dias</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p4">Status page pública</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p5">URL personalizada</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p6">Notificação por email</span></li>
+                        <li class="hl-wpp"><span class="fi wpp">✓</span> <span data-i18n="price.p7">💬 Alertas por
+                                WhatsApp</span></li>
+                        <li class="hl-synth"><span class="fi teal">✓</span> <span data-i18n="price.p8">🤖 Synthetic
+                                Monitor</span></li>
+                        <li><span class="fi on">✓</span> <span data-i18n="price.p9">Suporte prioritário</span></li>
                     </ul>
-                    <a href="https://upstat.online/register" class="plan-btn pro-b">Fazer upgrade →</a>
+                    <a href="https://upstat.online/register" class="plan-btn pro-b" data-i18n="price.probtn">Fazer
+                        upgrade →</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ─── CTA ─── -->
-
     <section class="cta-section">
-        <h2 class="cta-title reveal">Pronto pra parar<br />de perder <em>downtime</em>?</h2>
-        <p class="cta-sub reveal">Comece grátis agora. Sem cartão de crédito.</p>
+        <h2 class="cta-title reveal"><span data-i18n="cta.title1">Pronto pra parar</span><br /><span
+                data-i18n="cta.title2">de perder <em>downtime</em>?</span></h2>
+        <p class="cta-sub reveal" data-i18n="cta.sub">Comece grátis agora. Sem cartão de crédito.</p>
         <div class="cta-btns reveal">
-            <a href="https://upstat.online/register" class="btn btn-primary">Criar minha conta →</a>
-            <a href="https://upstat.online/register" class="btn btn-wpp">💬 Quero alertas no WhatsApp</a>
+            <a href="https://upstat.online/register" class="btn btn-primary" data-i18n="cta.btn1">Criar minha conta
+                →</a>
+            <a href="https://upstat.online/register" class="btn btn-wpp" data-i18n="cta.btn2">💬 Quero alertas no
+                WhatsApp</a>
         </div>
     </section>
 
     <!-- ─── FOOTER ─── -->
-
     <footer>
         <span class="foot-logo">
-            <div class="nav-logo-dot"></div>
-            UpStat
+            <div class="nav-logo-dot"></div> UpStat
         </span>
-        <span class="foot-copy">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
+        <span class="foot-copy" data-i18n="footer.copy">© 2026 UpStat. Feito no Brasil 🇧🇷</span>
     </footer>
 
     <script>
-        // Reveal on scroll
+        // ─── I18N ───
+        const translations = {
+            pt: {
+                'nav.features': 'Funcionalidades',
+                'nav.pricing': 'Preços',
+                'nav.login': 'Entrar',
+                'nav.cta': 'Começar grátis →',
+                'hero.badge1': 'Monitoramento em tempo real',
+                'hero.badge2': 'Alertas por WhatsApp',
+                'hero.title1': 'Seu sistema caiu.',
+                'hero.title2': 'Seus clientes já sabem.',
+                'hero.sub': 'Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — sem complicação.',
+                'hero.cta1': 'Criar conta grátis →',
+                'hero.cta2': 'Ver como funciona',
+                'mock.title': 'Minha Startup — Status',
+                'mock.allOk': 'Todos operacionais',
+                'mock.api': 'API Principal',
+                'mock.operational': 'Operacional',
+                'stats.uptime': 'UPTIME MÉDIO MONITORADO',
+                'stats.detection': 'TEMPO DE DETECÇÃO',
+                'stats.start': 'PRA COMEÇAR',
+                'feat.tag': '// funcionalidades',
+                'feat.head1': 'Tudo que você precisa.',
+                'feat.head2': 'Nada que você não precisa.',
+                'feat1.title': 'Monitoramento automático',
+                'feat1.desc': 'Seu sistema é verificado a cada 1–5 minutos. Se cair, você sabe antes do seu cliente.',
+                'feat2.title': 'Synthetic Monitor',
+                'feat2.desc': 'Simule fluxos reais — login, checkout, formulários. Detecte quando algo quebra, não só quando o servidor cai.',
+                'feat2.tag': '✦ Pro',
+                'feat3.title': 'Histórico de uptime',
+                'feat3.desc': 'Visualize 90 dias de histórico com barras por dia, latência e incidentes registrados.',
+                'feat4.title': 'Alertas por WhatsApp',
+                'feat4.desc': 'Receba mensagem direto no WhatsApp quando qualquer monitor cair ou se recuperar. Na hora, sem delay.',
+                'feat4.tag': '💬 Pro',
+                'feat5.title': 'Status page pública',
+                'feat5.desc': 'Página profissional com URL personalizada pra compartilhar com seus clientes e usuários.',
+                'feat6.title': 'Alertas por email',
+                'feat6.desc': 'Notificações por email quando seu sistema cair ou se recuperar — disponível em todos os planos.',
+                'wpp.tag': '// alertas por whatsapp',
+                'wpp.head1': 'Cai às 3h da manhã?',
+                'wpp.head2': 'Você sabe na hora.',
+                'wpp.desc': 'Email fica sem ler. Push você ignora. Mas <strong>WhatsApp você vê</strong> — independente da hora. Por isso o UpStat manda o alerta direto pra onde você vai ver mesmo.',
+                'wpp.check1': '<strong>Alerta de queda instantâneo</strong> — assim que o monitor detecta falha',
+                'wpp.check2': '<strong>Alerta de recuperação</strong> — quando o sistema volta ao ar',
+                'wpp.check3': '<strong>Detalhes completos</strong> — nome do monitor, downtime, código de status',
+                'wpp.check4': '<strong>Sem app extra</strong> — funciona direto no WhatsApp que você já usa',
+                'wpp.cta': '💬 Ativar alertas WhatsApp →',
+                'wpp.bubble1t': '🔴 Monitor offline',
+                'wpp.bubble1b': '<strong>API Principal</strong> está fora do ar.<br />Status: 503 · Detectado às 03:17',
+                'wpp.bubble2t': '🔴 Synthetic falhou',
+                'wpp.bubble2b': '<strong>Checkout Flow</strong> — step 2 falhou.<br />Timeout na etapa de pagamento',
+                'wpp.bubble3t': '🟢 Monitor recuperado',
+                'wpp.bubble3b': '<strong>API Principal</strong> voltou ao ar.<br />Downtime: 4 min · Latência: 138ms',
+                'syn.tag': '// synthetic monitor',
+                'syn.head1': 'Não é só ping.',
+                'syn.head2': 'É o fluxo real.',
+                'syn.desc': 'Servidor respondendo 200 OK enquanto o checkout está quebrado? O Synthetic Monitor simula o que seu <strong>usuário real faz</strong> e alerta quando qualquer etapa falha.',
+                'syn.check1': '<strong>Simula fluxos reais</strong> — login, checkout, APIs encadeadas',
+                'syn.check2': '<strong>Detecta erros lógicos</strong> — não só downtime, mas falhas de integração',
+                'syn.check3': '<strong>Steps granulares</strong> — veja exatamente qual etapa quebrou',
+                'syn.check4': '<strong>Alerta via WhatsApp + email</strong> — integra com todos os canais',
+                'syn.cta': '🤖 Criar meu primeiro synthetic →',
+                'syn.running': 'CHECKOUT FLOW · RODANDO AGORA',
+                'syn.step1': 'Listagem carregada',
+                'syn.step2': 'Item adicionado',
+                'syn.step3': 'Verificando gateway…',
+                'syn.running_step': '⟳ rodando',
+                'syn.step4desc': 'Confirmação',
+                'syn.step5desc': 'Validação do pedido',
+                'syn.waiting': 'aguardando',
+                'syn.lastrun': 'Último: <span style="color:var(--up)">✓ OK</span> · 1.2s · há 3 min',
+                'how.tag': '// como funciona',
+                'how.head1': 'Do cadastro à',
+                'how.head2': 'status page em minutos.',
+                'how.step1title': 'Crie sua conta grátis',
+                'how.step1desc': 'Cadastro em 30 segundos. Sem cartão de crédito. Seu primeiro monitor já começa a rodar na hora.',
+                'how.step2title': 'Adicione um monitor (HTTP ou Synthetic)',
+                'how.step2desc': 'Cole a URL da sua API pra monitoramento simples, ou configure um Synthetic Monitor com steps encadeados pra testar fluxos reais.',
+                'how.step3title': 'Configure seus alertas',
+                'how.step3desc': 'Ative notificações por email — ou por WhatsApp no plano Pro — pra saber imediatamente quando algo falhar.',
+                'how.step4title': 'Compartilhe sua status page',
+                'how.step4desc': 'Uma URL pública é gerada automaticamente. Compartilhe com seus clientes e deixe que eles acompanhem em tempo real.',
+                'price.tag': '// preços',
+                'price.head1': 'Simples como',
+                'price.head2': 'deve ser.',
+                'price.forever': 'para sempre',
+                'price.f1': '10 monitores HTTP',
+                'price.f2': 'Ping a cada 5 minutos',
+                'price.f3': 'Histórico de 7 dias',
+                'price.f4': 'Status page pública',
+                'price.f5': 'Notificação por email',
+                'price.f6': 'Alertas por WhatsApp',
+                'price.f7': 'Synthetic Monitor',
+                'price.f8': 'URL personalizada',
+                'price.freebtn': 'Começar grátis',
+                'price.recommended': 'recomendado',
+                'price.permonth': 'por mês',
+                'price.p1': 'Monitores ilimitados',
+                'price.p2': 'Ping a cada 1 minuto',
+                'price.p3': 'Histórico de 90 dias',
+                'price.p4': 'Status page pública',
+                'price.p5': 'URL personalizada',
+                'price.p6': 'Notificação por email',
+                'price.p7': '💬 Alertas por WhatsApp',
+                'price.p8': '🤖 Synthetic Monitor',
+                'price.p9': 'Suporte prioritário',
+                'price.probtn': 'Fazer upgrade →',
+                'cta.title1': 'Pronto pra parar',
+                'cta.title2': 'de perder <em>downtime</em>?',
+                'cta.sub': 'Comece grátis agora. Sem cartão de crédito.',
+                'cta.btn1': 'Criar minha conta →',
+                'cta.btn2': '💬 Quero alertas no WhatsApp',
+                'footer.copy': '© 2026 UpStat. Feito no Brasil 🇧🇷',
+            },
+            en: {
+                'nav.features': 'Features',
+                'nav.pricing': 'Pricing',
+                'nav.login': 'Sign in',
+                'nav.cta': 'Start for free →',
+                'hero.badge1': 'Real-time monitoring',
+                'hero.badge2': 'WhatsApp alerts',
+                'hero.title1': 'Your system went down.',
+                'hero.title2': 'Your clients already know.',
+                'hero.sub': 'Monitor APIs, flows and systems with synthetic monitors. Detect outages in seconds and get alerts straight to your WhatsApp — no hassle.',
+                'hero.cta1': 'Create free account →',
+                'hero.cta2': 'See how it works',
+                'mock.title': 'My Startup — Status',
+                'mock.allOk': 'All systems operational',
+                'mock.api': 'Main API',
+                'mock.operational': 'Operational',
+                'stats.uptime': 'AVERAGE MONITORED UPTIME',
+                'stats.detection': 'DETECTION TIME',
+                'stats.start': 'TO GET STARTED',
+                'feat.tag': '// features',
+                'feat.head1': 'Everything you need.',
+                'feat.head2': 'Nothing you don\'t.',
+                'feat1.title': 'Automatic monitoring',
+                'feat1.desc': 'Your system is checked every 1–5 minutes. If it goes down, you know before your client does.',
+                'feat2.title': 'Synthetic Monitor',
+                'feat2.desc': 'Simulate real flows — login, checkout, forms. Detect when something breaks, not just when the server goes down.',
+                'feat2.tag': '✦ Pro',
+                'feat3.title': 'Uptime history',
+                'feat3.desc': 'View 90 days of history with daily bars, latency and recorded incidents.',
+                'feat4.title': 'WhatsApp alerts',
+                'feat4.desc': 'Get a message straight to WhatsApp when any monitor goes down or recovers. Instantly, no delay.',
+                'feat4.tag': '💬 Pro',
+                'feat5.title': 'Public status page',
+                'feat5.desc': 'Professional page with custom URL to share with your clients and users.',
+                'feat6.title': 'Email alerts',
+                'feat6.desc': 'Email notifications when your system goes down or recovers — available on all plans.',
+                'wpp.tag': '// whatsapp alerts',
+                'wpp.head1': 'Goes down at 3am?',
+                'wpp.head2': 'You know right away.',
+                'wpp.desc': 'Emails go unread. Push notifications get ignored. But <strong>WhatsApp you always check</strong> — no matter the time. That\'s why UpStat sends alerts right where you\'ll actually see them.',
+                'wpp.check1': '<strong>Instant downtime alert</strong> — as soon as the monitor detects a failure',
+                'wpp.check2': '<strong>Recovery alert</strong> — when the system comes back online',
+                'wpp.check3': '<strong>Full details</strong> — monitor name, downtime duration, status code',
+                'wpp.check4': '<strong>No extra app</strong> — works directly in the WhatsApp you already use',
+                'wpp.cta': '💬 Enable WhatsApp alerts →',
+                'wpp.bubble1t': '🔴 Monitor offline',
+                'wpp.bubble1b': '<strong>Main API</strong> is down.<br />Status: 503 · Detected at 03:17',
+                'wpp.bubble2t': '🔴 Synthetic failed',
+                'wpp.bubble2b': '<strong>Checkout Flow</strong> — step 2 failed.<br />Timeout at payment step',
+                'wpp.bubble3t': '🟢 Monitor recovered',
+                'wpp.bubble3b': '<strong>Main API</strong> is back online.<br />Downtime: 4 min · Latency: 138ms',
+                'syn.tag': '// synthetic monitor',
+                'syn.head1': 'It\'s not just a ping.',
+                'syn.head2': 'It\'s the real flow.',
+                'syn.desc': 'Server returning 200 OK while checkout is broken? The Synthetic Monitor simulates what your <strong>real user does</strong> and alerts you when any step fails.',
+                'syn.check1': '<strong>Simulates real flows</strong> — login, checkout, chained APIs',
+                'syn.check2': '<strong>Detects logical errors</strong> — not just downtime, but integration failures',
+                'syn.check3': '<strong>Granular steps</strong> — see exactly which step broke',
+                'syn.check4': '<strong>WhatsApp + email alerts</strong> — integrates with all channels',
+                'syn.cta': '🤖 Create my first synthetic →',
+                'syn.running': 'CHECKOUT FLOW · RUNNING NOW',
+                'syn.step1': 'Listing loaded',
+                'syn.step2': 'Item added',
+                'syn.step3': 'Checking gateway…',
+                'syn.running_step': '⟳ running',
+                'syn.step4desc': 'Confirmation',
+                'syn.step5desc': 'Order validation',
+                'syn.waiting': 'waiting',
+                'syn.lastrun': 'Last: <span style="color:var(--up)">✓ OK</span> · 1.2s · 3 min ago',
+                'how.tag': '// how it works',
+                'how.head1': 'From sign-up to',
+                'how.head2': 'status page in minutes.',
+                'how.step1title': 'Create your free account',
+                'how.step1desc': 'Sign up in 30 seconds. No credit card. Your first monitor starts running immediately.',
+                'how.step2title': 'Add a monitor (HTTP or Synthetic)',
+                'how.step2desc': 'Paste your API URL for simple monitoring, or set up a Synthetic Monitor with chained steps to test real flows.',
+                'how.step3title': 'Set up your alerts',
+                'how.step3desc': 'Enable email notifications — or WhatsApp on the Pro plan — to know immediately when something fails.',
+                'how.step4title': 'Share your status page',
+                'how.step4desc': 'A public URL is automatically generated. Share it with your clients and let them follow along in real time.',
+                'price.tag': '// pricing',
+                'price.head1': 'Simple as it',
+                'price.head2': 'should be.',
+                'price.forever': 'forever',
+                'price.f1': '10 HTTP monitors',
+                'price.f2': 'Ping every 5 minutes',
+                'price.f3': '7-day history',
+                'price.f4': 'Public status page',
+                'price.f5': 'Email notifications',
+                'price.f6': 'WhatsApp alerts',
+                'price.f7': 'Synthetic Monitor',
+                'price.f8': 'Custom URL',
+                'price.freebtn': 'Start for free',
+                'price.recommended': 'recommended',
+                'price.permonth': 'per month',
+                'price.p1': 'Unlimited monitors',
+                'price.p2': 'Ping every 1 minute',
+                'price.p3': '90-day history',
+                'price.p4': 'Public status page',
+                'price.p5': 'Custom URL',
+                'price.p6': 'Email notifications',
+                'price.p7': '💬 WhatsApp alerts',
+                'price.p8': '🤖 Synthetic Monitor',
+                'price.p9': 'Priority support',
+                'price.probtn': 'Upgrade now →',
+                'cta.title1': 'Ready to stop',
+                'cta.title2': 'missing <em>downtime</em>?',
+                'cta.sub': 'Start for free now. No credit card required.',
+                'cta.btn1': 'Create my account →',
+                'cta.btn2': '💬 I want WhatsApp alerts',
+                'footer.copy': '© 2026 UpStat. Made in Brazil 🇧🇷',
+            }
+        };
+
+        let currentLang = 'pt';
+
+        function applyTranslations(lang) {
+            const t = translations[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key] !== undefined) {
+                    el.innerHTML = t[key];
+                }
+            });
+            // Update html lang attr
+            document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+            // Update page title
+            if (lang === 'en') {
+                document.title = 'UpStat — Status pages for devs who take their systems seriously';
+            } else {
+                document.title = 'UpStat — Status pages para quem leva seu sistema a sério';
+            }
+        }
+
+        function setLang(lang) {
+            if (lang === currentLang) return;
+            const toast = document.getElementById('translatingToast');
+            const toastText = document.getElementById('toastText');
+            toastText.textContent = lang === 'en' ? 'Translating to English…' : 'Traduzindo para Português…';
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                applyTranslations(lang);
+                currentLang = lang;
+
+                // Update switcher UI
+                const flagEl = document.getElementById('currentFlag');
+                const langEl = document.getElementById('currentLang');
+                flagEl.textContent = lang === 'pt' ? '🇧🇷' : '🇺🇸';
+                langEl.textContent = lang === 'pt' ? 'PT' : 'EN';
+
+                // Update active state in dropdown
+                document.querySelectorAll('.lang-option').forEach(opt => {
+                    opt.classList.toggle('active', opt.dataset.lang === lang);
+                });
+
+                toast.classList.remove('show');
+            }, 400);
+        }
+
+        // Lang switcher toggle
+        const langSwitcher = document.getElementById('langSwitcher');
+        const langBtn = document.getElementById('langBtn');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langSwitcher.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                setLang(opt.dataset.lang);
+                langSwitcher.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            langSwitcher.classList.remove('open');
+        });
+
+        // ─── REVEAL ───
         const obs = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
@@ -1818,7 +2267,7 @@
 
         document.querySelectorAll('.reveal, .reveal-group').forEach(el => obs.observe(el));
 
-        // Mobile menu
+        // ─── MOBILE MENU ───
         const hamburger = document.getElementById('hamburger');
         const mobileMenu = document.getElementById('mobileMenu');
 
@@ -1826,7 +2275,6 @@
             mobileMenu.classList.toggle('open');
         });
 
-        // Close mobile menu when clicking a link
         mobileMenu.querySelectorAll('a').forEach(a => {
             a.addEventListener('click', () => mobileMenu.classList.remove('open'));
         });
