@@ -2409,26 +2409,29 @@
       <div class="wrap">
         <div class="sp-card cli-card reveal">
           <div class="sp-content">
-            <div class="stag">// cli &amp; sdk</div>
+            <div class="stag" data-i18n="cli.tag">// cli &amp; sdk</div>
             <h2 class="shead">
-              <span>No seu terminal.</span><br /><em>No seu código.</em>
+              <span data-i18n="cli.head1">No seu terminal.</span><br /><em
+                data-i18n="cli.head2"
+                >No seu código.</em
+              >
             </h2>
-            <p class="sp-desc">
+            <p class="sp-desc" data-i18n="cli.desc">
               Gerencie monitores, consulte status e dispare eventos direto do
               seu workflow. <strong>CLI para o terminal</strong>, SDK para
               integrar no código — do jeito que dev gosta.
             </p>
             <ul class="checklist">
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="cli.check1"
                   ><strong>CLI completa</strong> — criar, pausar, listar e
                   deletar monitores sem abrir o dashboard</span
                 >
               </li>
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="cli.check2"
                   ><strong>SDK npm</strong> —
                   <code
                     style="
@@ -2444,15 +2447,15 @@
                 >
               </li>
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="cli.check3"
                   ><strong>Heartbeat &amp; cron jobs</strong> — monitore tarefas
                   agendadas com um ping simples</span
                 >
               </li>
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="cli.check4"
                   ><strong>CI/CD ready</strong> — pause alertas durante deploys
                   sem falso positivo</span
                 >
@@ -2463,9 +2466,13 @@
                 href="https://www.npmjs.com/package/upstat-sdk"
                 class="btn btn-primary"
                 target="_blank"
+                data-i18n="cli.npm"
                 >📦 Ver no npm →</a
               >
-              <a href="https://upstat.online/docs" class="btn btn-ghost"
+              <a
+                href="https://upstat.online/docs"
+                class="btn btn-ghost"
+                data-i18n="cli.docs"
                 >Ver docs</a
               >
             </div>
@@ -2568,6 +2575,7 @@
               </div>
               <p
                 style="font-size: 11px; color: var(--muted); padding-top: 10px"
+                data-i18n="cli.heartbeat_hint"
               >
                 Se o job não pingar dentro do intervalo esperado, o alerta vai
                 automaticamente.
@@ -2583,11 +2591,16 @@
       <div class="wrap">
         <div class="sp-card sub-card reveal">
           <div class="sp-content">
-            <div class="stag">// inscrição na status page</div>
+            <div class="stag" data-i18n="sub.tag">
+              // inscrição na status page
+            </div>
             <h2 class="shead">
-              <span>Seus usuários</span><br /><em>sempre informados.</em>
+              <span data-i18n="sub.head1">Seus usuários</span><br /><em
+                data-i18n="sub.head2"
+                >sempre informados.</em
+              >
             </h2>
-            <p class="sp-desc">
+            <p class="sp-desc" data-i18n="sub.desc">
               Qualquer visitante da sua status page pode se inscrever para
               receber notificações automáticas quando
               <strong>qualquer serviço cair ou se recuperar</strong> — sem
@@ -2595,40 +2608,44 @@
             </p>
             <ul class="checklist">
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="sub.check1"
                   ><strong>Inscrição por email</strong> — formulário já
                   integrado na sua status page</span
                 >
               </li>
               <li>
-                <span class="ck wpp">✓</span
-                ><span
+                <span class="ck wpp">✓</span>
+                <span data-i18n="sub.check2"
                   ><strong>Inscrição por WhatsApp</strong> — notificação no
                   canal que eles já usam</span
                 >
               </li>
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="sub.check3"
                   ><strong>Notificação de incidente</strong> — avisados quando
                   algo cai e quando volta</span
                 >
               </li>
               <li>
-                <span class="ck teal">✓</span
-                ><span
+                <span class="ck teal">✓</span>
+                <span data-i18n="sub.check4"
                   ><strong>Zero configuração</strong> — funciona automaticamente
                   na sua status page existente</span
                 >
               </li>
             </ul>
-            <a href="https://upstat.online/register" class="btn btn-primary"
+            <a
+              href="https://upstat.online/register"
+              class="btn btn-primary"
+              data-i18n="sub.cta"
               >📣 Ativar inscrições →</a
             >
           </div>
           <div class="sp-demo">
             <div
+              data-i18n="sub.preview"
               style="
                 font-size: 11px;
                 color: var(--muted);
@@ -2639,7 +2656,9 @@
               PRÉVIA — STATUS PAGE PÚBLICA
             </div>
             <div class="sub-form">
-              <div class="sub-form-label">RECEBER NOTIFICAÇÕES</div>
+              <div class="sub-form-label" data-i18n="sub.form_label">
+                RECEBER NOTIFICAÇÕES
+              </div>
               <div class="sub-input-row">
                 <input
                   class="sub-input"
@@ -2647,7 +2666,9 @@
                   placeholder="seu@email.com"
                   readonly
                 />
-                <button class="sub-btn">Inscrever</button>
+                <button class="sub-btn" data-i18n="sub.form_btn">
+                  Inscrever
+                </button>
               </div>
             </div>
             <div class="sub-channels" style="margin-bottom: 16px">
@@ -2656,6 +2677,7 @@
               <div class="sub-channel">🌐 Web push</div>
             </div>
             <div
+              data-i18n="sub.sent_label"
               style="
                 font-size: 11px;
                 color: var(--muted);
@@ -2668,8 +2690,10 @@
             <div class="sub-notif">
               <div class="sub-notif-icon email">📧</div>
               <div>
-                <div class="sub-notif-title">Incidente detectado</div>
-                <div class="sub-notif-desc">
+                <div class="sub-notif-title" data-i18n="sub.notif1_title">
+                  Incidente detectado
+                </div>
+                <div class="sub-notif-desc" data-i18n="sub.notif1_desc">
                   Email enviado para 47 inscritos · API Principal offline
                 </div>
               </div>
@@ -2677,8 +2701,10 @@
             <div class="sub-notif">
               <div class="sub-notif-icon wpp-i">💬</div>
               <div>
-                <div class="sub-notif-title">Serviço recuperado</div>
-                <div class="sub-notif-desc">
+                <div class="sub-notif-title" data-i18n="sub.notif2_title">
+                  Serviço recuperado
+                </div>
+                <div class="sub-notif-desc" data-i18n="sub.notif2_desc">
                   WhatsApp enviado para 23 inscritos · Downtime: 4 min
                 </div>
               </div>
@@ -2691,15 +2717,11 @@
     <!-- ─── HOW ─── -->
     <section class="how-section" id="how">
       <div class="wrap-sm">
-        <div class="section-header">
-          <div class="stag reveal" data-i18n="how.tag">// como funciona</div>
-          <h2 class="shead reveal">
-            <span data-i18n="how.head1">Do cadastro à</span><br /><em
-              data-i18n="how.head2"
-              >status page em minutos.</em
-            >
-          </h2>
-        </div>
+        <div class="stag reveal" data-i18n="how.tag">// como funciona</div>
+        <h2 class="shead reveal">
+          <span data-i18n="how.head1">Do cadastro à</span><br />
+          <em data-i18n="how.head2">status page em minutos.</em>
+        </h2>
         <div class="steps-list reveal">
           <div class="step-row">
             <div class="step-n">1</div>
@@ -2950,19 +2972,22 @@
     <section class="faq-section" id="faq">
       <div class="wrap-sm">
         <div class="section-header">
-          <div class="stag reveal">// perguntas frequentes</div>
+          <div class="stag reveal" data-i18n="faq.tag">
+            // perguntas frequentes
+          </div>
           <h2 class="shead reveal">
-            <span>Tem dúvida?</span><br /><em>A gente responde.</em>
+            <span data-i18n="faq.head1">Tem dúvida?</span><br />
+            <em data-i18n="faq.head2">A gente responde.</em>
           </h2>
         </div>
         <div class="faq-list reveal">
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text"
+              <span class="faq-q-text" data-i18n="faq.q1"
                 >O plano gratuito tem limite de tempo?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a1">
               Não. O plano Free é gratuito para sempre — não é um trial. Você
               pode usar os 10 monitores HTTP, a status page e os alertas por
               email sem pagar nada, pelo tempo que quiser.
@@ -2970,11 +2995,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text"
+              <span class="faq-q-text" data-i18n="faq.q2"
                 >Como funciona o alerta por WhatsApp?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a2">
               Você conecta seu número de WhatsApp nas configurações da conta.
               Quando qualquer monitor cair ou se recuperar, o UpStat manda uma
               mensagem direto pra você — sem app extra. Disponível no plano Pro.
@@ -2982,10 +3007,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text">O que é um Synthetic Monitor?</span
+              <span class="faq-q-text" data-i18n="faq.q3"
+                >O que é um Synthetic Monitor?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a3">
               É um monitor que simula ações reais de um usuário — sequências de
               requisições HTTP encadeadas, como login ou checkout completo.
               Detecta quando uma <em>funcionalidade</em> quebra, mesmo que o
@@ -2994,10 +3020,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text">Como instalo e uso o SDK?</span
+              <span class="faq-q-text" data-i18n="faq.q4"
+                >Como instalo e uso o SDK?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a4">
               Instale via npm: <code>npm install upstat-sdk</code>. Inicialize
               com sua API key (disponível no dashboard) e use os métodos para
               criar monitores, checar status e enviar heartbeats. Docs em
@@ -3008,11 +3035,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text"
+              <span class="faq-q-text" data-i18n="faq.q5"
                 >Como meus usuários se inscrevem na status page?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a5">
               Na sua status page pública há um botão "Receber notificações". O
               usuário informa email ou WhatsApp e passa a receber alertas
               automáticos em cada incidente. Você vê a lista de inscritos no
@@ -3021,10 +3048,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text">Posso usar a CLI no CI/CD?</span
+              <span class="faq-q-text" data-i18n="faq.q6"
+                >Posso usar a CLI no CI/CD?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a6">
               Sim. Basta rodar
               <code>upstat monitors pause &lt;id&gt;</code> antes do deploy e
               <code>upstat monitors resume &lt;id&gt;</code> depois para evitar
@@ -3034,11 +3062,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text"
+              <span class="faq-q-text" data-i18n="faq.q7"
                 >Qual a diferença entre monitorar cron jobs e APIs?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a7">
               Monitorar APIs é ativo: o UpStat faz requisições periódicas.
               Monitorar cron jobs é passivo (heartbeat): o seu job envia um ping
               pro UpStat após executar. Se o ping não chegar no intervalo
@@ -3048,11 +3076,11 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">
-              <span class="faq-q-text"
+              <span class="faq-q-text" data-i18n="faq.q8"
                 >Preciso de cartão de crédito pra criar conta?</span
               ><i class="faq-icon">+</i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="faq.a8">
               Não. Conta grátis sem nenhum dado de pagamento. Cartão só é
               necessário para fazer upgrade pro plano Pro.
             </div>
@@ -3252,6 +3280,74 @@
             "O UpStat me avisa antes do meu cliente perceber que algo caiu. Simples, direto e em português — sem precisar de ferramenta gringa.",
           "testimonial.name": "Dev BR",
           "testimonial.role": "Cliente Pro · upstat.online",
+          "cli.tag": "// cli &amp; sdk",
+          "cli.head1": "No seu terminal.",
+          "cli.head2": "No seu código.",
+          "cli.desc":
+            "Gerencie monitores, consulte status e dispare eventos direto do seu workflow. <strong>CLI para o terminal</strong>, SDK para integrar no código — do jeito que dev gosta.",
+          "cli.check1":
+            "<strong>CLI completa</strong> — criar, pausar, listar e deletar monitores sem abrir o dashboard",
+          "cli.check2":
+            '<strong>SDK npm</strong> — <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--primary)">upstat-sdk</code> para Node.js e TypeScript',
+          "cli.check3":
+            "<strong>Heartbeat &amp; cron jobs</strong> — monitore tarefas agendadas com um ping simples",
+          "cli.check4":
+            "<strong>CI/CD ready</strong> — pause alertas durante deploys sem falso positivo",
+          "cli.npm": "📦 Ver no npm →",
+          "cli.docs": "Ver docs",
+          "sub.tag": "// inscrição na status page",
+          "sub.head1": "Seus usuários",
+          "sub.head2": "sempre informados.",
+          "sub.desc":
+            "Qualquer visitante da sua status page pode se inscrever para receber notificações automáticas quando <strong>qualquer serviço cair ou se recuperar</strong> — sem precisar ficar atualizando a página.",
+          "sub.check1":
+            "<strong>Inscrição por email</strong> — formulário já integrado na sua status page",
+          "sub.check2":
+            "<strong>Inscrição por WhatsApp</strong> — notificação no canal que eles já usam",
+          "sub.check3":
+            "<strong>Notificação de incidente</strong> — avisados quando algo cai e quando volta",
+          "sub.check4":
+            "<strong>Zero configuração</strong> — funciona automaticamente na sua status page existente",
+          "sub.cta": "📣 Ativar inscrições →",
+          "faq.tag": "// perguntas frequentes",
+          "faq.head1": "Tem dúvida?",
+          "faq.head2": "A gente responde.",
+          "faq.q1": "O plano gratuito tem limite de tempo?",
+          "faq.a1":
+            "Não. O plano Free é gratuito para sempre — não é um trial. Você pode usar os 10 monitores HTTP, a status page e os alertas por email sem pagar nada, pelo tempo que quiser.",
+          "faq.q2": "Como funciona o alerta por WhatsApp?",
+          "faq.a2":
+            "Você conecta seu número de WhatsApp nas configurações da conta. Quando qualquer monitor cair ou se recuperar, o UpStat manda uma mensagem direto pra você — sem app extra. Disponível no plano Pro.",
+          "faq.q3": "O que é um Synthetic Monitor?",
+          "faq.a3":
+            "É um monitor que simula ações reais de um usuário — sequências de requisições HTTP encadeadas, como login ou checkout completo. Detecta quando uma <em>funcionalidade</em> quebra, mesmo que o servidor continue de pé.",
+          "faq.q4": "Como instalo e uso o SDK?",
+          "faq.a4":
+            'Instale via npm: <code>npm install upstat-sdk</code>. Inicialize com sua API key (disponível no dashboard) e use os métodos para criar monitores, checar status e enviar heartbeats. Docs em <a href="https://upstat.online/docs" target="_blank">upstat.online/docs</a>.',
+          "faq.q5": "Como meus usuários se inscrevem na status page?",
+          "faq.a5":
+            'Na sua status page pública há um botão "Receber notificações". O usuário informa email ou WhatsApp e passa a receber alertas automáticos em cada incidente. Você vê a lista de inscritos no dashboard.',
+          "faq.q6": "Posso usar a CLI no CI/CD?",
+          "faq.a6":
+            "Sim. Basta rodar <code>upstat monitors pause &lt;id&gt;</code> antes do deploy e <code>upstat monitors resume &lt;id&gt;</code> depois para evitar falsos positivos. Funciona em qualquer pipeline (GitHub Actions, GitLab CI, etc.).",
+          "faq.q7": "Qual a diferença entre monitorar cron jobs e APIs?",
+          "faq.a7":
+            "Monitorar APIs é ativo: o UpStat faz requisições periódicas. Monitorar cron jobs é passivo (heartbeat): o seu job envia um ping pro UpStat após executar. Se o ping não chegar no intervalo esperado, o alerta dispara — ideal para backups, envio de emails e relatórios.",
+          "faq.q8": "Preciso de cartão de crédito pra criar conta?",
+          "faq.a8":
+            "Não. Conta grátis sem nenhum dado de pagamento. Cartão só é necessário para fazer upgrade pro plano Pro.",
+          "cli.heartbeat_hint":
+            "Se o job não pingar dentro do intervalo esperado, o alerta vai automaticamente.",
+          "sub.preview": "PRÉVIA — STATUS PAGE PÚBLICA",
+          "sub.form_label": "RECEBER NOTIFICAÇÕES",
+          "sub.form_btn": "Inscrever",
+          "sub.sent_label": "NOTIFICAÇÕES ENVIADAS",
+          "sub.notif1_title": "Incidente detectado",
+          "sub.notif1_desc":
+            "Email enviado para 47 inscritos · API Principal offline",
+          "sub.notif2_title": "Serviço recuperado",
+          "sub.notif2_desc":
+            "WhatsApp enviado para 23 inscritos · Downtime: 4 min",
         },
         en: {
           "nav.features": "Features",
@@ -3403,6 +3499,74 @@
             "UpStat alerts me before my client even notices something went down. Simple, straightforward and in Portuguese — no need for a foreign tool.",
           "testimonial.name": "Dev BR",
           "testimonial.role": "Pro Customer · upstat.online",
+          "cli.tag": "// cli &amp; sdk",
+          "cli.head1": "In your terminal.",
+          "cli.head2": "In your code.",
+          "cli.desc":
+            "Manage monitors, check status and trigger events directly from your workflow. <strong>CLI for the terminal</strong>, SDK to integrate in your code — the way devs like it.",
+          "cli.check1":
+            "<strong>Full CLI</strong> — create, pause, list and delete monitors without opening the dashboard",
+          "cli.check2":
+            '<strong>npm SDK</strong> — <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--primary)">upstat-sdk</code> for Node.js and TypeScript',
+          "cli.check3":
+            "<strong>Heartbeat &amp; cron jobs</strong> — monitor scheduled tasks with a simple ping",
+          "cli.check4":
+            "<strong>CI/CD ready</strong> — pause alerts during deploys without false positives",
+          "cli.npm": "📦 View on npm →",
+          "cli.docs": "View docs",
+          "sub.tag": "// status page subscriptions",
+          "sub.head1": "Your users",
+          "sub.head2": "always informed.",
+          "sub.desc":
+            "Any visitor to your status page can subscribe to receive automatic notifications when <strong>any service goes down or recovers</strong> — no need to keep refreshing the page.",
+          "sub.check1":
+            "<strong>Email subscription</strong> — form already integrated in your status page",
+          "sub.check2":
+            "<strong>WhatsApp subscription</strong> — notification in the channel they already use",
+          "sub.check3":
+            "<strong>Incident notification</strong> — notified when something goes down and when it recovers",
+          "sub.check4":
+            "<strong>Zero configuration</strong> — works automatically on your existing status page",
+          "sub.cta": "📣 Enable subscriptions →",
+          "faq.tag": "// frequently asked questions",
+          "faq.head1": "Have a question?",
+          "faq.head2": "We've got answers.",
+          "faq.q1": "Is there a time limit on the free plan?",
+          "faq.a1":
+            "No. The Free plan is free forever — it's not a trial. You can use the 10 HTTP monitors, status page and email alerts without paying anything, for as long as you want.",
+          "faq.q2": "How do WhatsApp alerts work?",
+          "faq.a2":
+            "You connect your WhatsApp number in the account settings. When any monitor goes down or recovers, UpStat sends a message directly to you — no extra app needed. Available on the Pro plan.",
+          "faq.q3": "What is a Synthetic Monitor?",
+          "faq.a3":
+            "It's a monitor that simulates real user actions — chained HTTP requests, like login or a full checkout. It detects when a <em>feature</em> breaks, even if the server is still responding.",
+          "faq.q4": "How do I install and use the SDK?",
+          "faq.a4":
+            'Install via npm: <code>npm install upstat-sdk</code>. Initialize with your API key (available in the dashboard) and use the methods to create monitors, check status and send heartbeats. Docs at <a href="https://upstat.online/docs" target="_blank">upstat.online/docs</a>.',
+          "faq.q5": "How do my users subscribe to the status page?",
+          "faq.a5":
+            'Your public status page has a "Receive notifications" button. The user enters their email or WhatsApp and starts receiving automatic alerts on each incident. You can see the subscriber list in the dashboard.',
+          "faq.q6": "Can I use the CLI in CI/CD?",
+          "faq.a6":
+            "Yes. Just run <code>upstat monitors pause &lt;id&gt;</code> before the deploy and <code>upstat monitors resume &lt;id&gt;</code> afterwards to avoid false positives. Works in any pipeline (GitHub Actions, GitLab CI, etc.).",
+          "faq.q7":
+            "What's the difference between monitoring cron jobs and APIs?",
+          "faq.a7":
+            "Monitoring APIs is active: UpStat makes periodic requests. Monitoring cron jobs is passive (heartbeat): your job sends a ping to UpStat after running. If the ping doesn't arrive within the expected interval, the alert fires — ideal for backups, email sending and reports.",
+          "faq.q8": "Do I need a credit card to create an account?",
+          "faq.a8":
+            "No. Free account with no payment data required. A card is only needed to upgrade to the Pro plan.",
+          "cli.heartbeat_hint":
+            "If the job doesn't ping within the expected interval, the alert fires automatically.",
+          "sub.preview": "PREVIEW — PUBLIC STATUS PAGE",
+          "sub.form_label": "RECEIVE NOTIFICATIONS",
+          "sub.form_btn": "Subscribe",
+          "sub.sent_label": "NOTIFICATIONS SENT",
+          "sub.notif1_title": "Incident detected",
+          "sub.notif1_desc": "Email sent to 47 subscribers · Main API offline",
+          "sub.notif2_title": "Service recovered",
+          "sub.notif2_desc":
+            "WhatsApp sent to 23 subscribers · Downtime: 4 min",
         },
       };
 
