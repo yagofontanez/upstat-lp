@@ -1,0 +1,66 @@
+.codeBlock {
+  background: #0a0d14;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-x: auto;
+  margin-bottom: 12px;
+  max-width: 100%;
+}
+.codeBlock code {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--text2);
+  white-space: pre;
+  display: block;
+}
+
+.channels {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.subInputRow {
+  display: flex;
+  gap: 8px;
+}
+.subInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+}
+.subInput::placeholder {
+  color: var(--muted);
+}
+.subBtn {
+  background: var(--primary);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .subInputRow {
+    flex-direction: column;
+  }
+  .subBtn {
+    width: 100%;
+  }
+}

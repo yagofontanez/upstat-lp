@@ -1,0 +1,217 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(18px, 5vw, 40px);
+  height: 60px;
+  background: rgba(6, 8, 16, 0.88);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.logoDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  animation: navPulse 2.5s ease-in-out infinite;
+}
+@keyframes navPulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--primary);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 16px var(--primary);
+  }
+}
+.links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+}
+.links a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.links a:hover {
+  color: var(--text);
+}
+.cta {
+  background: var(--primary) !important;
+  color: #000 !important;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 12px !important;
+  transition: opacity 0.15s !important;
+}
+.cta:hover {
+  opacity: 0.85 !important;
+}
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.langSwitcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.langBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s;
+  letter-spacing: 0.04em;
+}
+.langBtn:hover {
+  color: var(--text);
+  border-color: var(--border2);
+  background: var(--surface2);
+}
+.arrow {
+  font-size: 8px;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+.open .arrow {
+  transform: rotate(180deg);
+}
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  min-width: 130px;
+  z-index: 200;
+}
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.option:hover {
+  background: var(--surface3);
+  color: var(--text);
+}
+.option.active {
+  color: var(--primary);
+}
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text2);
+  border-radius: 2px;
+  transition: 0.2s;
+}
+.mobileMenu {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  background: rgba(6, 8, 16, 0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 998;
+  padding: 20px clamp(18px, 5vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mobileMenu a {
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--text2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.mobileMenu a:last-child {
+  border-bottom: none;
+}
+.mobileMenu a:hover {
+  color: var(--text);
+}
+.mobileCta {
+  margin-top: 10px;
+  padding: 13px !important;
+  text-align: center;
+  background: var(--primary) !important;
+  color: #000 !important;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border-bottom: none !important;
+}
+@media (max-width: 768px) {
+  .links {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+}
