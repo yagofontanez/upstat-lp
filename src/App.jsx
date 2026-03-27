@@ -6,12 +6,7 @@ import { useReveal } from "./hooks/useReveal";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import { Stats, Features } from "./components/Sections";
-import {
-  WhatsAppSpotlight,
-  SyntheticSpotlight,
-  CLISpotlight,
-  SubscribeSpotlight,
-} from "./components/Spotlights";
+import { WhatsAppSpotlight, SyntheticSpotlight } from "./components/Spotlights";
 import {
   HowItWorks,
   Testimonial,
@@ -44,8 +39,6 @@ export default function App() {
         <Features />
         <WhatsAppSpotlight />
         <SyntheticSpotlight />
-        <CLISpotlight />
-        <SubscribeSpotlight />
         <HowItWorks />
         <Testimonial />
         <Pricing />

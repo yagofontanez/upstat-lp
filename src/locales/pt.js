@@ -8,10 +8,10 @@ const pt = {
   hero: {
     badge1: "Monitoramento em tempo real",
     badge2: "Alertas por WhatsApp",
-    title1: "Seu sistema caiu.",
-    title2: "Seus clientes já sabem.",
-    sub: "Monitore APIs, fluxos e sistemas com synthetic monitors. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — sem complicação.",
-    cta1: "Quero monitorar meu sistema →",
+    title1: "Você descobre a queda",
+    title2: "antes do seu cliente.",
+    sub: "Monitore APIs, status pages e fluxos reais. Detecte quedas em segundos e receba alertas direto no seu WhatsApp — de madrugada, fim de semana, sem depender de email.",
+    cta1: "Começar grátis agora →",
     cta2: "Ver como funciona",
   },
   mock: {
@@ -183,8 +183,8 @@ const pt = {
   },
   price: {
     tag: "// preços",
-    head1: "Simples como",
-    head2: "deve ser.",
+    head1: "Por R$9 você para de",
+    head2: "descobrir queda pelo cliente.",
     forever: "para sempre",
     f1: "10 monitores HTTP",
     f2: "Ping a cada 5 minutos",
@@ -230,12 +230,11 @@ const pt = {
     a8: "Não. Conta grátis sem nenhum dado de pagamento. Cartão só é necessário para fazer upgrade pro plano Pro.",
   },
   cta: {
-    title1: "Pronto pra parar",
-    title2: "de perder",
-    title3: "downtime",
-    sub: "Comece grátis agora. Sem cartão de crédito.",
+    title1: "Sua API pode estar caindo",
+    title2: "agora mesmo.",
+    title3: "Você saberia?",
+    sub: "Comece grátis. Sem cartão de crédito. Monitor rodando em 60 segundos.",
     btn1: "Quero criar minha conta →",
-    btn2: "💬 Quero alertas no WhatsApp",
   },
   footer: {
     copy: "© 2026 UpStat. Feito no Brasil 🇧🇷",

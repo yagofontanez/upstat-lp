@@ -83,73 +83,7 @@ export function HowItWorks() {
 }
 
 export function Testimonial() {
-  const { t } = useTranslation();
-  return (
-    <section style={{ padding: "60px 0", position: "relative", zIndex: 1 }}>
-      <div className="wrap-sm">
-        <div
-          className="reveal"
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border2)",
-            borderRadius: "var(--radius-lg)",
-            padding: "32px 36px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 28,
-              color: "var(--primary)",
-              marginBottom: 12,
-              lineHeight: 1,
-            }}
-          >
-            "
-          </div>
-          <p
-            style={{
-              fontSize: 14,
-              color: "var(--text2)",
-              lineHeight: 1.8,
-              marginBottom: 20,
-              fontStyle: "italic",
-            }}
-          >
-            {t("testimonial.quote")}
-          </p>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                background: "var(--primary-d)",
-                border: "1px solid var(--primary-b)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 13,
-                fontWeight: 700,
-                color: "var(--primary)",
-              }}
-            >
-              D
-            </div>
-            <div>
-              <div
-                style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}
-              >
-                {t("testimonial.name")}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>
-                {t("testimonial.role")}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return null;
 }
 
 export function Pricing() {
@@ -539,11 +473,11 @@ export function CTA() {
       >
         {t("cta.title1")}
         <br />
-        {t("cta.title2")}{" "}
-        <em style={{ fontStyle: "italic", color: "var(--down)" }}>
-          {t("cta.title3")}
+        <em style={{ fontStyle: "italic", color: "var(--primary)" }}>
+          {t("cta.title2")}
         </em>
-        ?
+        <br />
+        {t("cta.title3")}
       </h2>
       <p
         className="reveal"
@@ -562,9 +496,6 @@ export function CTA() {
       >
         <a href="https://upstat.online/register" className="btn btn-primary">
           {t("cta.btn1")}
-        </a>
-        <a href="https://upstat.online/register" className="btn btn-wpp">
-          {t("cta.btn2")}
         </a>
       </div>
     </section>

@@ -8,10 +8,10 @@ const en = {
   hero: {
     badge1: "Real-time monitoring",
     badge2: "WhatsApp alerts",
-    title1: "Your system went down.",
-    title2: "Your clients already know.",
-    sub: "Monitor APIs, flows and systems with synthetic monitors. Detect outages in seconds and get alerts straight to your WhatsApp — no hassle.",
-    cta1: "I want to monitor my system →",
+    title1: "You find out about downtime",
+    title2: "before your users do.",
+    sub: "Monitor APIs, status pages and real user flows. Detect outages in seconds and get alerts straight to your WhatsApp — at 3am, on weekends, no email required.",
+    cta1: "Start for free →",
     cta2: "See how it works",
   },
   mock: {
@@ -182,8 +182,8 @@ const en = {
   },
   price: {
     tag: "// pricing",
-    head1: "Simple as it",
-    head2: "should be.",
+    head1: "For $9/mo you stop finding out",
+    head2: "about downtime from your users.",
     forever: "forever",
     f1: "10 HTTP monitors",
     f2: "Ping every 5 minutes",
@@ -229,12 +229,11 @@ const en = {
     a8: "No. Free account with no payment data required. A card is only needed to upgrade to the Pro plan.",
   },
   cta: {
-    title1: "Ready to stop",
-    title2: "missing",
-    title3: "downtime",
-    sub: "Start for free now. No credit card required.",
-    btn1: "I want to create my account →",
-    btn2: "💬 I want WhatsApp alerts",
+    title1: "Your API might be down",
+    title2: "right now.",
+    title3: "Would you know?",
+    sub: "Start for free. No credit card. Monitor running in 60 seconds.",
+    btn1: "Create my account →",
   },
   footer: {
     copy: "© 2026 UpStat. Made in Brazil 🇧🇷",

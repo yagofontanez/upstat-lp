@@ -55,6 +55,19 @@
 .featCard:hover {
   background: var(--surface2);
 }
+.featCard:nth-child(4) {
+  grid-column: 1 / 2;
+}
+.featCard:nth-child(5) {
+  grid-column: 2 / 3;
+}
+.featCard:nth-child(4),
+.featCard:nth-child(5) {
+  border-bottom: none;
+}
+.featCard:nth-child(3n) {
+  border-right: none;
+}
 
 @media (max-width: 640px) {
   .statsGrid {
@@ -74,6 +87,7 @@
   .featCard {
     border-right: none !important;
     border-bottom: 1px solid var(--border) !important;
+    grid-column: auto !important;
   }
   .featCard:last-child {
     border-bottom: none !important;
@@ -84,11 +98,18 @@
   .featGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .featCard {
+    grid-column: auto !important;
+  }
   .featCard:nth-child(2n) {
     border-right: none !important;
   }
-  .featCard:nth-last-child(-n + 2):nth-child(2n + 1),
-  .featCard:nth-last-child(1) {
+  .featCard:nth-child(3),
+  .featCard:nth-child(4),
+  .featCard:nth-child(5) {
     border-bottom: none !important;
+  }
+  .featCard:nth-child(4) {
+    border-bottom: 1px solid var(--border) !important;
   }
 }

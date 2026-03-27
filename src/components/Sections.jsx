@@ -36,7 +36,6 @@ export function Features() {
       tagType: "synth",
       hl: "synth",
     },
-    { icon: "📊", title: t("feat3.title"), desc: t("feat3.desc") },
     {
       icon: "💬",
       title: t("feat4.title"),
@@ -45,18 +44,8 @@ export function Features() {
       tagType: "wpp",
       hl: "wpp",
     },
-    { icon: "🔗", title: t("feat5.title"), desc: t("feat5.desc") },
-    { icon: "🔔", title: t("feat6.title"), desc: t("feat6.desc") },
-    {
-      icon: "⌨️",
-      title: t("feat7.title"),
-      desc: t("feat7.desc"),
-      tag: t("feat7.tag"),
-      tagType: "synth",
-      hl: "synth",
-    },
+    { icon: "📊", title: t("feat3.title"), desc: t("feat3.desc") },
     { icon: "📣", title: t("feat8.title"), desc: t("feat8.desc") },
-    { icon: "🛠️", title: t("feat9.title"), desc: t("feat9.desc") },
   ];
 
   function cardBg(hl) {

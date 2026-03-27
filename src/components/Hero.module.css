@@ -187,7 +187,20 @@
     padding: 100px 18px 60px;
   }
   .mock {
-    display: none;
+    max-width: 100%;
+    font-size: 11px;
+  }
+  .mockHeader {
+    padding: 10px 14px;
+  }
+  .mockRow {
+    padding: 10px 14px 4px;
+  }
+  .ubars {
+    padding: 4px 14px 10px;
+  }
+  .ubar {
+    height: 20px;
   }
   .actions {
     flex-direction: column;
