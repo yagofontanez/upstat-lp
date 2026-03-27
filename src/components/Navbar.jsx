@@ -18,7 +18,6 @@ export default function Navbar() {
     { href: "#features", label: t("nav.features") },
     { href: "#whatsapp", label: "WhatsApp" },
     { href: "#synthetic", label: "Synthetic" },
-    { href: "#cli", label: "CLI & SDK" },
     { href: "#pricing", label: t("nav.pricing") },
   ];
 
